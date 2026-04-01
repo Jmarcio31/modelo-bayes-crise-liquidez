@@ -6,8 +6,8 @@ FRONTEND_DIR = BASE_DIR / 'frontend'
 DATA_DIR = BACKEND_DIR / 'data'
 RAW_DIR = DATA_DIR / 'raw'
 DB_PATH = DATA_DIR / 'liquidez.db'
-LATEST_JSON = FRONTEND_DIR / 'data' / 'latest.json'
-HISTORY_JSON = FRONTEND_DIR / 'data' / 'history.json'
+LATEST_JSON = Path("data/latest.json")
+HISTORY_JSON = Path("data/history.json")
 
 PRIOR = 0.10
 
