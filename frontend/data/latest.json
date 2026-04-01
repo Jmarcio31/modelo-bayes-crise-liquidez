@@ -1,0 +1,159 @@
+{
+  "run_id": 1,
+  "run_date": "2026-04-01",
+  "prior": 0.1,
+  "posterior": 0.422552085657656,
+  "risk_label": "Estresse intermediario",
+  "signals": [
+    {
+      "signal_id": "curva",
+      "signal_name": "Desinversao da curva apos inversao profunda",
+      "block": "Macro",
+      "raw_value": 0.6,
+      "status": "ATIVO",
+      "weight": 0.55,
+      "p_e_h": 0.72,
+      "p_e_not_h": 0.42,
+      "lr_used": 1.7142857142857142,
+      "log_contrib": 0.2964480754029778
+    },
+    {
+      "signal_id": "sahm",
+      "signal_name": "Sahm Rule / deterioracao do mercado de trabalho",
+      "block": "Macro",
+      "raw_value": 0.2666666666666666,
+      "status": "NEUTRO",
+      "weight": 0.55,
+      "p_e_h": 0.68,
+      "p_e_not_h": 0.38,
+      "lr_used": 1.0,
+      "log_contrib": 0.0
+    },
+    {
+      "signal_id": "reservas",
+      "signal_name": "Reservas bancarias em suporte",
+      "block": "Liquidez domestica",
+      "raw_value": 0.997985,
+      "status": "ATIVO",
+      "weight": 0.8,
+      "p_e_h": 0.83,
+      "p_e_not_h": 0.33,
+      "lr_used": 2.5151515151515147,
+      "log_contrib": 0.737866437064094
+    },
+    {
+      "signal_id": "rrp",
+      "signal_name": "Reverse Repo Facility comprimido",
+      "block": "Liquidez domestica",
+      "raw_value": 145.0,
+      "status": "ATIVO",
+      "weight": 0.65,
+      "p_e_h": 0.74,
+      "p_e_not_h": 0.41,
+      "lr_used": 1.8048780487804879,
+      "log_contrib": 0.3838204672249103
+    },
+    {
+      "signal_id": "sofr_iorb",
+      "signal_name": "Spread SOFR - IORB",
+      "block": "Funding stress",
+      "raw_value": -2.0000000000000018,
+      "status": "CONTRARIO",
+      "weight": 0.85,
+      "p_e_h": 0.82,
+      "p_e_not_h": 0.29,
+      "lr_used": 0.2535211267605635,
+      "log_contrib": -1.1664619012733777
+    },
+    {
+      "signal_id": "fra_ois",
+      "signal_name": "FRA-OIS proxy publica",
+      "block": "Funding stress",
+      "raw_value": 29.0,
+      "status": "ATIVO",
+      "weight": 0.85,
+      "p_e_h": 0.79,
+      "p_e_not_h": 0.31,
+      "lr_used": 2.5483870967741935,
+      "log_contrib": 0.7951415507845939
+    },
+    {
+      "signal_id": "repo",
+      "signal_name": "Repo stress / spikes",
+      "block": "Funding stress",
+      "raw_value": 0.66,
+      "status": "ATIVO",
+      "weight": 0.95,
+      "p_e_h": 0.88,
+      "p_e_not_h": 0.24,
+      "lr_used": 3.666666666666667,
+      "log_contrib": 1.2343188349237477
+    },
+    {
+      "signal_id": "vol_yields",
+      "signal_name": "Volatilidade de yields (proxy publica do MOVE)",
+      "block": "Mercado de juros",
+      "raw_value": 11.12249971903798,
+      "status": "NEUTRO",
+      "weight": 0.65,
+      "p_e_h": 0.7,
+      "p_e_not_h": 0.39,
+      "lr_used": 1.0,
+      "log_contrib": 0.0
+    },
+    {
+      "signal_id": "bloco_externo",
+      "signal_name": "Bloco externo: Custody + TIC + stress em dolar",
+      "block": "Externo",
+      "raw_value": 0.3928247272628046,
+      "status": "NEUTRO",
+      "weight": 0.85,
+      "p_e_h": 0.84,
+      "p_e_not_h": 0.3,
+      "lr_used": 1.0,
+      "log_contrib": 0.0
+    },
+    {
+      "signal_id": "nfci",
+      "signal_name": "National Financial Conditions Index",
+      "block": "Condicoes financeiras",
+      "raw_value": -0.47504,
+      "status": "CONTRARIO",
+      "weight": 0.6,
+      "p_e_h": 0.69,
+      "p_e_not_h": 0.4,
+      "lr_used": 0.5166666666666668,
+      "log_contrib": -0.3962144146421725
+    }
+  ],
+  "external_block": {
+    "custody_12w_pct": -0.9642017435079198,
+    "tic_3m_usd_bn": -96.0,
+    "usd_stress_score": 0.5087154669580287,
+    "composite_score": 0.3928247272628046,
+    "status": "NEUTRO"
+  },
+  "raw_data": {
+    "curva_spread": 0.6,
+    "sahm_gap": 0.2666666666666666,
+    "reservas_pct_min": 0.997985,
+    "rrp_usd_bn": 145.0,
+    "sofr_iorb_bp": -2.0000000000000018,
+    "fra_ois_bp": 29.0,
+    "repo_stress_score": 0.66,
+    "vol_yields_20d_bp": 11.12249971903798,
+    "custody_12w_pct": -0.9642017435079198,
+    "tic_3m_usd_bn": -96.0,
+    "usd_stress_score": 0.5087154669580287,
+    "nfci": -0.47504,
+    "bloco_externo_score": 0.3928247272628046
+  },
+  "source_status": {
+    "custody": "ok",
+    "tic": "manual_proxy",
+    "repo_stress": "manual_score",
+    "fra_ois": "manual_proxy",
+    "rrp": "manual_fallback",
+    "nfci": "ok"
+  }
+}
