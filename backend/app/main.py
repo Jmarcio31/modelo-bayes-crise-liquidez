@@ -2,23 +2,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
-from pathlib import Path
 
 from .bayes import compute_model
-from .config import DB_PATH, FRONTEND_DIR, HISTORY_JSON, LATEST_JSON, MANUAL_DEFAULTS, PRIOR, RAW_DIR, SIGNALS
+from .config import DATA_FEED_CSV, DB_PATH, HISTORY_JSON, LATEST_JSON, MANUAL_DEFAULTS, PRIOR, RAW_DIR, SIGNALS
 from .exporter import export_history, export_latest
+from .feed_loader import feed_entries_to_meta, load_data_feed
 from .signals import classify
 from .sources import SERIES, latest_date, latest_value, load_fred_series, load_manual_overrides, load_nfci, try_rrp_usd_bn
 from .storage import connect, fetch_history, insert_run
-from .transforms import (
-    custody_12w_pct,
-    reservas_pct_min,
-    sahm_gap,
-    sofr_iorb_bp,
-    usd_stress_score,
-    vol_yields_20d_bp,
-    external_block_score,
-)
+from .transforms import custody_12w_pct, external_block_score, reservas_pct_min, sahm_gap, sofr_iorb_bp, usd_stress_score, vol_yields_20d_bp
 
 
 @dataclass
@@ -27,7 +19,38 @@ class PipelineOutput:
     history_payload: list[dict]
 
 
-def collect_raw_data() -> tuple[dict[str, float], dict[str, str]]:
+def _simplify_feed_status(method: str, quality_flag: str) -> str:
+    text = f"{method} {quality_flag}".lower()
+
+    if "fallback" in text:
+        return "fallback"
+    if "proxy" in text or "calculated" in text or "composite" in text:
+        return "proxy"
+    if "api" in text or "direct" in text or "scrape" in text:
+        return "direct"
+    if "missing" in text:
+        return "missing"
+    return quality_flag or method or "unknown"
+
+
+def _source_status_from_feed(feed) -> dict[str, str]:
+    mapping = {
+        "tic_3m_usd_bn": "tic",
+        "repo_stress_score": "repo_stress",
+        "fra_ois_bp": "fra_ois",
+        "rrp_usd_bn": "rrp",
+        "usd_stress_score": "usd_stress",
+    }
+    out: dict[str, str] = {}
+    for key, alias in mapping.items():
+        entry = feed.get(key)
+        if entry is None:
+            continue
+        out[alias] = _simplify_feed_status(entry.method, entry.quality_flag)
+    return out
+
+
+def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict]]:
     overrides = MANUAL_DEFAULTS.copy()
     overrides.update(load_manual_overrides(RAW_DIR / 'manual_inputs.csv'))
 
@@ -56,24 +79,39 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str]]:
         'vol_yields_20d_bp': vol_yields_20d_bp([v for _, v in y10]),
         'custody_12w_pct': custody_12w_pct([v for _, v in custody]),
         'tic_3m_usd_bn': float(overrides['tic_3m_usd_bn']),
-        'usd_stress_score': usd_stress_score([v for _, v in dxy], [v for _, v in y10], [v for _, v in y2]),
+        'usd_stress_score': float(overrides.get('usd_stress_score', usd_stress_score([v for _, v in dxy], [v for _, v in y10], [v for _, v in y2]))),
         'nfci': load_nfci(),
     }
+
+    # Status base dos dados diretos
+    source_status = {
+        'custody': 'direct',
+        'nfci': 'direct',
+    }
+
+    # Feed complementar automatizado
+    feed = load_data_feed(DATA_FEED_CSV)
+    for key, entry in feed.items():
+        if key in raw:
+            raw[key] = entry.value
+
+    # Se o feed trouxe metadados, ele passa a ditar o status dessas séries
+    source_status.update(_source_status_from_feed(feed))
+
+    # Se alguma chave não veio no feed, manter fallback legível
+    source_status.setdefault('tic', 'manual_or_default')
+    source_status.setdefault('repo_stress', 'manual_or_default')
+    source_status.setdefault('fra_ois', 'manual_or_default')
+    source_status.setdefault('rrp', 'direct' if rrp != float(overrides['rrp_usd_bn']) else 'fallback')
+    source_status.setdefault('usd_stress', 'proxy')
+
     raw['bloco_externo_score'] = external_block_score(raw['custody_12w_pct'], raw['tic_3m_usd_bn'], raw['usd_stress_score'])
 
-    source_status = {
-        'custody': 'ok',
-        'tic': 'manual_proxy',
-        'repo_stress': 'manual_score',
-        'fra_ois': 'manual_proxy',
-        'rrp': 'ok' if rrp != float(overrides['rrp_usd_bn']) else 'manual_fallback',
-        'nfci': 'ok',
-    }
-    return raw, source_status
+    return raw, source_status, feed_entries_to_meta(feed)
 
 
 def run_pipeline() -> PipelineOutput:
-    raw, source_status = collect_raw_data()
+    raw, source_status, data_feed_meta = collect_raw_data()
     statuses, ext_score = classify(raw)
     model = compute_model(PRIOR, SIGNALS, raw, statuses)
     run_date = str(date.today())
@@ -101,6 +139,7 @@ def run_pipeline() -> PipelineOutput:
         'external_block': external_block,
         'raw_data': raw,
         'source_status': source_status,
+        'data_feed_meta': data_feed_meta,
     }
     export_latest(LATEST_JSON, latest_payload)
     export_history(HISTORY_JSON, history)
@@ -109,6 +148,6 @@ def run_pipeline() -> PipelineOutput:
 
 if __name__ == '__main__':
     out = run_pipeline()
-    print(f"[OK] latest.json: {LATEST_JSON}")
-    print(f"[OK] history.json: {HISTORY_JSON}")
+    print(f'[OK] latest.json: {LATEST_JSON}')
+    print(f'[OK] history.json: {HISTORY_JSON}')
     print(f"[OK] posterior: {out.latest_payload['posterior']:.4f}")

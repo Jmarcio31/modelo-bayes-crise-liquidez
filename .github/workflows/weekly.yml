@@ -19,13 +19,14 @@ jobs:
           python-version: '3.11'
       - name: Install backend deps
         run: pip install -r backend/requirements.txt
+      - name: Build non-FRED data feed
+        run: python -m backend.app.data_builder
       - name: Run pipeline
-        working-directory: .
         run: python -m backend.app.main
-      - name: Commit updated dashboard data
+      - name: Commit updated data
         run: |
-         git config user.name github-actions
-         git config user.email github-actions@github.com
-         git add data/latest.json frontend/data/history.json
-         git diff --cached --quiet || git commit -m "Update dashboard data"
-         git push
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add data/latest.json data/history.json backend/data/raw/data_feed.csv
+          git diff --cached --quiet || git commit -m "Atualiza dados do dashboard"
+          git push

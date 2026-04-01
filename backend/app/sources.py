@@ -4,132 +4,186 @@ import csv
 import io
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Dict, List, Tuple
 
 import requests
 
-TIMEOUT = 30
-FRED_API_URL = 'https://api.stlouisfed.org/fred/series/observations'
-RRP_JSON = 'https://markets.newyorkfed.org/api/rp/reverserepo/propositions/search.json?startDate={date}&endDate={date}'
+FRED_URL = "https://api.stlouisfed.org/fred/series/observations"
+FRED_GRAPH_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
+NYFED_RRP_JSON = "https://markets.newyorkfed.org/api/rp/reverserepo/propositions/search.json?startDate={date}&endDate={date}"
 
+# Mantém compatibilidade com o restante do projeto
 SERIES = {
-    'curve10y3m': 'T10Y3M',
-    'unrate': 'UNRATE',
-    'sofr': 'SOFR',
-    'iorb': 'IORB',
-    'custody': 'WSEFINT1',
-    'dxy_broad': 'DTWEXBGS',
-    'yield10': 'DGS10',
-    'yield2': 'DGS2',
-    'reserve_balances': 'WRESBAL',
+    "curve10y3m": "T10Y3M",
+    "unrate": "UNRATE",
+    "sofr": "SOFR",
+    "iorb": "IORB",
+    "custody": "WSEFINT1",
+    "dxy_broad": "DTWEXBGS",
+    "yield10": "DGS10",
+    "yield2": "DGS2",
+    "reserve_balances": "WRESBAL",
+    "nfci": "NFCI",
 }
 
 
-class SourceError(RuntimeError):
+class SourceError(Exception):
     pass
 
 
-def _get_text(url: str) -> str:
-    r = requests.get(url, timeout=TIMEOUT)
-    r.raise_for_status()
-    return r.text
-
-
 def get_fred_api_key() -> str:
-    api_key = os.getenv('FRED_API_KEY', '').strip()
-    if not api_key:
-        raise SourceError('FRED_API_KEY nao encontrada no ambiente')
-    return api_key
+    key = os.getenv("FRED_API_KEY")
+    if not key:
+        raise SourceError("FRED_API_KEY nao encontrada no ambiente")
+    return key
 
 
-def load_fred_series(series_id: str) -> list[tuple[str, float]]:
+def _safe_float(value):
+    try:
+        if value in (None, "", "."):
+            return None
+        return float(str(value).replace(",", ""))
+    except Exception:
+        return None
+
+
+def load_fred_series(series_id: str) -> List[Tuple[str, float]]:
     params = {
-        'series_id': series_id,
-        'api_key': get_fred_api_key(),
-        'file_type': 'json',
-        'sort_order': 'asc',
-        'observation_start': '2000-01-01',
+        "series_id": series_id,
+        "api_key": get_fred_api_key(),
+        "file_type": "json",
+        "sort_order": "asc",
+        "observation_start": "2000-01-01",
     }
-    response = requests.get(FRED_API_URL, params=params, timeout=TIMEOUT)
-    response.raise_for_status()
-    payload = response.json()
 
-    observations = payload.get('observations')
-    if not isinstance(observations, list):
-        raise SourceError(f'Resposta invalida da API FRED para {series_id}')
+    # 1) tenta API oficial
+    try:
+        r = requests.get(FRED_URL, params=params, timeout=30)
+        r.raise_for_status()
+        data = r.json()
+        obs = data.get("observations", [])
 
-    rows: list[tuple[str, float]] = []
-    for obs in observations:
-        if not isinstance(obs, dict):
-            continue
-        raw = obs.get('value')
-        if raw in (None, '', '.'):
-            continue
-        try:
-            rows.append((str(obs.get('date', '')), float(raw)))
-        except (TypeError, ValueError):
-            continue
+        out: List[Tuple[str, float]] = []
+        for row in obs:
+            val = _safe_float(row.get("value"))
+            if val is None:
+                continue
+            out.append((row.get("date", ""), val))
 
-    if not rows:
-        raise SourceError(f'Sem dados numericos na API FRED para {series_id}')
-    return rows
+        if out:
+            return out
+
+    except Exception:
+        pass
+
+    # 2) fallback para CSV público
+    try:
+        url = FRED_GRAPH_CSV.format(series_id=series_id)
+        r = requests.get(url, timeout=30)
+        r.raise_for_status()
+
+        reader = csv.DictReader(io.StringIO(r.text))
+        fields = reader.fieldnames or []
+
+        if len(fields) < 2:
+            raise SourceError(f"CSV invalido para {series_id}")
+
+        date_col = fields[0]
+        value_col = fields[1]
+
+        out: List[Tuple[str, float]] = []
+        for row in reader:
+            val = _safe_float(row.get(value_col))
+            if val is None:
+                continue
+            out.append((row.get(date_col, ""), val))
+
+        if not out:
+            raise SourceError(f"Serie vazia para {series_id}")
+
+        return out
+
+    except Exception as e:
+        raise SourceError(f"Erro ao carregar serie {series_id}: {e}")
 
 
-def latest_value(series: list[tuple[str, float]]) -> float:
+def latest_value(series: List[Tuple[str, float]]) -> float:
+    if not series:
+        raise SourceError("Serie vazia")
     return series[-1][1]
 
 
-def latest_date(series: list[tuple[str, float]]) -> str:
+def latest_date(series: List[Tuple[str, float]]) -> str:
+    if not series:
+        raise SourceError("Serie vazia")
     return series[-1][0]
 
 
 def load_nfci() -> float:
-    return latest_value(load_fred_series('NFCI'))
+    # Usa FRED (serie NFCI) para maior robustez
+    series = load_fred_series(SERIES["nfci"])
+    return latest_value(series)
 
 
-def try_rrp_usd_bn(date_hint: str) -> Optional[float]:
+def load_manual_overrides(path: Path) -> Dict[str, float]:
+    if not path.exists():
+        return {}
+
+    out: Dict[str, float] = {}
+    with path.open("r", encoding="utf-8-sig", newline="") as fh:
+        reader = csv.DictReader(fh)
+        rows = list(reader)
+
+    if not rows:
+        return {}
+
+    for row in rows:
+        key = row.get("chave") or row.get("key") or row.get("serie") or row.get("variavel")
+        raw = row.get("valor") or row.get("value")
+        if not key:
+            continue
+        val = _safe_float(raw)
+        if val is None:
+            continue
+        out[key] = val
+
+    return out
+
+
+def try_rrp_usd_bn(date_hint: str | None = None):
+    if not date_hint:
+        return None
+    url = NYFED_RRP_JSON.format(date=date_hint)
     try:
-        r = requests.get(RRP_JSON.format(date=date_hint), timeout=TIMEOUT)
-        r.raise_for_status()
-        payload = r.json()
+        response = requests.get(url, timeout=30)
+        response.raise_for_status()
+        payload = response.json()
     except Exception:
         return None
-    candidates = []
+
+    total = None
     if isinstance(payload, dict):
-        candidates.append(payload)
-        for key in ('repoOperations', 'operations', 'data'):
+        candidates = [payload]
+        for key in ("repoOperations", "operations", "data"):
             value = payload.get(key)
             if isinstance(value, list):
                 candidates.extend([v for v in value if isinstance(v, dict)])
-    for item in candidates:
-        for field in ('totalAmtAccepted', 'totalSubmitted', 'accepted', 'amountAccepted'):
-            raw = item.get(field)
-            if raw is None:
-                continue
-            try:
-                total = float(raw)
-                if total > 1e9:
-                    return total / 1e9
-                if total > 1e6:
-                    return total / 1e3
-                return total
-            except Exception:
-                continue
-    return None
 
+        for item in candidates:
+            for field in ("totalAmtAccepted", "totalSubmitted", "accepted", "amountAccepted"):
+                raw = item.get(field)
+                num = _safe_float(raw)
+                if num is not None:
+                    total = num
+                    break
+            if total is not None:
+                break
 
-def load_manual_overrides(path: Path) -> dict[str, float]:
-    if not path.exists():
-        return {}
-    reader = csv.DictReader(path.read_text(encoding='utf-8-sig').splitlines())
-    out: dict[str, float] = {}
-    for row in reader:
-        key = row.get('chave') or row.get('key') or row.get('variavel')
-        val = row.get('valor') or row.get('value')
-        if not key or val in (None, ''):
-            continue
-        try:
-            out[key] = float(str(val).replace(',', ''))
-        except ValueError:
-            continue
-    return out
+    if total is None:
+        return None
+
+    if total > 1e9:
+        return total / 1e9
+    if total > 1e6:
+        return total / 1e3
+    return total

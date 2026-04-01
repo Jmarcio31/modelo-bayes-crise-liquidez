@@ -1,97 +1,36 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard Bayesiano de Liquidez</title>
-    <link rel="stylesheet" href="assets/styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <header class="hero card">
-        <div>
-          <div class="eyebrow">Modelo público v2</div>
-          <h1>Dashboard Bayesiano de Risco de Liquidez</h1>
-          <p>Painel estático consumindo <code>frontend/data/latest.json</code> e <code>frontend/data/history.json</code>, com resumo executivo, histórico e vetores de risco.</p>
-        </div>
-        <div class="meta">
-          <div><span>Execução</span><strong id="run-date">-</strong></div>
-          <div><span>Classificação</span><strong id="risk-label">-</strong></div>
-          <div><span>Último delta semanal</span><strong id="weekly-delta">-</strong></div>
-        </div>
-      </header>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Modelo Bayesiano de Risco de Liquidez</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">MODELO PÚBLICO V3</div>
+        <h1>Dashboard Bayesiano de Risco de Liquidez</h1>
+        <p id="subtitle">Carregando dados...</p>
+      </div>
+      <div class="top-meta" id="run-meta"></div>
+    </header>
 
-      <section class="summary-grid summary-grid-4">
-        <article class="card dark hero-kpi">
-          <span>Probabilidade posterior</span>
-          <strong id="posterior">-</strong>
-          <div class="subline">Prior <span id="prior-inline">-</span></div>
-        </article>
-        <article class="card">
-          <span>Sinais ativos</span>
-          <strong id="active-count">-</strong>
-          <div class="small">Contrários: <span id="contrary-count">-</span> · Neutros: <span id="neutral-count">-</span></div>
-        </article>
-        <article class="card">
-          <span>Bloco externo</span>
-          <strong id="external-score">-</strong>
-          <div class="small">Status: <span id="external-status">-</span></div>
-        </article>
-        <article class="card">
-          <span>Fonte / status</span>
-          <strong id="source-status">-</strong>
-        </article>
-      </section>
+    <nav class="tabs">
+      <button class="tab active" data-tab="dashboard" type="button">Dashboard</button>
+      <button class="tab" data-tab="historico" type="button">Histórico</button>
+      <button class="tab" data-tab="metodologia" type="button">Metodologia</button>
+      <button class="tab" data-tab="dados" type="button">Dados brutos</button>
+      <button class="tab" data-tab="fontes" type="button">Fontes</button>
+    </nav>
 
-      <section class="grid-two">
-        <article class="card">
-          <h2>Resumo por bloco</h2>
-          <div id="block-summary" class="block-summary-grid"></div>
-        </article>
-        <article class="card">
-          <h2>Vetores de risco</h2>
-          <div class="vectors-grid">
-            <div>
-              <div class="section-label danger">Pressões altistas</div>
-              <div id="positive-vectors"></div>
-            </div>
-            <div>
-              <div class="section-label safe">Amortecedores</div>
-              <div id="negative-vectors"></div>
-            </div>
-          </div>
-        </article>
-      </section>
+    <main id="app">
+      <div class="card">Carregando...</div>
+    </main>
+  </div>
 
-      <section class="grid-two-uneven">
-        <article class="card">
-          <h2>Evolução da probabilidade</h2>
-          <canvas id="history-chart" width="860" height="300"></canvas>
-          <div id="history-table" class="history-table"></div>
-        </article>
-        <article class="card">
-          <h2>Contribuição por sinal</h2>
-          <canvas id="impact-chart" width="520" height="300"></canvas>
-        </article>
-      </section>
-
-      <section class="grid-two-uneven">
-        <article class="card">
-          <h2>Sinais do modelo</h2>
-          <div id="signals"></div>
-        </article>
-        <div class="stack">
-          <article class="card">
-            <h2>Bloco externo</h2>
-            <div id="external-block"></div>
-          </article>
-          <article class="card compact-card">
-            <h2>Dados brutos</h2>
-            <div id="raw-data"></div>
-          </article>
-        </div>
-      </section>
-    </div>
-    <script src="assets/app.js"></script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="assets/app.js"></script>
+</body>
 </html>

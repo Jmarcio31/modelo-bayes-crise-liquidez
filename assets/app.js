@@ -1,239 +1,138 @@
-async function fetchJson(path) {
-  const res = await fetch(path, { cache: 'no-store' });
-  if (!res.ok) throw new Error(`Falha ao carregar ${path}`);
-  return res.json();
-}
 
-function pct(v) { return `${(v * 100).toFixed(1)}%`; }
-function fmt(v) { return typeof v === 'number' ? Number(v).toFixed(2) : String(v); }
-function badgeClass(status) {
-  if (status === 'ATIVO') return 'ativo';
-  if (status === 'CONTRARIO') return 'contrario';
-  return 'neutro';
-}
-function signalClass(status) {
-  if (status === 'ATIVO') return 'active';
-  if (status === 'CONTRARIO') return 'contrary';
-  return 'neutral';
-}
-function sum(arr) { return arr.reduce((a, b) => a + b, 0); }
+(function(){
+  const state = { latest:null, history:[], modelConfig:{signals:[]}, activeTab:'dashboard' };
 
-function groupByBlock(signals) {
-  const grouped = {};
-  signals.forEach((s) => {
-    if (!grouped[s.block]) grouped[s.block] = [];
-    grouped[s.block].push(s);
-  });
-  return Object.entries(grouped).map(([block, items]) => ({
-    block,
-    items,
-    active: items.filter((i) => i.status === 'ATIVO').length,
-    contrary: items.filter((i) => i.status === 'CONTRARIO').length,
-    score: sum(items.map((i) => i.log_contrib || 0)),
-  })).sort((a, b) => Math.abs(b.score) - Math.abs(a.score));
-}
-
-function renderBlockSummary(signals) {
-  const root = document.getElementById('block-summary');
-  root.innerHTML = '';
-  groupByBlock(signals).forEach((b) => {
-    const div = document.createElement('div');
-    const pctAbs = Math.min(100, Math.abs(b.score) * 35);
-    div.className = 'block-card';
-    div.innerHTML = `
-      <div class="block-card-head">
-        <div>
-          <div class="signal-title">${b.block}</div>
-          <div class="small">Ativos ${b.active} · Contrários ${b.contrary}</div>
-        </div>
-        <div class="${b.score >= 0 ? 'block-score-pos' : 'block-score-neg'}">${b.score >= 0 ? '+' : ''}${fmt(b.score)}</div>
-      </div>
-      <div class="block-meter"><div style="width:${pctAbs}%"></div></div>`;
-    root.appendChild(div);
-  });
-}
-
-function renderVectorList(containerId, signals, kind) {
-  const root = document.getElementById(containerId);
-  root.innerHTML = '';
-  signals.slice(0, 5).forEach((s) => {
-    const div = document.createElement('div');
-    div.className = `vector-item ${kind}`;
-    div.innerHTML = `<div class="name">${s.signal_name}</div><div class="value">${s.log_contrib >= 0 ? '+' : ''}${fmt(s.log_contrib)}</div>`;
-    root.appendChild(div);
-  });
-}
-
-function renderSignals(signals) {
-  const root = document.getElementById('signals');
-  root.innerHTML = '';
-  signals.forEach((s) => {
-    const div = document.createElement('div');
-    div.className = `signal-item ${signalClass(s.status)}`;
-    div.innerHTML = `
-      <div class="signal-top">
-        <div>
-          <div class="signal-title">${s.signal_name}</div>
-          <div class="small">${s.block}</div>
-        </div>
-        <div class="signal-top-right">
-          <span class="badge ${badgeClass(s.status)}">${s.status}</span>
-          <div class="contrib ${s.log_contrib >= 0 ? 'pos' : 'neg'}">${s.log_contrib >= 0 ? '+' : ''}${fmt(s.log_contrib)}</div>
-        </div>
-      </div>
-      <div class="table">
-        <div class="row"><span>Valor bruto</span><span>${fmt(s.raw_value)}</span><span></span></div>
-        <div class="row"><span>Peso</span><span>${fmt(s.weight)}</span><span>P(E|H) ${fmt(s.p_e_h)}</span></div>
-        <div class="row"><span>LR aplicado</span><span>${fmt(s.lr_used)}</span><span>P(E|~H) ${fmt(s.p_e_not_h)}</span></div>
-      </div>`;
-    root.appendChild(div);
-  });
-}
-
-function renderKeyValue(containerId, payload) {
-  const root = document.getElementById(containerId);
-  root.innerHTML = '';
-  Object.entries(payload).forEach(([k, v]) => {
-    const div = document.createElement('div');
-    div.className = 'kv';
-    div.innerHTML = `<span>${k}</span><strong>${fmt(v)}</strong>`;
-    root.appendChild(div);
-  });
-}
-
-function renderHistory(history) {
-  const table = document.getElementById('history-table');
-  table.innerHTML = history.map((h) => `<div class="row"><span>${h.run_date}</span><span>${pct(h.posterior)}</span><span>${h.risk_label}</span></div>`).join('');
-
-  const canvas = document.getElementById('history-chart');
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (!history.length) return;
-
-  const padding = 36;
-  const w = canvas.width - padding * 2;
-  const h = canvas.height - padding * 2;
-  const vals = history.map((x) => x.posterior);
-  const min = 0;
-  const max = 1;
-
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(padding, padding);
-  ctx.lineTo(padding, canvas.height - padding);
-  ctx.lineTo(canvas.width - padding, canvas.height - padding);
-  ctx.stroke();
-
-  [0.25, 0.5, 0.75].forEach((mark) => {
-    const y = canvas.height - padding - ((mark - min) / (max - min)) * h;
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.beginPath();
-    ctx.moveTo(padding, y);
-    ctx.lineTo(canvas.width - padding, y);
-    ctx.stroke();
-    ctx.fillStyle = '#64748b';
-    ctx.font = '12px Arial';
-    ctx.fillText(`${Math.round(mark * 100)}%`, 4, y + 4);
-  });
-
-  ctx.strokeStyle = '#0f172a';
-  ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  vals.forEach((v, i) => {
-    const x = padding + (i * w) / Math.max(vals.length - 1, 1);
-    const y = canvas.height - padding - ((v - min) / (max - min)) * h;
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-  });
-  ctx.stroke();
-
-  ctx.fillStyle = '#0f172a';
-  vals.forEach((v, i) => {
-    const x = padding + (i * w) / Math.max(vals.length - 1, 1);
-    const y = canvas.height - padding - ((v - min) / (max - min)) * h;
-    ctx.beginPath();
-    ctx.arc(x, y, 3, 0, Math.PI * 2);
-    ctx.fill();
-  });
-}
-
-function renderImpactChart(signals) {
-  const canvas = document.getElementById('impact-chart');
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (!signals.length) return;
-
-  const sorted = [...signals].sort((a, b) => Math.abs(b.log_contrib) - Math.abs(a.log_contrib)).slice(0, 8);
-  const padding = { top: 24, right: 24, bottom: 24, left: 120 };
-  const chartW = canvas.width - padding.left - padding.right;
-  const chartH = canvas.height - padding.top - padding.bottom;
-  const maxAbs = Math.max(...sorted.map((s) => Math.abs(s.log_contrib)), 0.1);
-  const zeroX = padding.left + chartW / 2;
-
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.beginPath();
-  ctx.moveTo(zeroX, padding.top);
-  ctx.lineTo(zeroX, canvas.height - padding.bottom);
-  ctx.stroke();
-
-  const barH = chartH / sorted.length * 0.65;
-  sorted.forEach((s, idx) => {
-    const y = padding.top + idx * (chartH / sorted.length) + 6;
-    const width = Math.abs(s.log_contrib) / maxAbs * (chartW / 2 - 12);
-    const isPos = s.log_contrib >= 0;
-    ctx.fillStyle = isPos ? '#fecaca' : '#bbf7d0';
-    const x = isPos ? zeroX : zeroX - width;
-    ctx.fillRect(x, y, width, barH);
-    ctx.fillStyle = '#0f172a';
-    ctx.font = '12px Arial';
-    ctx.fillText(s.signal_id, 8, y + barH / 2 + 4);
-    const valText = `${isPos ? '+' : ''}${fmt(s.log_contrib)}`;
-    ctx.fillText(valText, isPos ? x + width + 6 : x - 42, y + barH / 2 + 4);
-  });
-}
-
-async function boot() {
-  try {
-    const [latest, history] = await Promise.all([
-      fetchJson('data/latest.json'),
-      fetchJson('data/history.json'),
-    ]);
-    const signals = latest.signals || [];
-    const positives = signals.filter((s) => s.log_contrib > 0).sort((a, b) => b.log_contrib - a.log_contrib);
-    const negatives = signals.filter((s) => s.log_contrib < 0).sort((a, b) => a.log_contrib - b.log_contrib);
-    const activeCount = signals.filter((s) => s.status === 'ATIVO').length;
-    const contraryCount = signals.filter((s) => s.status === 'CONTRARIO').length;
-    const neutralCount = signals.filter((s) => s.status === 'NEUTRO').length;
-
-    document.getElementById('run-date').textContent = latest.run_date;
-    document.getElementById('risk-label').textContent = latest.risk_label;
-    document.getElementById('posterior').textContent = pct(latest.posterior);
-    document.getElementById('prior-inline').textContent = pct(latest.prior);
-    document.getElementById('active-count').textContent = String(activeCount);
-    document.getElementById('contrary-count').textContent = String(contraryCount);
-    document.getElementById('neutral-count').textContent = String(neutralCount);
-    document.getElementById('external-status').textContent = latest.external_block.status || '-';
-    document.getElementById('external-score').textContent = fmt(latest.external_block.composite_score || 0);
-    document.getElementById('source-status').textContent = Object.entries(latest.source_status || {}).map(([k, v]) => `${k}: ${v}`).join(' | ');
-
-    if ((history || []).length >= 2) {
-      const delta = history[history.length - 1].posterior - history[history.length - 2].posterior;
-      document.getElementById('weekly-delta').textContent = `${delta >= 0 ? '+' : ''}${pct(Math.abs(delta))}`;
-    } else {
-      document.getElementById('weekly-delta').textContent = 'n/d';
-    }
-
-    renderBlockSummary(signals);
-    renderVectorList('positive-vectors', positives, 'danger');
-    renderVectorList('negative-vectors', negatives, 'safe');
-    renderSignals(signals);
-    renderKeyValue('external-block', latest.external_block || {});
-    renderKeyValue('raw-data', latest.raw_data || {});
-    renderHistory(history || []);
-    renderImpactChart(signals);
-  } catch (err) {
-    document.body.innerHTML = `<div class="container"><div class="card"><h1>Falha ao carregar dados</h1><p>${err.message}</p></div></div>`;
+  function byId(id){ return document.getElementById(id); }
+  async function fetchJson(path){
+    const res = await fetch(path, { cache:'no-store' });
+    if(!res.ok) throw new Error('Falha ao carregar ' + path);
+    return res.json();
   }
-}
-
-boot();
+  function pct(v,d=1){ return ((Number(v||0))*100).toFixed(d) + '%'; }
+  function num(v,d=2){ return Number(v||0).toFixed(d); }
+  function signalClass(status){ return status === 'ATIVO' ? 'ativo' : (status === 'CONTRARIO' ? 'contrario' : 'neutro'); }
+  function sourceBadgeClass(type){
+    const t = String(type||'').toLowerCase();
+    if(t.includes('direct')) return 'blue';
+    if(t.includes('proxy')) return 'amber';
+    if(t.includes('fallback')) return 'red';
+    return 'green';
+  }
+  function weeklyDelta(){
+    if((state.history||[]).length < 2) return '+0.0%';
+    const a = Number(state.history[state.history.length-1].posterior || 0);
+    const b = Number(state.history[state.history.length-2].posterior || 0);
+    const d = a - b; return (d>=0?'+':'-') + (Math.abs(d)*100).toFixed(1) + '%';
+  }
+  function header(){
+    const latest = state.latest || {};
+    const subtitle = byId('subtitle');
+    const runMeta = byId('run-meta');
+    if(subtitle){
+      subtitle.innerHTML = 'Painel estático consumindo <span class="code">data/latest.json</span>, <span class="code">data/history.json</span> e <span class="code">backend/app/model_config.json</span>.';
+    }
+    if(runMeta){
+      runMeta.innerHTML = [
+        '<div class="meta-kv"><span class="small">EXECUÇÃO</span><strong>' + (latest.run_date||'-') + '</strong></div>',
+        '<div class="meta-kv"><span class="small">CLASSIFICAÇÃO</span><strong style="font-size:22px">' + (latest.risk_label||'-') + '</strong></div>',
+        '<div class="meta-kv"><span class="small">ÚLTIMO DELTA SEMANAL</span><strong style="font-size:22px">' + weeklyDelta() + '</strong></div>'
+      ].join('');
+    }
+  }
+  function blockSummary(){
+    const out = {};
+    (state.latest?.signals || []).forEach(s=>{
+      const key = s.block || 'Sem bloco';
+      if(!out[key]) out[key] = {score:0, ativos:0, contrarios:0, total:0};
+      out[key].score += Number(s.log_contrib || 0);
+      out[key].total += 1;
+      if(s.status === 'ATIVO') out[key].ativos += 1;
+      if(s.status === 'CONTRARIO') out[key].contrarios += 1;
+    });
+    return out;
+  }
+  function panelDashboard(){
+    const latest = state.latest || {signals:[], external_block:{}, raw_data:{}, source_status:{}};
+    const blocks = blockSummary();
+    const positives = (latest.signals||[]).filter(s=>Number(s.log_contrib)>0.0001).sort((a,b)=>Number(b.log_contrib)-Number(a.log_contrib));
+    const negatives = (latest.signals||[]).filter(s=>Number(s.log_contrib)<-0.0001).sort((a,b)=>Number(a.log_contrib)-Number(b.log_contrib));
+    const blockCards = Object.entries(blocks).map(([name,v])=>{
+      const width = Math.min(100, Math.abs(v.score)*50);
+      return '<div class="block-summary"><div><strong>' + name + '</strong><div class="small">Ativos ' + v.ativos + ' · Contrários ' + v.contrarios + '</div><div class="progress"><span style="width:' + width + '%"></span></div></div><div style="font-weight:800;color:' + (v.score>=0?'#b42318':'#067647') + '">' + (v.score>=0?'+':'') + num(v.score) + '</div></div>';
+    }).join('');
+    const signalsHtml = (latest.signals||[]).map(s=>{
+      return '<div class="signal-card ' + signalClass(s.status) + '"><div class="row"><div><div class="signal-name">' + s.signal_name + '</div><div class="signal-meta">' + s.block + '</div></div><div style="text-align:right"><div class="pill ' + signalClass(s.status) + '">' + s.status + '</div><div style="margin-top:8px;font-weight:800;color:' + (Number(s.log_contrib)>=0?'#b42318':'#067647') + '">' + (Number(s.log_contrib)>=0?'+':'') + num(s.log_contrib) + '</div></div></div><div class="kv-table"><div>Valor bruto</div><div>' + num(s.raw_value) + '</div><div>Peso</div><div>' + num(s.weight) + '</div><div>LR aplicado</div><div>' + num(s.lr_used) + '</div><div>P(E|H) / P(E|~H)</div><div>' + num(s.p_e_h) + ' / ' + num(s.p_e_not_h) + '</div></div></div>';
+    }).join('');
+    return '<section class="tab-panel ' + (state.activeTab==='dashboard'?'active':'') + '" data-panel="dashboard">' +
+      '<div class="grid grid-4">' +
+      '<div class="card dark"><div class="small">PROBABILIDADE POSTERIOR</div><div class="kpi-value">' + pct(latest.posterior) + '</div><div class="kpi-sub">Prior ' + pct(latest.prior) + '</div></div>' +
+      '<div class="card"><div class="small">SINAIS ATIVOS</div><div class="kpi-value" style="font-size:42px;color:var(--ink)">' + (latest.signals||[]).filter(s=>s.status==='ATIVO').length + '</div><div class="kpi-sub">Contrários: ' + (latest.signals||[]).filter(s=>s.status==='CONTRARIO').length + ' · Neutros: ' + (latest.signals||[]).filter(s=>s.status==='NEUTRO').length + '</div></div>' +
+      '<div class="card"><div class="small">BLOCO EXTERNO</div><div class="kpi-value" style="font-size:42px;color:var(--ink)">' + num(latest.external_block?.composite_score) + '</div><div class="kpi-sub">Status: ' + (latest.external_block?.status||'-') + '</div></div>' +
+      '<div class="card"><div class="small">FONTE / STATUS</div><div style="font-size:15px;font-weight:700;line-height:1.45">' + Object.entries(latest.source_status||{}).map(([k,v])=>k + ': ' + v).join(' | ') + '</div></div>' +
+      '</div>' +
+      '<div class="grid grid-2" style="margin-top:18px"><div class="card"><h3>Resumo por bloco</h3><div class="list">' + blockCards + '</div></div><div class="card"><h3>Vetores de risco</h3><div class="grid grid-2"><div><div class="small" style="color:#b42318;font-weight:700;margin-bottom:8px">Pressões altistas</div><div class="list">' + positives.slice(0,5).map(s=>'<div class="row" style="padding:10px;border-radius:12px;background:var(--red-bg)"><span>'+s.signal_name+'</span><strong>+'+num(s.log_contrib)+'</strong></div>').join('') + '</div></div><div><div class="small" style="color:#067647;font-weight:700;margin-bottom:8px">Amortecedores</div><div class="list">' + negatives.slice(0,5).map(s=>'<div class="row" style="padding:10px;border-radius:12px;background:var(--green-bg)"><span>'+s.signal_name+'</span><strong>'+num(s.log_contrib)+'</strong></div>').join('') + '</div></div></div></div></div>' +
+      '<div class="grid grid-2" style="margin-top:18px"><div class="card"><h3>Sinais do modelo</h3><div class="list">' + signalsHtml + '</div></div><div class="grid"><div class="card"><h3>Bloco externo</h3><table class="table"><tbody>' + Object.entries(latest.external_block||{}).map(([k,v])=>'<tr><td>'+k+'</td><td><strong>' + (typeof v === 'number' ? num(v) : v) + '</strong></td></tr>').join('') + '</tbody></table></div><div class="card"><h3>Dados brutos</h3><table class="table"><tbody>' + Object.entries(latest.raw_data||{}).map(([k,v])=>'<tr><td>'+k+'</td><td><strong>'+num(v)+'</strong></td></tr>').join('') + '</tbody></table></div></div></div>' +
+      '</section>';
+  }
+  function panelHistorico(){
+    return '<section class="tab-panel ' + (state.activeTab==='historico'?'active':'') + '" data-panel="historico"><div class="grid grid-2"><div class="card"><h3>Evolução da probabilidade</h3><div class="canvas-wrap"><canvas id="historyChart"></canvas></div><table class="table" style="margin-top:12px"><tbody>' + (state.history||[]).slice().reverse().map(h=>'<tr><td>'+(h.run_date||h.date)+'</td><td>'+pct(h.posterior)+'</td><td>'+(h.risk_label||'')+'</td></tr>').join('') + '</tbody></table></div><div class="card"><h3>Contribuição por sinal</h3><div class="canvas-wrap"><canvas id="signalChart"></canvas></div></div></div></section>';
+  }
+  function panelMetodologia(){
+    const rows = state.modelConfig?.signals || [];
+    return '<section class="tab-panel ' + (state.activeTab==='metodologia'?'active':'') + '" data-panel="metodologia"><div class="notice"><strong>Como ler esta aba</strong>Cada parâmetro mostra o que mede, a que bloco pertence e qual a origem declarada no modelo. O detalhe operacional da coleta fica em <span class="code">source_status</span> e <span class="code">data_feed_meta</span>.</div><div class="list" style="margin-top:18px">' + rows.map(r=>'<div class="card"><div class="row"><div><h3 style="margin-bottom:6px">'+r.signal_name+'</h3><div class="small">'+r.block+'</div></div><div><span class="badge '+sourceBadgeClass(r.source_type)+'">'+r.source_type+'</span></div></div><p style="margin:14px 0 10px">'+(r.description||'')+'</p><div class="kv-table"><div>Fonte declarada</div><div>'+(r.source_label||'')+'</div><div>Raw key</div><div><span class="code">'+r.raw_key+'</span></div><div>Peso</div><div>'+num(r.weight)+'</div><div>P(E|H) / P(E|~H)</div><div>'+num(r.p_e_h)+' / '+num(r.p_e_not_h)+'</div><div>Thresholds</div><div><span class="code">'+JSON.stringify(r.thresholds||{})+'</span></div></div></div>').join('') + '</div></section>';
+  }
+  function panelDados(){
+    return '<section class="tab-panel ' + (state.activeTab==='dados'?'active':'') + '" data-panel="dados"><div class="card"><h3>Dados brutos</h3><table class="table"><thead><tr><th>Chave</th><th>Valor</th></tr></thead><tbody>' + Object.entries(state.latest?.raw_data||{}).map(([k,v])=>'<tr><td>'+k+'</td><td>'+num(v)+'</td></tr>').join('') + '</tbody></table></div></section>';
+  }
+  function panelFontes(){
+    const meta = state.latest?.data_feed_meta || {};
+    return '<section class="tab-panel ' + (state.activeTab==='fontes'?'active':'') + '" data-panel="fontes"><div class="grid grid-2"><div class="card"><h3>Source status</h3><table class="table"><thead><tr><th>Chave</th><th>Status</th></tr></thead><tbody>' + Object.entries(state.latest?.source_status||{}).map(([k,v])=>'<tr><td>'+k+'</td><td><span class="badge '+sourceBadgeClass(v)+'">'+v+'</span></td></tr>').join('') + '</tbody></table></div><div class="card"><h3>data_feed_meta</h3><table class="table"><thead><tr><th>Item</th><th>Detalhe</th></tr></thead><tbody>' + Object.entries(meta).map(([k,v])=>'<tr><td>'+k+'</td><td><div><strong>valor:</strong> '+(typeof v.value === 'number' ? num(v.value) : v.value)+'</div><div><strong>as_of_date:</strong> '+(v.as_of_date||'')+'</div><div><strong>source:</strong> '+(v.source||'')+'</div><div><strong>method:</strong> '+(v.method||'')+'</div><div><strong>quality_flag:</strong> '+(v.quality_flag||'')+'</div></td></tr>').join('') + '</tbody></table></div></div></section>';
+  }
+  function render(){
+    const app = byId('app');
+    if(!app || !state.latest) return;
+    header();
+    app.innerHTML = [panelDashboard(), panelHistorico(), panelMetodologia(), panelDados(), panelFontes()].join('');
+    bindTabs();
+    drawCharts();
+  }
+  function bindTabs(){
+    document.querySelectorAll('.tab').forEach(btn=>{
+      btn.onclick = function(){
+        state.activeTab = btn.dataset.tab;
+        document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active', b===btn));
+        document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active', p.dataset.panel===state.activeTab));
+        drawCharts();
+      };
+    });
+  }
+  let historyChart = null, signalChart = null;
+  function drawCharts(){
+    if(state.activeTab !== 'historico' || !window.Chart) return;
+    const historyCtx = byId('historyChart');
+    const signalCtx = byId('signalChart');
+    if(!historyCtx || !signalCtx) return;
+    if(historyChart) historyChart.destroy();
+    if(signalChart) signalChart.destroy();
+    historyChart = new Chart(historyCtx, { type:'line', data:{ labels:(state.history||[]).map(h=>h.run_date||h.date), datasets:[{ label:'Posterior', data:(state.history||[]).map(h=>h.posterior), borderColor:'#0b1835', backgroundColor:'#0b1835', tension:0.15 }] }, options:{ responsive:true, maintainAspectRatio:false, scales:{ y:{ ticks:{ callback:v=>Math.round(v*100)+'%' }, min:0, max:1 } } } });
+    signalChart = new Chart(signalCtx, { type:'bar', data:{ labels:(state.latest?.signals||[]).map(s=>s.signal_id), datasets:[{ label:'Log contribution', data:(state.latest?.signals||[]).map(s=>s.log_contrib), backgroundColor:(state.latest?.signals||[]).map(s=>Number(s.log_contrib)>=0?'#f3b5b5':'#b7ebc9'), borderColor:(state.latest?.signals||[]).map(s=>Number(s.log_contrib)>=0?'#b42318':'#067647'), borderWidth:1 }] }, options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y' } });
+  }
+  async function init(){
+    try{
+      const latest = await fetchJson('data/latest.json');
+      const history = await fetchJson('data/history.json');
+      let modelConfig = {signals:[]};
+      try { modelConfig = await fetchJson('backend/app/model_config.json'); } catch(e) {}
+      state.latest = latest;
+      state.history = history;
+      state.modelConfig = modelConfig;
+      render();
+    }catch(err){
+      const app = byId('app');
+      if(app){
+        app.innerHTML = '<div class="card"><h3>Falha ao carregar dados</h3><p>' + err.message + '</p></div>';
+      }
+    }
+  }
+  init();
+})();
