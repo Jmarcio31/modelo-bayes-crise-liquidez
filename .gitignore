@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+backend/data/liquidez.db
+backend/data/raw/
+frontend/data/latest.json
+frontend/data/history.json
+run_backend.bat

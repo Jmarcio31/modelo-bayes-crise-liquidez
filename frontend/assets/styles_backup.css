@@ -1,0 +1,46 @@
+:root {
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --line: #dbe3ee;
+  --dark: #0f172a;
+  --green: #166534;
+  --green-bg: #dcfce7;
+  --amber: #92400e;
+  --amber-bg: #fef3c7;
+  --red: #991b1b;
+  --red-bg: #fee2e2;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, Arial, sans-serif; background: var(--bg); color: var(--text); }
+.container { max-width: 1240px; margin: 0 auto; padding: 24px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 20px; box-shadow: 0 4px 18px rgba(15,23,42,0.05); }
+.hero { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+.hero h1 { margin: 0 0 8px; }
+.hero p { margin: 0; color: var(--muted); }
+.meta { display: grid; gap: 10px; min-width: 220px; }
+.meta div { display: flex; flex-direction: column; }
+.meta span, .card span.label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+.meta strong { font-size: 18px; }
+.summary-grid, .grid-two { display: grid; gap: 16px; margin-top: 16px; }
+.summary-grid { grid-template-columns: repeat(4, 1fr); }
+.grid-two { grid-template-columns: 1.3fr 1fr; }
+.dark { background: var(--dark); color: white; }
+.dark span { color: #cbd5e1; }
+.dark strong { font-size: 40px; margin-top: 8px; display: block; }
+.card strong { display: block; margin-top: 8px; font-size: 28px; }
+.signal-item, .kv { border: 1px solid var(--line); border-radius: 16px; padding: 12px; margin-top: 10px; }
+.signal-top, .kv { display: flex; justify-content: space-between; gap: 10px; }
+.small { color: var(--muted); font-size: 13px; }
+.badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.badge.ativo { background: var(--red-bg); color: var(--red); }
+.badge.neutro { background: var(--amber-bg); color: var(--amber); }
+.badge.contrario { background: var(--green-bg); color: var(--green); }
+.table { margin-top: 10px; }
+.row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+canvas { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; background: white; }
+code { background: #e2e8f0; padding: 2px 6px; border-radius: 6px; }
+@media (max-width: 960px) {
+  .summary-grid, .grid-two, .hero { grid-template-columns: 1fr; display: grid; }
+}
