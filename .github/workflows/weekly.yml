@@ -22,10 +22,10 @@ jobs:
       - name: Run pipeline
         working-directory: .
         run: python -m backend.app.main
-      - name: Commit updated data
+      - name: Commit updated dashboard data
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add backend/data/liquidez.db frontend/data/latest.json frontend/data/history.json
-          git diff --cached --quiet || git commit -m "Atualiza dados do dashboard"
-          git push
+         git config user.name github-actions
+         git config user.email github-actions@github.com
+         git add frontend/data/latest.json frontend/data/history.json
+         git diff --cached --quiet || git commit -m "Update dashboard data"
+         git push
