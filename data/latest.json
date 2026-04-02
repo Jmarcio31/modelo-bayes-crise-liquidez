@@ -1,8 +1,44 @@
 {
-  "run_id": 23,
+  "run_id": 29,
   "run_date": "2026-04-02",
-  "prior": 0.15,
-  "posterior": 0.04585521022163201,
+  "prior": 0.16000000000000003,
+  "prior_base": 0.12,
+  "prior_mode": "dynamic",
+  "prior_details": [
+    {
+      "label": "curva_desinverte",
+      "raw_key": "curva_spread",
+      "kind": "gte",
+      "threshold": 0.15,
+      "value": 0.63,
+      "add": 0.01
+    },
+    {
+      "label": "rrp_muito_baixo",
+      "raw_key": "rrp_usd_bn",
+      "kind": "lte",
+      "threshold": 25.0,
+      "value": 3.992,
+      "add": 0.01
+    },
+    {
+      "label": "bloco_externo_sensivel",
+      "raw_key": "bloco_externo_score",
+      "kind": "gte",
+      "threshold": 0.35,
+      "value": 0.39285028717539594,
+      "add": 0.01
+    },
+    {
+      "label": "private_credit_fragil",
+      "raw_key": "private_credit_stress_score",
+      "kind": "gte",
+      "threshold": 0.25,
+      "value": 0.2966,
+      "add": 0.01
+    }
+  ],
+  "posterior": 0.3140300229298246,
   "risk_label": "Estresse contido",
   "signals": [
     {
@@ -45,7 +81,7 @@
       "signal_id": "rrp",
       "signal_name": "Reverse Repo Facility comprimido",
       "block": "Liquidez domestica",
-      "raw_value": 4.1036,
+      "raw_value": 3.992,
       "status": "ATIVO",
       "weight": 0.45,
       "p_e_h": 0.68,
@@ -58,24 +94,24 @@
       "signal_name": "Spread SOFR - IORB",
       "block": "Funding stress",
       "raw_value": 0.0,
-      "status": "CONTRARIO",
-      "weight": 0.85,
-      "p_e_h": 0.82,
-      "p_e_not_h": 0.29,
-      "lr_used": 0.2535211267605635,
-      "log_contrib": -1.1664619012733777
+      "status": "NEUTRO",
+      "weight": 0.55,
+      "p_e_h": 0.72,
+      "p_e_not_h": 0.4,
+      "lr_used": 1.0,
+      "log_contrib": 0.0
     },
     {
       "signal_id": "fra_ois",
       "signal_name": "FRA-OIS proxy publica",
       "block": "Funding stress",
       "raw_value": 4.8,
-      "status": "CONTRARIO",
-      "weight": 0.85,
-      "p_e_h": 0.79,
-      "p_e_not_h": 0.31,
-      "lr_used": 0.3043478260869565,
-      "log_contrib": -1.011146456842761
+      "status": "NEUTRO",
+      "weight": 0.5,
+      "p_e_h": 0.72,
+      "p_e_not_h": 0.38,
+      "lr_used": 1.0,
+      "log_contrib": 0.0
     },
     {
       "signal_id": "repo",
@@ -114,6 +150,18 @@
       "log_contrib": 0.0
     },
     {
+      "signal_id": "private_credit",
+      "signal_name": "Private credit stress",
+      "block": "Credito privado / NBFI",
+      "raw_value": 0.2966,
+      "status": "NEUTRO",
+      "weight": 0.6,
+      "p_e_h": 0.74,
+      "p_e_not_h": 0.4,
+      "lr_used": 1.0,
+      "log_contrib": 0.0
+    },
+    {
       "signal_id": "nfci",
       "signal_name": "National Financial Conditions Index",
       "block": "Condicoes financeiras",
@@ -137,7 +185,7 @@
     "curva_spread": 0.63,
     "sahm_gap": 0.2666666666666675,
     "reservas_pct_min": 0.997985,
-    "rrp_usd_bn": 4.1036,
+    "rrp_usd_bn": 3.992,
     "sofr_iorb_bp": 0.0,
     "fra_ois_bp": 4.8,
     "repo_stress_score": 0.346,
@@ -146,6 +194,7 @@
     "tic_3m_usd_bn": -98.5951,
     "usd_stress_score": 0.4915,
     "nfci": -0.43366,
+    "private_credit_stress_score": 0.2966,
     "bloco_externo_score": 0.39285028717539594
   },
   "source_status": {
@@ -155,7 +204,8 @@
     "repo_stress": "proxy",
     "fra_ois": "proxy",
     "rrp": "direct",
-    "usd_stress": "proxy"
+    "usd_stress": "proxy",
+    "private_credit": "proxy"
   },
   "data_feed_meta": {
     "tic_3m_usd_bn": {
@@ -180,7 +230,7 @@
       "quality_flag": "ok"
     },
     "rrp_usd_bn": {
-      "value": 4.1036,
+      "value": 3.992,
       "as_of_date": "2026-04-02",
       "source": "nyfed_markets",
       "method": "api_direct_5d_avg",
@@ -191,6 +241,13 @@
       "as_of_date": "2026-03-27",
       "source": "fred",
       "method": "calculated_composite",
+      "quality_flag": "ok"
+    },
+    "private_credit_stress_score": {
+      "value": 0.2966,
+      "as_of_date": "2026-04-01",
+      "source": "market_proxy",
+      "method": "calculated_composite_hy_funding_redemption_overlay",
       "quality_flag": "ok"
     }
   }

@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import io
 import os
+import time
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -12,7 +13,10 @@ FRED_URL = "https://api.stlouisfed.org/fred/series/observations"
 FRED_GRAPH_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
 NYFED_RRP_JSON = "https://markets.newyorkfed.org/api/rp/reverserepo/propositions/search.json?startDate={date}&endDate={date}"
 
-# Mantém compatibilidade com o restante do projeto
+REQUEST_TIMEOUT = 60
+REQUEST_ATTEMPTS = 3
+BACKOFF_SECONDS = 2
+
 SERIES = {
     "curve10y3m": "T10Y3M",
     "unrate": "UNRATE",
@@ -47,6 +51,21 @@ def _safe_float(value):
         return None
 
 
+def _get_with_retry(url: str, *, params=None, attempts: int = REQUEST_ATTEMPTS, timeout: int = REQUEST_TIMEOUT) -> requests.Response:
+    last_exc = None
+    headers = {"User-Agent": "Mozilla/5.0"}
+    for i in range(attempts):
+        try:
+            r = requests.get(url, params=params, timeout=timeout, headers=headers)
+            r.raise_for_status()
+            return r
+        except requests.exceptions.RequestException as e:
+            last_exc = e
+            if i < attempts - 1:
+                time.sleep(BACKOFF_SECONDS * (i + 1))
+    raise last_exc
+
+
 def load_fred_series(series_id: str) -> List[Tuple[str, float]]:
     params = {
         "series_id": series_id,
@@ -56,10 +75,8 @@ def load_fred_series(series_id: str) -> List[Tuple[str, float]]:
         "observation_start": "2000-01-01",
     }
 
-    # 1) tenta API oficial
     try:
-        r = requests.get(FRED_URL, params=params, timeout=30)
-        r.raise_for_status()
+        r = _get_with_retry(FRED_URL, params=params)
         data = r.json()
         obs = data.get("observations", [])
 
@@ -76,11 +93,9 @@ def load_fred_series(series_id: str) -> List[Tuple[str, float]]:
     except Exception:
         pass
 
-    # 2) fallback para CSV público
     try:
         url = FRED_GRAPH_CSV.format(series_id=series_id)
-        r = requests.get(url, timeout=30)
-        r.raise_for_status()
+        r = _get_with_retry(url)
 
         reader = csv.DictReader(io.StringIO(r.text))
         fields = reader.fieldnames or []
@@ -120,7 +135,6 @@ def latest_date(series: List[Tuple[str, float]]) -> str:
 
 
 def load_nfci() -> float:
-    # Usa FRED (serie NFCI) para maior robustez
     series = load_fred_series(SERIES["nfci"])
     return latest_value(series)
 
@@ -155,8 +169,7 @@ def try_rrp_usd_bn(date_hint: str | None = None):
         return None
     url = NYFED_RRP_JSON.format(date=date_hint)
     try:
-        response = requests.get(url, timeout=30)
-        response.raise_for_status()
+        response = _get_with_retry(url)
         payload = response.json()
     except Exception:
         return None
