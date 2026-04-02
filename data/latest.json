@@ -1,8 +1,8 @@
 {
-  "run_id": 14,
-  "run_date": "2026-04-01",
+  "run_id": 23,
+  "run_date": "2026-04-02",
   "prior": 0.15,
-  "posterior": 0.1336731406970651,
+  "posterior": 0.04585521022163201,
   "risk_label": "Estresse contido",
   "signals": [
     {
@@ -57,19 +57,19 @@
       "signal_id": "sofr_iorb",
       "signal_name": "Spread SOFR - IORB",
       "block": "Funding stress",
-      "raw_value": 3.000000000000025,
-      "status": "NEUTRO",
+      "raw_value": 0.0,
+      "status": "CONTRARIO",
       "weight": 0.85,
       "p_e_h": 0.82,
       "p_e_not_h": 0.29,
-      "lr_used": 1.0,
-      "log_contrib": 0.0
+      "lr_used": 0.2535211267605635,
+      "log_contrib": -1.1664619012733777
     },
     {
       "signal_id": "fra_ois",
       "signal_name": "FRA-OIS proxy publica",
       "block": "Funding stress",
-      "raw_value": 1.8,
+      "raw_value": 4.8,
       "status": "CONTRARIO",
       "weight": 0.85,
       "p_e_h": 0.79,
@@ -81,7 +81,7 @@
       "signal_id": "repo",
       "signal_name": "Repo stress / spikes",
       "block": "Funding stress",
-      "raw_value": 0.324,
+      "raw_value": 0.346,
       "status": "NEUTRO",
       "weight": 0.95,
       "p_e_h": 0.88,
@@ -138,9 +138,9 @@
     "sahm_gap": 0.2666666666666675,
     "reservas_pct_min": 0.997985,
     "rrp_usd_bn": 4.1036,
-    "sofr_iorb_bp": 3.000000000000025,
-    "fra_ois_bp": 1.8,
-    "repo_stress_score": 0.324,
+    "sofr_iorb_bp": 0.0,
+    "fra_ois_bp": 4.8,
+    "repo_stress_score": 0.346,
     "vol_yields_20d_bp": 10.234744745229353,
     "custody_12w_pct": -0.9642017435079198,
     "tic_3m_usd_bn": -98.5951,
@@ -153,9 +153,9 @@
     "nfci": "direct",
     "tic": "proxy",
     "repo_stress": "proxy",
-    "fra_ois": "fallback",
+    "fra_ois": "proxy",
     "rrp": "direct",
-    "usd_stress": "fallback"
+    "usd_stress": "proxy"
   },
   "data_feed_meta": {
     "tic_3m_usd_bn": {
@@ -166,22 +166,22 @@
       "quality_flag": "ok"
     },
     "repo_stress_score": {
-      "value": 0.324,
-      "as_of_date": "2026-04-01",
+      "value": 0.346,
+      "as_of_date": "2026-04-02",
       "source": "nyfed_markets",
       "method": "calculated_composite",
       "quality_flag": "ok"
     },
     "fra_ois_bp": {
-      "value": 1.8,
-      "as_of_date": "2026-03-31",
+      "value": 4.8,
+      "as_of_date": "2026-04-01",
       "source": "fred",
-      "method": "fallback_last_valid:fra_ois_error:HTTPError",
-      "quality_flag": "stale_fallback"
+      "method": "calculated_proxy_cp_minus_sofr",
+      "quality_flag": "ok"
     },
     "rrp_usd_bn": {
       "value": 4.1036,
-      "as_of_date": "2026-04-01",
+      "as_of_date": "2026-04-02",
       "source": "nyfed_markets",
       "method": "api_direct_5d_avg",
       "quality_flag": "ok"
@@ -190,8 +190,8 @@
       "value": 0.4915,
       "as_of_date": "2026-03-27",
       "source": "fred",
-      "method": "fallback_last_valid:usd_stress_error:HTTPError",
-      "quality_flag": "stale_fallback"
+      "method": "calculated_composite",
+      "quality_flag": "ok"
     }
   }
 }
