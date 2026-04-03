@@ -238,5 +238,10 @@
     "run_date": "2026-04-03",
     "posterior": 0.361399337573148,
     "risk_label": "Estresse contido"
+  },
+  {
+    "run_date": "2026-04-03",
+    "posterior": 0.361399337573148,
+    "risk_label": "Estresse contido"
   }
 ]

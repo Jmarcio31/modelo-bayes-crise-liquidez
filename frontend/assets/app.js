@@ -119,8 +119,8 @@
   }
   async function init(){
     try{
-      const latest = await fetchJson('data/latest.json');
-      const history = await fetchJson('data/history.json');
+      const latest = await fetchJson('frontend/data/latest.json');
+      const history = await fetchJson('frontend/data/history.json');
       let modelConfig = {signals:[]};
       try { modelConfig = await fetchJson('backend/app/model_config.json'); } catch(e) {}
       state.latest = latest;
