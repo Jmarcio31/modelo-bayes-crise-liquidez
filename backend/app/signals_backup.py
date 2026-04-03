@@ -11,18 +11,14 @@ def _classify_value(value: float, thresholds: dict) -> str:
     contrary_gte = thresholds.get("contrary_gte")
     contrary_lte = thresholds.get("contrary_lte")
 
-    # Primeiro verifica se é ATIVO (prioridade mais alta)
     if active_gte is not None and value >= active_gte:
         return "ATIVO"
     if active_lte is not None and value <= active_lte:
         return "ATIVO"
-    
-    # Depois verifica se é CONTRÁRIO
     if contrary_gte is not None and value >= contrary_gte:
         return "CONTRARIO"
     if contrary_lte is not None and value <= contrary_lte:
         return "CONTRARIO"
-    
     return "NEUTRO"
 
 

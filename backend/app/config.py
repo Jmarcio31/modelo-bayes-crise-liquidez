@@ -6,7 +6,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parents[2]
 APP_DIR = BASE_DIR / "backend" / "app"
 RAW_DIR = BASE_DIR / "backend" / "data" / "raw"
-DATA_DIR = BASE_DIR / "data"
+DATA_DIR = BASE_DIR / "frontend" / "data"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 

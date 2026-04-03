@@ -168,7 +168,7 @@ def run_pipeline() -> PipelineOutput:
         "tic_3m_usd_bn": raw["tic_3m_usd_bn"],
         "usd_stress_score": raw["usd_stress_score"],
         "composite_score": ext_score,
-        "status": statuses.get("bloco_externo", "NEUTRO"),
+        "status": statuses["bloco_externo"],
     }
 
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)

@@ -23,14 +23,14 @@
       {
         "raw_key": "bloco_externo_score",
         "kind": "gte",
-        "threshold": 0.40,
+        "threshold": 0.35,
         "add": 0.01,
         "label": "bloco_externo_sensivel"
       },
       {
         "raw_key": "private_credit_stress_score",
         "kind": "gte",
-        "threshold": 0.30,
+        "threshold": 0.25,
         "add": 0.01,
         "label": "private_credit_fragil"
       },
@@ -44,7 +44,7 @@
       {
         "raw_key": "sahm_gap",
         "kind": "gte",
-        "threshold": 0.30,
+        "threshold": 0.35,
         "add": 0.01,
         "label": "mercado_trabalho_enfraquece"
       }
@@ -61,7 +61,7 @@
   "signals": [
     {
       "id": "curva",
-      "signal_name": "Desinversão da curva após inversão profunda",
+      "signal_name": "Desinversao da curva apos inversao profunda",
       "block": "Macro",
       "raw_key": "curva_spread",
       "weight": 0.55,
@@ -71,30 +71,30 @@
         "active_gte": 0.15,
         "contrary_lte": -0.25
       },
-      "description": "Mede a normalização da curva após inversão relevante e ajuda a identificar mudança de regime macro.",
+      "description": "Mede a normalizacao da curva apos inversao relevante e ajuda a identificar mudanca de regime macro.",
       "source_type": "direct",
       "source_label": "FRED / Treasury yields"
     },
     {
       "id": "sahm",
-      "signal_name": "Sahm Rule / deterioração do mercado de trabalho",
+      "signal_name": "Sahm Rule / deterioracao do mercado de trabalho",
       "block": "Macro",
       "raw_key": "sahm_gap",
       "weight": 0.55,
       "p_e_h": 0.68,
       "p_e_not_h": 0.38,
       "thresholds": {
-        "active_gte": 0.30,
+        "active_gte": 0.5,
         "contrary_lte": 0.2
       },
-      "description": "Capta piora cíclica do mercado de trabalho via desemprego.",
+      "description": "Capta piora ciclica do mercado de trabalho via desemprego.",
       "source_type": "direct",
       "source_label": "FRED / BLS"
     },
     {
       "id": "reservas",
-      "signal_name": "Reservas bancárias em suporte",
-      "block": "Liquidez doméstica",
+      "signal_name": "Reservas bancarias em suporte",
+      "block": "Liquidez domestica",
       "raw_key": "reservas_pct_min",
       "weight": 0.8,
       "p_e_h": 0.83,
@@ -103,14 +103,14 @@
         "active_lte": 1.03,
         "contrary_gte": 1.12
       },
-      "description": "Compara reservas bancárias com uma faixa operacional mínima confortável.",
+      "description": "Compara reservas bancarias com uma faixa operacional minima confortavel.",
       "source_type": "proxy",
       "source_label": "FRED / H.4.1 + piso operacional"
     },
     {
       "id": "rrp",
       "signal_name": "Reverse Repo Facility comprimido",
-      "block": "Liquidez doméstica",
+      "block": "Liquidez domestica",
       "raw_key": "rrp_usd_bn",
       "weight": 0.45,
       "p_e_h": 0.68,
@@ -119,7 +119,7 @@
         "active_lte": 25.0,
         "contrary_gte": 500.0
       },
-      "description": "Mede o colchão de liquidez no facility reverso do Fed, usando média móvel de 5 dias úteis.",
+      "description": "Mede o colchao de liquidez no facility reverso do Fed, usando media movel de 5 dias uteis.",
       "source_type": "feed",
       "source_label": "NY Fed Markets / data_feed.csv"
     },
@@ -135,25 +135,25 @@
         "active_gte": 8.0,
         "contrary_lte": -2.0
       },
-      "description": "Captura descolamento entre taxa secured overnight e remuneração de reservas.",
+      "description": "Captura descolamento entre taxa secured overnight e remuneracao de reservas.",
       "source_type": "direct",
       "source_label": "FRED / NY Fed / Fed"
     },
     {
       "id": "fra_ois",
-      "signal_name": "FRA-OIS proxy pública",
+      "signal_name": "FRA-OIS proxy publica",
       "block": "Funding stress",
       "raw_key": "fra_ois_bp",
       "weight": 0.5,
       "p_e_h": 0.72,
       "p_e_not_h": 0.38,
       "thresholds": {
-        "active_gte": 15.0,
+        "active_gte": 25.0,
         "contrary_lte": 3.0
       },
-      "description": "Proxy de estresse em funding unsecured com base em séries públicas.",
+      "description": "Proxy de estresse em funding unsecured com base em series publicas.",
       "source_type": "proxy",
-      "source_label": "FRED + cálculo no data_builder"
+      "source_label": "FRED + calculo no data_builder"
     },
     {
       "id": "repo",
@@ -167,13 +167,13 @@
         "active_gte": 0.55,
         "contrary_lte": 0.25
       },
-      "description": "Score composto de tensão em repo, usando spreads, dispersão e persistência.",
+      "description": "Score composto de tensao em repo, usando spreads, dispersao e persistencia.",
       "source_type": "proxy",
       "source_label": "NY Fed Markets + data_builder"
     },
     {
       "id": "vol_yields",
-      "signal_name": "Volatilidade de yields (proxy pública do MOVE)",
+      "signal_name": "Volatilidade de yields (proxy publica do MOVE)",
       "block": "Mercado de juros",
       "raw_key": "vol_yields_20d_bp",
       "weight": 0.65,
@@ -183,13 +183,13 @@
         "active_gte": 12.0,
         "contrary_lte": 6.0
       },
-      "description": "Usa a volatilidade recente das yields como aproximação pública do MOVE.",
+      "description": "Usa a volatilidade recente das yields como aproximacao publica do MOVE.",
       "source_type": "proxy",
       "source_label": "FRED / Treasury yields"
     },
     {
       "id": "bloco_externo",
-      "signal_name": "Bloco externo: Custody + TIC + stress em dólar",
+      "signal_name": "Bloco externo: Custody + TIC + stress em dolar",
       "block": "Externo",
       "raw_key": "bloco_externo_score",
       "weight": 1.0,
@@ -199,29 +199,29 @@
         "active_gte": 0.4,
         "contrary_lte": 0.2
       },
-      "description": "Subíndice que combina suporte externo a Treasuries, fluxos e aperto de dólar global.",
+      "description": "Subindice que combina suporte externo a Treasuries, fluxos e aperto de dolar global.",
       "source_type": "mixed",
       "source_label": "FRED + data_feed.csv"
     },
     {
       "id": "private_credit",
       "signal_name": "Private credit stress",
-      "block": "Crédito privado / NBFI",
+      "block": "Credito privado / NBFI",
       "raw_key": "private_credit_stress_score",
       "weight": 0.6,
       "p_e_h": 0.74,
       "p_e_not_h": 0.4,
       "thresholds": {
-        "active_gte": 0.25
+        "active_gte": 0.35
       },
-      "description": "Proxy público de estresse em private credit e veículos semi-líquidos, combinando spread de high yield, overlay de funding e overlay supervisionado de redemptions.",
+      "description": "Proxy publico de estresse em private credit e veiculos semi-iliquidos, combinando spread de high yield, overlay de funding e overlay supervisionado de redemptions.",
       "source_type": "proxy",
       "source_label": "FRED + data_builder + overlay supervisionado"
     },
     {
       "id": "nfci",
       "signal_name": "National Financial Conditions Index",
-      "block": "Condições financeiras",
+      "block": "Condicoes financeiras",
       "raw_key": "nfci",
       "weight": 0.6,
       "p_e_h": 0.69,
@@ -230,7 +230,7 @@
         "active_gte": 0.35,
         "contrary_lte": -0.25
       },
-      "description": "Índice amplo de condições financeiras para leitura sistêmica agregada.",
+      "description": "Indice amplo de condicoes financeiras para leitura sistemica agregada.",
       "source_type": "direct",
       "source_label": "FRED / Chicago Fed"
     }
