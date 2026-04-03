@@ -1,4 +1,3 @@
-
 (function(){
   const state = { latest:null, history:[], modelConfig:{signals:[]}, activeTab:'dashboard' };
 
@@ -29,7 +28,7 @@
     const subtitle = byId('subtitle');
     const runMeta = byId('run-meta');
     if(subtitle){
-      subtitle.innerHTML = 'Painel estático consumindo <span class="code">data/latest.json</span>, <span class="code">data/history.json</span> e <span class="code">backend/app/model_config.json</span>.';
+      subtitle.innerHTML = 'Painel estático consumindo <span class="code">frontend/data/latest.json</span>, <span class="code">frontend/data/history.json</span> e <span class="code">backend/app/model_config.json</span>.';
     }
     if(runMeta){
       runMeta.innerHTML = [

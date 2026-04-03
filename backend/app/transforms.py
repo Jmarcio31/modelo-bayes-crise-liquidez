@@ -34,6 +34,7 @@ def sofr_iorb_bp(sofr: float, iorb: float) -> float:
 
 
 def vol_yields_20d_bp(y10_values: list[float]) -> float:
+    """Volatilidade de yields em basis points (desvio padrão dos últimos 20 dias * 100)"""
     return rolling_std_last(y10_values, 20) * 100.0
 
 
@@ -62,4 +63,5 @@ def usd_stress_score(dxy_values: list[float], y10_values: list[float], y2_values
 def external_block_score(custody_12w: float, tic_3m: float, usd_score: float) -> float:
     custody_score = clamp((-custody_12w) / 8.0, 0.0, 1.0)
     tic_score = clamp((-tic_3m) / 150.0, 0.0, 1.0)
-    return 0.4 * custody_score + 0.3 * tic_score + 0.3 * clamp(usd_score, 0.0, 1.0)
+    usd_score_clamped = clamp(usd_score, 0.0, 1.0)
+    return 0.4 * custody_score + 0.3 * tic_score + 0.3 * usd_score_clamped

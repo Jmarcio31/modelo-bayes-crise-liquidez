@@ -6,13 +6,21 @@ from datetime import date
 from pathlib import Path
 
 from .bayes import compute_model
-from .config import DATA_FEED_CSV, DB_PATH, HISTORY_JSON, LATEST_JSON, MANUAL_DEFAULTS, PRIOR, RAW_DIR, SIGNALS
+from .config import DATA_FEED_CSV, DB_PATH, HISTORY_JSON, LATEST_JSON, MANUAL_DEFAULTS, PRIOR, RAW_DIR, SIGNALS, SERIES
 from .exporter import export_history, export_latest
 from .feed_loader import feed_entries_to_meta, load_data_feed
 from .signals import classify
-from .sources import SERIES, latest_date, latest_value, load_fred_series, load_manual_overrides, load_nfci, try_rrp_usd_bn
+from .sources import latest_date, latest_value, load_fred_series, load_manual_overrides, load_nfci, try_rrp_usd_bn
 from .storage import connect, fetch_history, insert_run
-from .transforms import custody_12w_pct, external_block_score, reservas_pct_min, sahm_gap, sofr_iorb_bp, usd_stress_score, vol_yields_20d_bp
+from .transforms import (
+    custody_12w_pct,
+    external_block_score,
+    reservas_pct_min,
+    sahm_gap,
+    sofr_iorb_bp,
+    usd_stress_score,
+    vol_yields_20d_bp,
+)
 
 
 @dataclass
@@ -104,6 +112,7 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict
     overrides = MANUAL_DEFAULTS.copy()
     overrides.update(load_manual_overrides(RAW_DIR / "manual_inputs.csv"))
 
+    # Carregar séries FRED existentes
     curve = load_fred_series(SERIES["curve10y3m"])
     unrate = load_fred_series(SERIES["unrate"])
     sofr = load_fred_series(SERIES["sofr"])
@@ -118,6 +127,7 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict
     if rrp is None:
         rrp = float(overrides["rrp_usd_bn"])
 
+    # Dados brutos
     raw = {
         "curva_spread": latest_value(curve),
         "sahm_gap": sahm_gap([v for _, v in unrate]),
@@ -136,6 +146,7 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict
 
     source_status = {"custody": "direct", "nfci": "direct"}
 
+    # Atualizar com dados do feed
     feed = load_data_feed(DATA_FEED_CSV)
     for key, entry in feed.items():
         if key in raw:
@@ -149,7 +160,13 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict
     source_status.setdefault("usd_stress", "proxy")
     source_status.setdefault("private_credit", "manual_or_default")
 
-    raw["bloco_externo_score"] = external_block_score(raw["custody_12w_pct"], raw["tic_3m_usd_bn"], raw["usd_stress_score"])
+    # Bloco externo
+    raw["bloco_externo_score"] = external_block_score(
+        raw["custody_12w_pct"],
+        raw["tic_3m_usd_bn"],
+        raw["usd_stress_score"]
+    )
+    
     return raw, source_status, feed_entries_to_meta(feed)
 
 

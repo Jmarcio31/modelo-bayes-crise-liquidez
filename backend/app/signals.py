@@ -40,7 +40,12 @@ def classify(raw: Dict[str, float]) -> Tuple[Dict[str, str], float]:
 
 
 def compute_external_block_score(raw: Dict[str, float]) -> float:
-    custody_score = max(0.0, min(1.0, (-float(raw["custody_12w_pct"])) / 8.0))
-    tic_score = max(0.0, min(1.0, (-float(raw["tic_3m_usd_bn"])) / 150.0))
-    usd_score = max(0.0, min(1.0, float(raw["usd_stress_score"])))
-    return 0.4 * custody_score + 0.3 * tic_score + 0.3 * usd_score
+    from .transforms import clamp
+    
+    custody_score = clamp((-raw.get("custody_12w_pct", 0.0)) / 8.0, 0.0, 1.0)
+    tic_score = clamp((-raw.get("tic_3m_usd_bn", 0.0)) / 150.0, 0.0, 1.0)
+    usd_score = clamp(raw.get("usd_stress_score", 0.0), 0.0, 1.0)
+    eur_basis = raw.get("eur_basis_bp", 0.0)
+    basis_score = clamp((-eur_basis - 5.0) / 50.0, 0.0, 1.0)
+    
+    return 0.30 * custody_score + 0.25 * tic_score + 0.25 * usd_score + 0.20 * basis_score
