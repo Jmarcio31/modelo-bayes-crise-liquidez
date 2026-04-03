@@ -83,7 +83,7 @@
       ].join('');
     }
   }
-  function blockSummary(){j
+  function blockSummary(){
     const out = {};
     (state.latest?.signals || []).forEach(s=>{
       const key = s.block || 'Sem bloco';
