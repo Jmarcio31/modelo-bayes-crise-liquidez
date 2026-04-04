@@ -130,12 +130,72 @@
       <button class="toggle-btn ${state.signalViewMode==='prob'?'active':''}" onclick="window.__setSignalMode('prob')">Probabilidade</button>
     </div>`;
 
-    return '<section class="tab-panel ' + (state.activeTab==='historico'?'active':'') + '" data-panel="historico"><div class="grid grid-2"><div class="card"><h3>Evolução da probabilidade</h3><div class="canvas-wrap"><canvas id="historyChart"></canvas></div><table class="table" style="margin-top:12px"><tbody>' + (state.history||[]).slice().reverse().map(h=>'<tr><td>'+(h.run_date||h.date)+'</td><td>'+pct(h.posterior)+'</td><td>'+(h.risk_label||'')+'</td></tr>').join('') + '</tbody></table></div><div class="card"><h3>Contribuição por sinal</h3>' + toggleHtml + '<div class="canvas-wrap"><canvas id="signalChart"></canvas></div></div></div></section>';
+    const histDedup = dedupHistoryByDay(state.history);
+    return '<section class="tab-panel ' + (state.activeTab==='historico'?'active':'') + '" data-panel="historico"><div class="grid grid-2"><div class="card"><h3>Evolução da probabilidade</h3><div class="canvas-wrap"><canvas id="historyChart"></canvas></div><table class="table" style="margin-top:12px"><tbody>' + histDedup.slice().reverse().map(h=>'<tr><td>'+(h.run_date||h.date)+'</td><td>'+pct(h.posterior)+'</td><td>'+(h.risk_label||'')+'</td></tr>').join('') + '</tbody></table></div><div class="card"><h3>Contribuição por sinal</h3>' + toggleHtml + '<div class="canvas-wrap"><canvas id="signalChart"></canvas></div></div></div></section>';
   }
 
   function panelMetodologia(){
     const rows = state.modelConfig?.signals || [];
-    return '<section class="tab-panel ' + (state.activeTab==='metodologia'?'active':'') + '" data-panel="metodologia"><div class="notice"><strong>Como ler esta aba</strong>Cada parâmetro mostra o que mede, a que bloco pertence e qual a origem declarada no modelo. O detalhe operacional da coleta fica em <span class="code">source_status</span> e <span class="code">data_feed_meta</span>.</div><div class="list" style="margin-top:18px">' + rows.map(r=>'<div class="card"><div class="row"><div><h3 style="margin-bottom:6px">'+r.signal_name+'</h3><div class="small">'+r.block+'</div></div><div><span class="badge '+sourceBadgeClass(r.source_type)+'">'+r.source_type+'</span></div></div><p style="margin:14px 0 10px">'+(r.description||'')+'</p><div class="kv-table"><div>Fonte declarada</div><div>'+(r.source_label||'')+'</div><div>Raw key</div><div><span class="code">'+r.raw_key+'</span></div><div>Peso</div><div>'+num(r.weight)+'</div><div>P(E|H) / P(E|~H)</div><div>'+num(r.p_e_h)+' / '+num(r.p_e_not_h)+'</div><div>Thresholds</div><div><span class="code">'+JSON.stringify(r.thresholds||{})+'</span></div></div></div>').join('') + '</div></section>';
+    const latest = state.latest || {};
+    const priorConfig = latest.prior_config || {};
+    const priorDetails = latest.prior_details || [];
+    const priorBase = latest.prior_base || latest.prior || 0.12;
+    const priorFinal = latest.prior || priorBase;
+    const priorMode = latest.prior_mode || 'fixed';
+
+    // Seção do prior dinâmico
+    const priorRulesHtml = priorDetails.length > 0
+      ? priorDetails.map(d => {
+          const isSmooth = d.mode === 'smooth';
+          const pct_max = isSmooth ? Math.round((d.add / d.add_max) * 100) : 100;
+          const barColor = d.add > 0.005 ? '#b42318' : '#94a3b8';
+          const barWidth = Math.round(pct_max * 0.8);
+          return `<div style="padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-weight:700;font-size:13px">${d.label}</span>
+              <span style="font-size:12px;font-weight:800;color:${barColor}">+${(d.add*100).toFixed(3)}pp ${isSmooth ? '<span style="font-size:10px;color:var(--muted)">('+pct_max+'% do máx.)</span>' : ''}</span>
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px">
+              <span class="code">${d.raw_key}</span> = ${num(d.value,3)} &nbsp;|&nbsp; threshold: ${num(d.threshold,2)} &nbsp;|&nbsp; modo: <span class="code">${d.mode||'binary'}</span>
+              ${isSmooth ? `&nbsp;|&nbsp; k=${d.smooth_k} &nbsp;|&nbsp; add_max=${(d.add_max*100).toFixed(1)}pp` : ''}
+            </div>
+            <div style="height:6px;background:#edf2f7;border-radius:999px;overflow:hidden">
+              <div style="width:${barWidth}%;height:100%;background:${barColor};border-radius:999px"></div>
+            </div>
+          </div>`;
+        }).join('')
+      : '<div style="color:var(--muted);font-size:13px;padding:8px">Nenhuma regra ativa no período atual.</div>';
+
+    const priorSection = `<div class="card" style="margin-bottom:18px">
+      <h3 style="margin-bottom:4px">Prior dinâmico</h3>
+      <div class="small" style="margin-bottom:14px">
+        O prior P(H) representa a probabilidade de base de estarmos em um regime de stress <em>antes</em> de observar qualquer sinal.
+        Em vez de um valor fixo, o modelo usa um prior dinâmico que se ajusta às condições estruturais correntes via funções sigmoides suaves —
+        evitando descontinuidades nos limiares e capturando gradualmente a proximidade ao risco.
+      </div>
+      <div class="kv-table" style="margin-bottom:14px">
+        <div>Modo</div><div><span class="code">${priorMode}</span></div>
+        <div>Base</div><div>${pct(priorBase)} — frequência histórica incondicional de stress</div>
+        <div>Mínimo / Máximo</div><div>${pct(latest.prior_min||0.08)} / ${pct(latest.prior_max||0.22)}</div>
+        <div>Prior efetivo (atual)</div><div><strong>${pct(priorFinal)}</strong></div>
+        <div>Incremento total</div><div><strong style="color:#b42318">+${((priorFinal - priorBase)*100).toFixed(2)}pp</strong></div>
+      </div>
+      <div class="small" style="margin-bottom:10px;font-weight:700">Regras ativas nesta execução</div>
+      <div class="notice" style="margin-bottom:12px;font-size:12px">
+        Cada regra contribui com um incremento contínuo calculado como
+        <span class="code">add_max × sigmoid(k × (valor − limiar))</span>.
+        Quando <span class="code">k</span> é alto, a função se aproxima de um degrau; quando baixo, a transição é mais gradual.
+        O prior final é limitado ao intervalo [mín, máx] definido na configuração.
+      </div>
+      ${priorRulesHtml}
+    </div>`;
+
+    return '<section class="tab-panel ' + (state.activeTab==='metodologia'?'active':'') + '" data-panel="metodologia">' +
+      '<div class="notice" style="margin-bottom:18px"><strong>Como ler esta aba</strong>Cada parâmetro mostra o que mede, a que bloco pertence e qual a origem declarada no modelo. O detalhe operacional da coleta fica em <span class="code">source_status</span> e <span class="code">data_feed_meta</span>.</div>' +
+      priorSection +
+      '<div class="list">' +
+      rows.map(r=>'<div class="card"><div class="row"><div><h3 style="margin-bottom:6px">'+r.signal_name+'</h3><div class="small">'+r.block+'</div></div><div><span class="badge '+sourceBadgeClass(r.source_type)+'">'+r.source_type+'</span></div></div><p style="margin:14px 0 10px">'+(r.description||'')+'</p><div class="kv-table"><div>Fonte declarada</div><div>'+(r.source_label||'')+'</div><div>Raw key</div><div><span class="code">'+r.raw_key+'</span></div><div>Peso</div><div>'+num(r.weight)+'</div><div>P(E|H) / P(E|~H)</div><div>'+num(r.p_e_h)+' / '+num(r.p_e_not_h)+'</div><div>Thresholds</div><div><span class="code">'+JSON.stringify(r.thresholds||{})+'</span></div></div></div>').join('') +
+      '</div></section>';
   }
 
   // MELHORIA 4: Coluna de data de atualização + MELHORIA 5: ícone de defasagem
@@ -155,8 +215,76 @@
   }
 
   function panelFontes(){
-    const meta = state.latest?.data_feed_meta || {};
-    return '<section class="tab-panel ' + (state.activeTab==='fontes'?'active':'') + '" data-panel="fontes"><div class="grid grid-2"><div class="card"><h3>Source status</h3><table class="table"><thead><tr><th>Chave</th><th>Status</th></tr></thead><tbody>' + Object.entries(state.latest?.source_status||{}).map(([k,v])=>'<tr><td>'+k+'</td><td><span class="badge '+sourceBadgeClass(v)+'">'+v+'</span></td></tr>').join('') + '</tbody></table></div><div class="card"><h3>data_feed_meta</h3><table class="table"><thead><tr><th>Item</th><th>Detalhe</th></tr></thead><tbody>' + Object.entries(meta).map(([k,v])=>'<tr><td>'+k+'</td><td><div><strong>valor:</strong> '+(typeof v.value === 'number' ? num(v.value) : v.value)+'</div><div><strong>as_of_date:</strong> '+(v.as_of_date||'')+'</div><div><strong>source:</strong> '+(v.source||'')+'</div><div><strong>method:</strong> '+(v.method||'')+'</div><div><strong>quality_flag:</strong> '+(v.quality_flag||'')+'</div></td></tr>').join('') + '</tbody></table></div></div></section>';
+    const meta    = state.latest?.data_feed_meta || {};
+    const signals = state.modelConfig?.signals || [];
+    const latest  = state.latest || {};
+    const runDate = latest.run_date || '';
+
+    // Agrupa sinais por bloco
+    const byBlock = {};
+    signals.forEach(s=>{
+      const b = s.block || 'Outros';
+      if(!byBlock[b]) byBlock[b] = [];
+      byBlock[b].push(s);
+    });
+
+    // Busca as_of_date e calcula defasagem para cada sinal
+    function getAsOf(rawKey){ return (meta[rawKey]||{}).as_of_date || null; }
+    function stalenessInfo(asOf){
+      if(!asOf || !runDate) return null;
+      return Math.round((new Date(runDate) - new Date(asOf)) / 86400000);
+    }
+
+    const blocksHtml = Object.entries(byBlock).map(([block, sigs])=>{
+      const rows = sigs.map(s=>{
+        const asOf  = getAsOf(s.raw_key);
+        const days  = stalenessInfo(asOf);
+        const stale = days != null && days > 3;
+        const staleIcon  = stale ? ' <span title="Dado defasado" style="color:var(--amber)">⏱</span>' : '';
+        const asOfCell   = asOf
+          ? '<span style="font-size:12px;color:' + (stale?'var(--amber)':'var(--muted)') + '">' + asOf + staleIcon + '</span>'
+          : '<span style="color:#c8d3e0;font-size:12px">—</span>';
+        const tailBadge  = s.tail_signal
+          ? '<span class="badge amber" style="font-size:10px;margin-left:4px">cauda</span>' : '';
+        return '<tr>' +
+          '<td><strong>' + s.signal_name + '</strong>' + tailBadge + '</td>' +
+          '<td><span class="badge ' + sourceBadgeClass(s.source_type) + '">' + s.source_type + '</span></td>' +
+          '<td style="font-size:13px">' + (s.source_label||'—') + '</td>' +
+          '<td style="font-size:12px;color:var(--muted)">' + (s.unit||'—') + '</td>' +
+          '<td>' + asOfCell + '</td>' +
+        '</tr>';
+      }).join('');
+      return '<div style="margin-bottom:18px">' +
+        '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">' + block + '</div>' +
+        '<table class="table"><thead><tr><th>Sinal</th><th>Tipo</th><th>Fonte</th><th>Unidade</th><th>Atualizado em</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody></table></div>';
+    }).join('');
+
+    const sourceStatusHtml = Object.entries(latest.source_status||{})
+      .map(([k,v])=>'<tr><td>'+k+'</td><td><span class="badge '+sourceBadgeClass(v)+'">'+v+'</span></td></tr>').join('');
+    const feedMetaHtml = Object.entries(meta)
+      .map(([k,v])=>'<tr><td>'+k+'</td><td>' +
+        '<div><strong>valor:</strong> '+(typeof v.value==='number'?num(v.value):v.value)+'</div>' +
+        '<div><strong>as_of_date:</strong> '+(v.as_of_date||'')+'</div>' +
+        '<div><strong>source:</strong> '+(v.source||'')+'</div>' +
+        '<div><strong>method:</strong> '+(v.method||'')+'</div>' +
+        '<div><strong>quality_flag:</strong> '+(v.quality_flag||'')+'</div>' +
+      '</td></tr>').join('');
+
+    return '<section class="tab-panel ' + (state.activeTab==='fontes'?'active':'') + '" data-panel="fontes">' +
+      '<div class="card" style="margin-bottom:18px">' +
+        '<h3 style="margin-bottom:4px">Fontes por sinal</h3>' +
+        '<div class="small" style="margin-bottom:16px">Todos os 14 sinais do modelo, agrupados por bloco, com tipo de fonte, origem declarada, unidade e data de atualização.</div>' +
+        blocksHtml +
+      '</div>' +
+      '<details style="margin-bottom:18px">' +
+        '<summary style="cursor:pointer;font-weight:700;font-size:13px;color:var(--muted);padding:10px 0">▶ Detalhes técnicos de ingestão (source_status e data_feed_meta)</summary>' +
+        '<div class="grid grid-2" style="margin-top:12px">' +
+          '<div class="card"><h3>Source status</h3><table class="table"><thead><tr><th>Chave</th><th>Status</th></tr></thead><tbody>' + sourceStatusHtml + '</tbody></table></div>' +
+          '<div class="card"><h3>data_feed_meta</h3><table class="table"><thead><tr><th>Item</th><th>Detalhe</th></tr></thead><tbody>' + feedMetaHtml + '</tbody></table></div>' +
+        '</div>' +
+      '</details>' +
+    '</section>';
   }
 
   function render(){
@@ -177,6 +305,16 @@
         drawCharts();
       };
     });
+  }
+
+  // Agrupa histórico por dia, mantendo apenas o último registro de cada dia
+  function dedupHistoryByDay(history){
+    const byDay = {};
+    (history||[]).forEach(h=>{
+      const d = h.run_date || h.date || '';
+      byDay[d] = h;
+    });
+    return Object.values(byDay).sort((a,b)=>(a.run_date||a.date) < (b.run_date||b.date) ? -1 : 1);
   }
 
   // Toggle global acessível pelo onclick inline
@@ -222,14 +360,15 @@
       }
     };
 
+    const histDedup = dedupHistoryByDay(state.history);
     historyChart = new Chart(historyCtx, {
       type:'line',
       plugins:[zonePlugin],
       data:{
-        labels:(state.history||[]).map(h=>h.run_date||h.date),
+        labels: histDedup.map(h=>h.run_date||h.date),
         datasets:[{
           label:'Posterior',
-          data:(state.history||[]).map(h=>h.posterior),
+          data: histDedup.map(h=>h.posterior),
           borderColor:'#0b1835',
           backgroundColor:'#0b1835',
           tension:0.15,
