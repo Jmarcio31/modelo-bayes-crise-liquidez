@@ -1,5 +1,5 @@
 {
-  "run_id": 52,
+  "run_id": 53,
   "run_date": "2026-04-03",
   "prior": 0.14,
   "prior_base": 0.12,
@@ -10,7 +10,7 @@
       "raw_key": "curva_spread",
       "kind": "gte",
       "threshold": 0.1,
-      "value": 0.61,
+      "value": 0.64,
       "add": 0.01
     },
     {
@@ -29,7 +29,7 @@
       "signal_id": "curva",
       "signal_name": "Desinversão da curva após inversão profunda",
       "block": "Macro",
-      "raw_value": 0.61,
+      "raw_value": 0.64,
       "status": "ATIVO",
       "weight": 0.55,
       "p_e_h": 0.72,
@@ -113,7 +113,7 @@
       "signal_id": "vol_yields",
       "signal_name": "Volatilidade de yields (proxy pública do MOVE)",
       "block": "Mercado de juros",
-      "raw_value": 9.492628719169408,
+      "raw_value": 8.890444308357138,
       "status": "NEUTRO",
       "weight": 0.65,
       "p_e_h": 0.7,
@@ -125,7 +125,7 @@
       "signal_id": "bloco_externo",
       "signal_name": "Bloco externo: Custody + TIC + stress em dólar",
       "block": "Externo",
-      "raw_value": 0.33949019999999996,
+      "raw_value": 0.33718020000000004,
       "status": "NEUTRO",
       "weight": 1.0,
       "p_e_h": 0.84,
@@ -137,7 +137,7 @@
       "signal_id": "private_credit",
       "signal_name": "Private credit stress",
       "block": "Crédito privado / NBFI",
-      "raw_value": 0.294,
+      "raw_value": 0.292,
       "status": "ATIVO",
       "weight": 0.6,
       "p_e_h": 0.74,
@@ -160,26 +160,26 @@
   ],
   "external_block": {
     "custody_12w_pct": 6.477438868150154,
-    "tic_3m_usd_bn": -98.1951,
-    "usd_stress_score": 0.477,
-    "composite_score": 0.33949019999999996,
+    "tic_3m_usd_bn": -98.7951,
+    "usd_stress_score": 0.4653,
+    "composite_score": 0.33718020000000004,
     "status": "NEUTRO"
   },
   "raw_data": {
-    "curva_spread": 0.61,
+    "curva_spread": 0.64,
     "sahm_gap": 0.2333333333333334,
     "reservas_pct_min": 1.0089026666666667,
     "rrp_usd_bn": 3.992,
     "sofr_iorb_bp": 0.0,
     "fra_ois_bp": 4.8,
     "repo_stress_score": 0.346,
-    "vol_yields_20d_bp": 9.492628719169408,
+    "vol_yields_20d_bp": 8.890444308357138,
     "custody_12w_pct": 6.477438868150154,
-    "tic_3m_usd_bn": -98.1951,
-    "usd_stress_score": 0.477,
+    "tic_3m_usd_bn": -98.7951,
+    "usd_stress_score": 0.4653,
     "nfci": -0.43366,
-    "private_credit_stress_score": 0.294,
-    "bloco_externo_score": 0.33949019999999996
+    "private_credit_stress_score": 0.292,
+    "bloco_externo_score": 0.33718020000000004
   },
   "source_status": {
     "custody": "direct",
@@ -193,7 +193,7 @@
   },
   "data_feed_meta": {
     "tic_3m_usd_bn": {
-      "value": -98.1951,
+      "value": -98.7951,
       "as_of_date": "2026-03-27",
       "source": "public_proxy",
       "method": "calculated_proxy_dxy_plus_curve",
@@ -201,7 +201,7 @@
     },
     "repo_stress_score": {
       "value": 0.346,
-      "as_of_date": "2026-04-03",
+      "as_of_date": "2026-04-04",
       "source": "nyfed_markets",
       "method": "calculated_composite",
       "quality_flag": "ok"
@@ -215,21 +215,21 @@
     },
     "rrp_usd_bn": {
       "value": 3.992,
-      "as_of_date": "2026-04-03",
+      "as_of_date": "2026-04-04",
       "source": "nyfed_markets",
       "method": "api_direct_5d_avg",
       "quality_flag": "ok"
     },
     "usd_stress_score": {
-      "value": 0.477,
+      "value": 0.4653,
       "as_of_date": "2026-03-27",
       "source": "fred",
       "method": "calculated_composite",
       "quality_flag": "ok"
     },
     "private_credit_stress_score": {
-      "value": 0.294,
-      "as_of_date": "2026-04-01",
+      "value": 0.292,
+      "as_of_date": "2026-04-02",
       "source": "market_proxy",
       "method": "calculated_composite_hy_funding_redemption_overlay",
       "quality_flag": "ok"

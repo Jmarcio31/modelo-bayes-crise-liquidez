@@ -48,11 +48,6 @@
       <!-- Zone labels -->
       <text x="14" y="128" font-size="8" fill="#067647" font-weight="700">0%</text>
       <text x="170" y="128" font-size="8" fill="#7c0a02" font-weight="700">100%</text>
-      <!-- Needle -->
-      <g transform="translate(100,110) rotate(${angle})">
-        <line x1="0" y1="0" x2="0" y2="-62" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>
-        <circle cx="0" cy="0" r="5" fill="${color}"/>
-      </g>
       <!-- Center value -->
       <text x="100" y="98" text-anchor="middle" font-size="22" font-weight="800" fill="${color}">${(pct*100).toFixed(1)}%</text>
     </svg>`;

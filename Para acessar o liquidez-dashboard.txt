@@ -1,0 +1,20 @@
+Para acessar o liquidez-dashboard
+cd C:\liquidez-dashboard
+
+Para permitir abrir o dashboard localmente. Abrir um PowerShell só para isso.
+python -m http.server 8000
+
+Para interromper esse comando - CTRL+C
+
+Para salvar e rodar o programa
+cd C:\liquidez-dashboard
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+$env:FRED_API_KEY="d20790f3d77aa99860df54d37d9bf5d1"
+python -m backend.app.data_builder
+python -m backend.app.main
+
+Subir para o GitHub
+git add .
+git commit -m "Ajuste no modelo de probabilidade posterior"
+git push
