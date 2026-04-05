@@ -44,8 +44,4 @@ SERIES = {
     "iorb": "IORB",
     "custody": "WTREGEN",
     "reserve_balances": "WRESBAL",
-    # Novos sinais
-    "effr": "EFFR",            # Effective Fed Funds Rate — distribuição de reservas
-    "stlfsi4": "STLFSI4",      # St. Louis Fed Financial Stress Index — substitui proxy OAS
-    "discount_window": "DPCREDIT",  # Discount window usage (milhões USD)
 }

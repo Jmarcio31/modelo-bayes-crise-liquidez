@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import math
-from typing import Dict, List
+from datetime import date, datetime
+from typing import Dict, List, Optional
 
 
 def _to_odds(p: float) -> float:
@@ -20,49 +21,152 @@ def _risk_label(posterior: float) -> str:
     return "Estresse contido"
 
 
-def compute_model(prior: float, signals: List[dict], raw: Dict[str, float], statuses: Dict[str, str]) -> dict:
+# ── Confidence layer ────────────────────────────────────────────────────────
+# Fator multiplicativo aplicado ao peso efetivo de cada sinal,
+# baseado na qualidade declarada da fonte.
+#
+# Filosofia: penalizar levemente, não invalidar. Um proxy bem calibrado
+# ainda carrega 88% do poder informativo de uma série direta. Um dado
+# com alguns dias de defasagem ainda é relevante — especialmente para
+# séries com ciclo semanal (STLFSI4, DPCREDIT, WRESBAL).
+CONFIDENCE_FACTORS: dict[str, float] = {
+    "direct":            1.00,   # série direta de fonte primária
+    "feed":              0.97,   # feed automatizado validado
+    "mixed":             0.92,   # combinação de fontes diretas e proxies
+    "proxy":             0.88,   # proxy calculado sobre séries públicas
+    "fallback":          0.60,   # fallback manual ou default estático
+    "manual_or_default": 0.60,
+    "stale":             0.55,   # dado desatualizado além do threshold
+    # Nota: com coleta diária, dado de mais de 3 dias é genuinamente
+    # problemático. Fator 0.55 penaliza sem invalidar completamente.
+}
+
+# Tolerância de defasagem em dias antes de penalizar o peso.
+# 3 dias tolera fins de semana (dado de sexta disponível na segunda)
+# e eventuais atrasos de publicação do FRED.
+STALENESS_THRESHOLD_DAYS = 3
+
+
+def _staleness_days(as_of_date: Optional[str], run_date: str) -> Optional[int]:
+    """Retorna número de dias de defasagem, ou None se data ausente."""
+    if not as_of_date:
+        return None
+    try:
+        d_as_of = datetime.strptime(as_of_date, "%Y-%m-%d").date()
+        d_run   = datetime.strptime(run_date,   "%Y-%m-%d").date()
+        return (d_run - d_as_of).days
+    except ValueError:
+        return None
+
+
+def _effective_weight(
+    weight: float,
+    source_type: str,
+    as_of_date: Optional[str],
+    run_date: str,
+) -> tuple[float, str, bool]:
+    """
+    Retorna (peso_efetivo, confidence_source, is_stale).
+
+    Se o dado estiver atrasado além do threshold, aplica fator 'stale'
+    independentemente do source_type declarado.
+    """
+    days = _staleness_days(as_of_date, run_date)
+    is_stale = days is not None and days > STALENESS_THRESHOLD_DAYS
+
+    if is_stale:
+        factor = CONFIDENCE_FACTORS["stale"]
+        source = "stale"
+    else:
+        factor = CONFIDENCE_FACTORS.get(source_type, 0.80)
+        source = source_type
+
+    return weight * factor, source, is_stale
+
+
+def compute_model(
+    prior: float,
+    signals: List[dict],
+    raw: Dict[str, float],
+    statuses: Dict[str, str],
+    data_feed_meta: Optional[Dict[str, dict]] = None,
+    run_date: Optional[str] = None,
+) -> dict:
+    """
+    Calcula o modelo bayesiano com confidence layer e staleness automático.
+
+    Novos parâmetros opcionais:
+      data_feed_meta: dict com as_of_date por chave de raw_data
+      run_date: data da execução (YYYY-MM-DD); usa hoje se ausente
+    """
+    if run_date is None:
+        run_date = date.today().isoformat()
+    if data_feed_meta is None:
+        data_feed_meta = {}
+
     log_odds = math.log(_to_odds(prior))
     rows = []
 
     for signal in signals:
         status = statuses.get(signal["id"], "NEUTRO")
-        p_e_h = float(signal["p_e_h"])
+        p_e_h     = float(signal["p_e_h"])
         p_e_not_h = float(signal["p_e_not_h"])
-        weight = float(signal["weight"])
+        weight    = float(signal["weight"])
+        source_type = signal.get("source_type", "proxy")
+        raw_key   = signal.get("raw_key", "")
 
-        risk_lr = p_e_h / p_e_not_h
+        # Busca as_of_date no data_feed_meta pela raw_key do sinal
+        feed_entry  = data_feed_meta.get(raw_key, {})
+        as_of_date  = feed_entry.get("as_of_date") if feed_entry else None
+
+        eff_weight, conf_source, is_stale = _effective_weight(
+            weight, source_type, as_of_date, run_date
+        )
+
+        # Sinal de cauda com dado stale → força NEUTRO explicitamente
+        is_tail = signal.get("tail_signal", False)
+        if is_stale and is_tail:
+            status = "NEUTRO"
+
+        risk_lr    = p_e_h / p_e_not_h
         reverse_lr = (1.0 - p_e_h) / (1.0 - p_e_not_h)
 
         if status == "ATIVO":
-            lr_used = risk_lr
-            log_contrib = weight * math.log(risk_lr)
+            lr_used     = risk_lr
+            log_contrib = eff_weight * math.log(risk_lr)
         elif status == "CONTRARIO":
-            lr_used = reverse_lr
-            log_contrib = weight * math.log(reverse_lr)
+            lr_used     = reverse_lr
+            log_contrib = eff_weight * math.log(reverse_lr)
         else:
-            lr_used = 1.0
+            lr_used     = 1.0
             log_contrib = 0.0
 
         log_odds += log_contrib
 
         rows.append({
-            "signal_id": signal["id"],
-            "signal_name": signal["signal_name"],
-            "block": signal["block"],
-            "raw_value": float(raw.get(signal["raw_key"], 0.0)),
-            "status": status,
-            "weight": weight,
-            "p_e_h": p_e_h,
-            "p_e_not_h": p_e_not_h,
-            "lr_used": lr_used,
-            "log_contrib": log_contrib,
+            "signal_id":       signal["id"],
+            "signal_name":     signal["signal_name"],
+            "block":           signal["block"],
+            "raw_value":       float(raw.get(raw_key, 0.0)),
+            "status":          status,
+            "weight":          weight,           # peso nominal (config)
+            "weight_effective": round(eff_weight, 4),  # peso após confidence
+            "confidence_factor": round(eff_weight / weight, 3) if weight else 1.0,
+            "confidence_source": conf_source,
+            "is_stale":        is_stale,
+            "as_of_date":      as_of_date,
+            "tail_signal":     is_tail,
+            "p_e_h":           p_e_h,
+            "p_e_not_h":       p_e_not_h,
+            "lr_used":         lr_used,
+            "log_contrib":     log_contrib,
         })
 
     posterior = _from_odds(math.exp(log_odds))
 
     return {
-        "prior": prior,
+        "prior":     prior,
         "posterior": posterior,
         "risk_label": _risk_label(posterior),
-        "signals": rows,
+        "signals":   rows,
     }

@@ -263,5 +263,80 @@
     "run_date": "2026-04-03",
     "posterior": 0.361399337573148,
     "risk_label": "Estresse contido"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.424127451856536,
+    "risk_label": "Estresse intermediario"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.3444603440732079,
+    "risk_label": "Estresse contido"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.361399337573148,
+    "risk_label": "Estresse contido"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.361399337573148,
+    "risk_label": "Estresse contido"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.424127451856536,
+    "risk_label": "Estresse intermediario"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.424127451856536,
+    "risk_label": "Estresse intermediario"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.424127451856536,
+    "risk_label": "Estresse intermediario"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.424127451856536,
+    "risk_label": "Estresse intermediario"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.424127451856536,
+    "risk_label": "Estresse intermediario"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.3379685818976443,
+    "risk_label": "Estresse contido"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.3379685818976443,
+    "risk_label": "Estresse contido"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.35875107022072866,
+    "risk_label": "Estresse contido"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.35875107022072866,
+    "risk_label": "Estresse contido"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.35875107022072866,
+    "risk_label": "Estresse contido"
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.35875107022072866,
+    "risk_label": "Estresse contido"
   }
 ]

@@ -65,3 +65,59 @@ def external_block_score(custody_12w: float, tic_3m: float, usd_score: float) ->
     tic_score = clamp((-tic_3m) / 150.0, 0.0, 1.0)
     usd_score_clamped = clamp(usd_score, 0.0, 1.0)
     return 0.4 * custody_score + 0.3 * tic_score + 0.3 * usd_score_clamped
+
+
+def effr_iorb_bp(effr_values: list[float], iorb: float) -> float:
+    """
+    Spread entre Effective Fed Funds Rate e IORB, em basis points,
+    calculado como média móvel dos últimos 5 dias úteis disponíveis.
+
+    A persistência (MA5) elimina ruído de dias isolados e captura apenas
+    disfunção estrutural na distribuição de reservas — como em set/2019
+    e mar/2023, onde o spread permaneceu negativo por vários dias seguidos.
+
+    EFFR - IORB < -10bp por 5 dias consecutivos: distribuição disfuncional.
+    EFFR - IORB > +1bp: liquidez bem distribuída (amortecedor).
+
+    Aceita lista de valores EFFR (série histórica) e o valor pontual de IORB.
+    """
+    if not effr_values:
+        return 0.0
+    window = effr_values[-5:] if len(effr_values) >= 5 else effr_values
+    effr_ma5 = sum(window) / len(window)
+    return (effr_ma5 - iorb) * 100.0
+
+
+def stlfsi4_stress(stlfsi4_value: float) -> float:
+    """
+    St. Louis Fed Financial Stress Index (STLFSI4), versão 4.
+    Série semanal disponível diretamente no FRED.
+
+    O índice é construído pelo Fed com 18 séries de mercado (yields de
+    Treasuries, spreads de crédito, volatilidade implícita, LIBOR/SOFR
+    spreads), normalizados via PCA. Valores positivos indicam stress
+    acima da média histórica; valores negativos indicam condições frouxas.
+
+    Escala: o índice já é um z-score — valores acima de +1.0 são incomuns,
+    acima de +1.5 indicam stress moderado-severo, acima de +2.0 são eventos
+    de cauda (Covid atingiu ~8.0 no pico de março 2020).
+
+    Esta função mapeia o valor bruto do STLFSI4 para [0, 1] via sigmoide
+    calibrada para que:
+      -0.5 → ~0.30 (condições frouxas → amortecedor)
+       0.0 → ~0.50 (neutro)
+      +1.0 → ~0.73 (stress moderado → próximo do threshold ativo)
+      +1.5 → ~0.83 (stress elevado → ATIVO)
+      +2.0 → ~0.90 (stress severo)
+    """
+    score = 1.0 / (1.0 + math.exp(-0.6 * stlfsi4_value))
+    return clamp(score, 0.0, 1.0)
+
+
+def discount_window_bn(dpcredit_millions: float) -> float:
+    """
+    Converte DPCREDIT (milhões de USD, FRED) para bilhões.
+    Sinal unidirecional — thresholds do modelo não definem contrary.
+    Retorna 0.0 para valores negativos ou ausentes.
+    """
+    return clamp(dpcredit_millions / 1000.0, 0.0, 1e6)
