@@ -75,7 +75,8 @@
       "description": "Mede a normalização da curva após inversão relevante e ajuda a identificar mudança de regime macro.",
       "source_type": "direct",
       "source_label": "FRED / Treasury yields",
-      "unit": "pp"
+      "unit": "pp",
+      "expected_frequency_days": 1
     },
     {
       "id": "sahm",
@@ -94,7 +95,8 @@
       "source_label": "FRED / BLS",
       "unit": "pp",
       "tail_signal": true,
-      "tail_note": "Sinal de cauda: peso reduzido intencionalmente. Relevante em episódios extremos mas baixo poder discriminante em stress gradual."
+      "tail_note": "Sinal de cauda: peso reduzido intencionalmente. Relevante em episódios extremos mas baixo poder discriminante em stress gradual.",
+      "expected_frequency_days": 35
     },
     {
       "id": "reservas",
@@ -111,7 +113,8 @@
       "description": "Compara reservas bancárias com uma faixa operacional mínima confortável.",
       "source_type": "proxy",
       "source_label": "FRED / H.4.1 + piso operacional",
-      "unit": "ratio"
+      "unit": "ratio",
+      "expected_frequency_days": 7
     },
     {
       "id": "rrp",
@@ -128,7 +131,8 @@
       "description": "Mede o colchão de liquidez no facility reverso do Fed, usando média móvel de 5 dias úteis.",
       "source_type": "feed",
       "source_label": "NY Fed Markets / data_feed.csv",
-      "unit": "USD bn"
+      "unit": "USD bn",
+      "expected_frequency_days": 1
     },
     {
       "id": "sofr_iorb",
@@ -145,7 +149,8 @@
       "description": "Captura descolamento entre taxa secured overnight e remuneração de reservas.",
       "source_type": "direct",
       "source_label": "FRED / NY Fed / Fed",
-      "unit": "bp"
+      "unit": "bp",
+      "expected_frequency_days": 1
     },
     {
       "id": "fra_ois",
@@ -162,7 +167,8 @@
       "description": "Proxy de estresse em funding unsecured com base em séries públicas.",
       "source_type": "proxy",
       "source_label": "FRED + cálculo no data_builder",
-      "unit": "bp"
+      "unit": "bp",
+      "expected_frequency_days": 1
     },
     {
       "id": "repo",
@@ -179,7 +185,8 @@
       "description": "Score composto de tensão em repo, usando spreads, dispersão e persistência.",
       "source_type": "proxy",
       "source_label": "NY Fed Markets + data_builder",
-      "unit": "score 0-1"
+      "unit": "score 0-1",
+      "expected_frequency_days": 1
     },
     {
       "id": "vol_yields",
@@ -198,7 +205,8 @@
       "source_label": "FRED / Treasury yields",
       "unit": "bp",
       "tail_signal": true,
-      "tail_note": "Sinal de cauda: peso reduzido intencionalmente. Relevante em episódios extremos mas baixo poder discriminante em stress gradual."
+      "tail_note": "Sinal de cauda: peso reduzido intencionalmente. Relevante em episódios extremos mas baixo poder discriminante em stress gradual.",
+      "expected_frequency_days": 1
     },
     {
       "id": "bloco_externo",
@@ -215,7 +223,8 @@
       "description": "Mede pressão externa via fluxo de capitais para Treasuries (custody), fluxo líquido TIC e aperto de dólar global. Papel restrito ao canal externo — não captura stress doméstico.",
       "source_type": "mixed",
       "source_label": "FRED + data_feed.csv",
-      "unit": "score 0-1"
+      "unit": "score 0-1",
+      "expected_frequency_days": 7
     },
     {
       "id": "private_credit",
@@ -231,7 +240,8 @@
       "description": "Risco de stress em veículos NBFI e private credit. Proxy via spread de high yield, overlay de funding e redemptions supervisionadas. Papel restrito ao canal NBFI — não captura stress bancário direto.",
       "source_type": "proxy",
       "source_label": "FRED + data_builder + overlay supervisionado",
-      "unit": "score 0-1"
+      "unit": "score 0-1",
+      "expected_frequency_days": 7
     },
     {
       "id": "nfci",
@@ -248,7 +258,8 @@
       "description": "Índice amplo de condições financeiras para leitura sistêmica agregada.",
       "source_type": "direct",
       "source_label": "FRED / Chicago Fed",
-      "unit": "índice"
+      "unit": "índice",
+      "expected_frequency_days": 7
     },
     {
       "id": "reservas_concentracao",
@@ -265,7 +276,8 @@
       "description": "Spread entre EFFR e IORB em basis points, calculado como média móvel de 5 dias úteis. Valores persistentemente abaixo de -10bp indicam distribuição disfuncional de reservas, com concentração nos grandes bancos.",
       "source_type": "direct",
       "source_label": "FRED / NY Fed (EFFR, IORB)",
-      "unit": "bp"
+      "unit": "bp",
+      "expected_frequency_days": 1
     },
     {
       "id": "financial_credit_stress",
@@ -282,7 +294,8 @@
       "description": "St. Louis Fed Financial Stress Index (STLFSI4), versão 4, mapeado para [0,1] via sigmoide. Captura stress financeiro sistêmico a partir de 18 séries de mercado normalizadas via PCA.",
       "source_type": "direct",
       "source_label": "FRED / St. Louis Fed (STLFSI4)",
-      "unit": "score 0-1"
+      "unit": "score 0-1",
+      "expected_frequency_days": 7
     },
     {
       "id": "discount_window",
@@ -300,7 +313,8 @@
       "source_label": "FRED / Federal Reserve (DPCREDIT)",
       "unit": "USD bn",
       "tail_signal": true,
-      "tail_note": "Sinal de cauda: peso reduzido intencionalmente. Relevante em episódios extremos mas baixo poder discriminante em stress gradual."
+      "tail_note": "Sinal de cauda: peso reduzido intencionalmente. Relevante em episódios extremos mas baixo poder discriminante em stress gradual.",
+      "expected_frequency_days": 7
     }
   ]
 }

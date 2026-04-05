@@ -1,6 +1,6 @@
 {
-  "run_id": 68,
-  "run_date": "2026-04-04",
+  "run_id": 461,
+  "run_date": "2026-04-05",
   "prior": 0.15702780702685856,
   "prior_base": 0.12,
   "prior_min": 0.08,
@@ -67,6 +67,7 @@
       "confidence_source": "direct",
       "is_stale": false,
       "as_of_date": null,
+      "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.72,
       "p_e_not_h": 0.42,
@@ -85,6 +86,7 @@
       "confidence_source": "direct",
       "is_stale": false,
       "as_of_date": null,
+      "expected_frequency_days": 35,
       "tail_signal": true,
       "p_e_h": 0.68,
       "p_e_not_h": 0.38,
@@ -103,6 +105,7 @@
       "confidence_source": "proxy",
       "is_stale": false,
       "as_of_date": null,
+      "expected_frequency_days": 7,
       "tail_signal": false,
       "p_e_h": 0.83,
       "p_e_not_h": 0.33,
@@ -120,7 +123,8 @@
       "confidence_factor": 0.97,
       "confidence_source": "feed",
       "is_stale": false,
-      "as_of_date": "2026-04-04",
+      "as_of_date": "2026-04-05",
+      "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.68,
       "p_e_not_h": 0.4,
@@ -139,6 +143,7 @@
       "confidence_source": "direct",
       "is_stale": false,
       "as_of_date": null,
+      "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.72,
       "p_e_not_h": 0.4,
@@ -157,6 +162,7 @@
       "confidence_source": "proxy",
       "is_stale": false,
       "as_of_date": "2026-04-01",
+      "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.72,
       "p_e_not_h": 0.38,
@@ -174,7 +180,8 @@
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": "2026-04-04",
+      "as_of_date": "2026-04-05",
+      "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.88,
       "p_e_not_h": 0.24,
@@ -193,6 +200,7 @@
       "confidence_source": "proxy",
       "is_stale": false,
       "as_of_date": null,
+      "expected_frequency_days": 1,
       "tail_signal": true,
       "p_e_h": 0.7,
       "p_e_not_h": 0.39,
@@ -211,6 +219,7 @@
       "confidence_source": "mixed",
       "is_stale": false,
       "as_of_date": null,
+      "expected_frequency_days": 7,
       "tail_signal": false,
       "p_e_h": 0.84,
       "p_e_not_h": 0.3,
@@ -229,6 +238,7 @@
       "confidence_source": "proxy",
       "is_stale": false,
       "as_of_date": "2026-04-02",
+      "expected_frequency_days": 7,
       "tail_signal": false,
       "p_e_h": 0.74,
       "p_e_not_h": 0.4,
@@ -247,6 +257,7 @@
       "confidence_source": "direct",
       "is_stale": false,
       "as_of_date": null,
+      "expected_frequency_days": 7,
       "tail_signal": false,
       "p_e_h": 0.69,
       "p_e_not_h": 0.4,
@@ -265,6 +276,7 @@
       "confidence_source": "direct",
       "is_stale": false,
       "as_of_date": null,
+      "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.75,
       "p_e_not_h": 0.35,
@@ -283,6 +295,7 @@
       "confidence_source": "direct",
       "is_stale": false,
       "as_of_date": null,
+      "expected_frequency_days": 7,
       "tail_signal": false,
       "p_e_h": 0.76,
       "p_e_not_h": 0.38,
@@ -301,6 +314,7 @@
       "confidence_source": "direct",
       "is_stale": false,
       "as_of_date": null,
+      "expected_frequency_days": 7,
       "tail_signal": true,
       "p_e_h": 0.78,
       "p_e_not_h": 0.25,
@@ -332,6 +346,7 @@
     "effr_iorb_bp": -1.000000000000023,
     "stlfsi4_stress": 0.4726074548430977,
     "discount_window_bn": 0.00375,
+    "sp500": 6582.69,
     "bloco_externo_score": 0.33718020000000004
   },
   "source_status": {
@@ -357,7 +372,7 @@
     },
     "repo_stress_score": {
       "value": 0.346,
-      "as_of_date": "2026-04-04",
+      "as_of_date": "2026-04-05",
       "source": "nyfed_markets",
       "method": "calculated_composite",
       "quality_flag": "ok"
@@ -371,7 +386,7 @@
     },
     "rrp_usd_bn": {
       "value": 3.992,
-      "as_of_date": "2026-04-04",
+      "as_of_date": "2026-04-05",
       "source": "nyfed_markets",
       "method": "api_direct_5d_avg",
       "quality_flag": "ok"
@@ -390,5 +405,6 @@
       "method": "calculated_composite_hy_funding_redemption_overlay",
       "quality_flag": "ok"
     }
-  }
+  },
+  "sp500": 6582.69
 }

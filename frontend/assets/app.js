@@ -93,15 +93,17 @@
   function panelDashboard(){
     const latest = state.latest || {signals:[], external_block:{}, raw_data:{}, source_status:{}};
     const blocks = blockSummary();
-    const positives = (latest.signals||[]).filter(s=>Number(s.log_contrib)>0.0001).sort((a,b)=>Number(b.log_contrib)-Number(a.log_contrib));
-    const negatives = (latest.signals||[]).filter(s=>Number(s.log_contrib)<-0.0001).sort((a,b)=>Number(a.log_contrib)-Number(b.log_contrib));
+
     const blockCards = Object.entries(blocks).map(([name,v])=>{
       const width = Math.min(100, Math.abs(v.score)*50);
       return '<div class="block-summary"><div><strong>' + name + '</strong><div class="small">Ativos ' + v.ativos + ' · Contrários ' + v.contrarios + '</div><div class="progress"><span style="width:' + width + '%"></span></div></div><div style="font-weight:800;color:' + (v.score>=0?'#b42318':'#067647') + '">' + (v.score>=0?'+':'') + num(v.score) + '</div></div>';
     }).join('');
-    const signalsHtml = (latest.signals||[]).map(s=>{
-      return '<div class="signal-card ' + signalClass(s.status) + '"><div class="row"><div><div class="signal-name">' + s.signal_name + '</div><div class="signal-meta">' + s.block + '</div></div><div style="text-align:right"><div class="pill ' + signalClass(s.status) + '">' + s.status + '</div><div style="margin-top:8px;font-weight:800;color:' + (Number(s.log_contrib)>=0?'#b42318':'#067647') + '">' + (Number(s.log_contrib)>=0?'+':'') + num(s.log_contrib) + '</div></div></div><div class="kv-table"><div>Valor bruto</div><div>' + num(s.raw_value) + '</div><div>Peso</div><div>' + num(s.weight) + '</div><div>LR aplicado</div><div>' + num(s.lr_used) + '</div><div>P(E|H) / P(E|~H)</div><div>' + num(s.p_e_h) + ' / ' + num(s.p_e_not_h) + '</div></div></div>';
-    }).join('');
+    const signalsHtml = (latest.signals||[]).map(s => signalCardHtml(s)).join('');
+    const toggleHtml = `<div class="toggle-row">
+      <span class="small">Escala:</span>
+      <button class="toggle-btn ${state.signalViewMode==='log'?'active':''}" onclick="window.__setSignalMode('log')">Log contribuição</button>
+      <button class="toggle-btn ${state.signalViewMode==='prob'?'active':''}" onclick="window.__setSignalMode('prob')">Probabilidade</button>
+    </div>`;
 
     // MELHORIA 1: Gauge no lugar do KPI simples
     const gaugeHtml = `<div class="card dark gauge-card">
@@ -117,21 +119,20 @@
       '<div class="card"><div class="small">BLOCO EXTERNO</div><div class="kpi-value" style="font-size:42px;color:var(--ink)">' + num(latest.external_block?.composite_score) + '</div><div class="kpi-sub">Status: ' + (latest.external_block?.status||'-') + '</div></div>' +
       '<div class="card"><div class="small">FONTE / STATUS</div><div style="font-size:15px;font-weight:700;line-height:1.45">' + Object.entries(latest.source_status||{}).map(([k,v])=>k + ': ' + v).join(' | ') + '</div></div>' +
       '</div>' +
-      '<div class="grid grid-2" style="margin-top:18px"><div class="card"><h3>Resumo por bloco</h3><div class="list">' + blockCards + '</div></div><div class="card"><h3>Vetores de risco</h3><div class="grid grid-2"><div><div class="small" style="color:#b42318;font-weight:700;margin-bottom:8px">Pressões altistas</div><div class="list">' + positives.slice(0,5).map(s=>'<div class="row" style="padding:10px;border-radius:12px;background:var(--red-bg)"><span>'+s.signal_name+'</span><strong>+'+num(s.log_contrib)+'</strong></div>').join('') + '</div></div><div><div class="small" style="color:#067647;font-weight:700;margin-bottom:8px">Amortecedores</div><div class="list">' + negatives.slice(0,5).map(s=>'<div class="row" style="padding:10px;border-radius:12px;background:var(--green-bg)"><span>'+s.signal_name+'</span><strong>'+num(s.log_contrib)+'</strong></div>').join('') + '</div></div></div></div></div>' +
-      '<div class="grid grid-2" style="margin-top:18px"><div class="card"><h3>Sinais do modelo</h3><div class="list">' + signalsHtml + '</div></div><div class="grid"><div class="card"><h3>Bloco externo</h3><table class="table"><tbody>' + Object.entries(latest.external_block||{}).map(([k,v])=>'<tr><td>'+k+'</td><td><strong>' + (typeof v === 'number' ? num(v) : v) + '</strong></td></tr>').join('') + '</tbody></table></div><div class="card"><h3>Dados brutos</h3><table class="table"><tbody>' + Object.entries(latest.raw_data||{}).map(([k,v])=>'<tr><td>'+k+'</td><td><strong>'+num(v)+'</strong></td></tr>').join('') + '</tbody></table></div></div></div>' +
+      '<div class="grid grid-2" style="margin-top:18px"><div class="card"><h3>Resumo por bloco</h3><div class="list">' + blockCards + '</div></div><div class="card"><h3>Contribuição por sinal</h3>' + toggleHtml + '<div class="canvas-wrap"><canvas id="signalChart"></canvas></div></div></div>' +
+      '<div style="margin-top:18px"><div class="card"><h3>Sinais do modelo</h3><div class="list">' + signalsHtml + '</div></div></div>' +
       '</section>';
   }
 
   function panelHistorico(){
-    // MELHORIA 3: Toggle log/probabilidade no gráfico de contribuição
-    const toggleHtml = `<div class="toggle-row">
-      <span class="small">Escala:</span>
-      <button class="toggle-btn ${state.signalViewMode==='log'?'active':''}" onclick="window.__setSignalMode('log')">Log contribuição</button>
-      <button class="toggle-btn ${state.signalViewMode==='prob'?'active':''}" onclick="window.__setSignalMode('prob')">Probabilidade</button>
-    </div>`;
-
     const histDedup = dedupHistoryByDay(state.history);
-    return '<section class="tab-panel ' + (state.activeTab==='historico'?'active':'') + '" data-panel="historico"><div class="grid grid-2"><div class="card"><h3>Evolução da probabilidade</h3><div class="canvas-wrap"><canvas id="historyChart"></canvas></div><table class="table" style="margin-top:12px"><tbody>' + histDedup.slice().reverse().map(h=>'<tr><td>'+(h.run_date||h.date)+'</td><td>'+pct(h.posterior)+'</td><td>'+(h.risk_label||'')+'</td></tr>').join('') + '</tbody></table></div><div class="card"><h3>Contribuição por sinal</h3>' + toggleHtml + '<div class="canvas-wrap"><canvas id="signalChart"></canvas></div></div></div></section>';
+    return '<section class="tab-panel ' + (state.activeTab==='historico'?'active':'') + '" data-panel="historico">' +
+      '<div class="card"><h3>Evolução da probabilidade</h3>' +
+      '<div class="canvas-wrap" style="height:70vh"><canvas id="historyChart"></canvas></div>' +
+      '<table class="table" style="margin-top:12px"><tbody>' +
+      histDedup.slice().reverse().map(h=>'<tr><td>'+(h.run_date||h.date)+'</td><td>'+pct(h.posterior)+'</td><td>'+(h.risk_label||'')+'</td></tr>').join('') +
+      '</tbody></table></div>' +
+      '</section>';
   }
 
   function panelMetodologia(){
@@ -317,6 +318,41 @@
     return Object.values(byDay).sort((a,b)=>(a.run_date||a.date) < (b.run_date||b.date) ? -1 : 1);
   }
 
+  // Agrupa histórico por dia, mantendo apenas o último registro de cada dia
+  function dedupHistoryByDay(history){
+    const byDay = {};
+    (history||[]).forEach(h=>{
+      const d = h.run_date || h.date || '';
+      byDay[d] = h;
+    });
+    return Object.values(byDay).sort((a,b)=>(a.run_date||a.date) < (b.run_date||b.date) ? -1 : 1);
+  }
+
+  function signalCardHtml(s){
+    const freqLabel = s.expected_frequency_days === 1 ? 'diária' : s.expected_frequency_days === 7 ? 'semanal' : s.expected_frequency_days >= 30 ? 'mensal' : (s.expected_frequency_days||'?') + 'd';
+    const staleIcon = s.is_stale ? '<span title="Dado defasado além do ciclo esperado (' + freqLabel + '). Peso penalizado automaticamente." style="margin-left:4px;color:var(--amber)">⏱</span>' : '';
+    const tailBadge = s.tail_signal ? '<span class="pill neutro" style="margin-left:4px;font-size:10px">CAUDA</span>' : '';
+    const confPct = s.confidence_factor != null ? Math.round(s.confidence_factor * 100) : 100;
+    const confColor = confPct >= 95 ? 'var(--green)' : confPct >= 80 ? 'var(--amber)' : 'var(--red)';
+    const weightEff = s.weight_effective != null ? s.weight_effective : s.weight;
+    return '<div class="signal-card ' + signalClass(s.status) + '">' +
+      '<div class="row"><div>' +
+        '<div class="signal-name">' + s.signal_name + staleIcon + tailBadge + '</div>' +
+        '<div class="signal-meta">' + s.block + '</div>' +
+      '</div>' +
+      '<div style="text-align:right">' +
+        '<div class="pill ' + signalClass(s.status) + '">' + s.status + '</div>' +
+        '<div style="margin-top:8px;font-weight:800;color:' + (Number(s.log_contrib)>=0?'#b42318':'#067647') + '">' + (Number(s.log_contrib)>=0?'+':'') + num(s.log_contrib) + '</div>' +
+      '</div></div>' +
+      '<div class="kv-table">' +
+        '<div>Valor bruto</div><div>' + num(s.raw_value) + '</div>' +
+        '<div>Peso nominal</div><div>' + num(s.weight) + '</div>' +
+        '<div>Peso efetivo</div><div>' + num(weightEff) + ' <span style="font-size:11px;color:' + confColor + '">(' + confPct + '% conf.)</span></div>' +
+        '<div>LR aplicado</div><div>' + num(s.lr_used) + '</div>' +
+        '<div>P(E|H) / P(E|~H)</div><div>' + num(s.p_e_h) + ' / ' + num(s.p_e_not_h) + '</div>' +
+      '</div></div>';
+  }
+
   // Toggle global acessível pelo onclick inline
   window.__setSignalMode = function(mode){
     state.signalViewMode = mode;
@@ -333,95 +369,104 @@
   }
 
   function drawCharts(){
-    if(state.activeTab !== 'historico' || !window.Chart) return;
-    const historyCtx = byId('historyChart');
-    const signalCtx = byId('signalChart');
-    if(!historyCtx || !signalCtx) return;
-    if(historyChart) historyChart.destroy();
-    if(signalChart) signalChart.destroy();
+    if(!window.Chart) return;
+    const isDashboard = state.activeTab === 'dashboard';
+    const isHistorico = state.activeTab === 'historico';
+    if(!isDashboard && !isHistorico) return;
 
-    // MELHORIA 2: Bandas de classificação no gráfico histórico
+    if(isDashboard){
+      const signalCtx = byId('signalChart');
+      if(!signalCtx) return;
+      if(signalChart) signalChart.destroy();
+      const signals = state.latest?.signals || [];
+      const prior   = state.latest?.prior || 0.14;
+      const isLog   = state.signalViewMode !== 'prob';
+      const values  = isLog
+        ? signals.map(s=>s.log_contrib)
+        : signals.map(s=>logToProb(s.log_contrib, prior));
+      signalChart = new Chart(signalCtx, {
+        type:'bar',
+        data:{
+          labels: signals.map(s=>s.signal_id),
+          datasets:[{
+            label: isLog ? 'Log contribuição' : 'Δ Probabilidade',
+            data: values,
+            backgroundColor: signals.map(s=>Number(s.log_contrib)>=0?'#f3b5b5':'#b7ebc9'),
+            borderColor:     signals.map(s=>Number(s.log_contrib)>=0?'#b42318':'#067647'),
+            borderWidth:1
+          }]
+        },
+        options:{
+          responsive:true, maintainAspectRatio:false, indexAxis:'y',
+          scales:{ x:{ ticks:{ callback: v => isLog ? v.toFixed(2) : (v*100).toFixed(1)+'pp' } } }
+        }
+      });
+      return;
+    }
+
+    const historyCtx = byId('historyChart');
+    if(!historyCtx) return;
+    if(historyChart) historyChart.destroy();
+
+    const DAILY_START = '2026-03-31';
     const zonePlugin = {
-      id: 'zonePlugin',
+      id:'zonePlugin',
       beforeDraw(chart){
-        const {ctx, chartArea:{top,bottom,left,right}, scales:{y}} = chart;
-        const zones = [
-          {from:0,   to:0.20, color:'rgba(6,118,71,0.07)'},
-          {from:0.20,to:0.40, color:'rgba(181,71,8,0.07)'},
-          {from:0.40,to:0.60, color:'rgba(180,35,24,0.10)'},
-          {from:0.60,to:1.00, color:'rgba(124,10,2,0.12)'},
-        ];
-        zones.forEach(z=>{
-          const yTop    = y.getPixelForValue(z.to);
-          const yBottom = y.getPixelForValue(z.from);
-          ctx.fillStyle = z.color;
-          ctx.fillRect(left, yTop, right-left, yBottom-yTop);
+        const {ctx, chartArea:{top,bottom,left,right}, scales:{x,y}} = chart;
+        [{from:0,to:0.20,color:'rgba(6,118,71,0.07)'},{from:0.20,to:0.40,color:'rgba(181,71,8,0.07)'},
+         {from:0.40,to:0.60,color:'rgba(180,35,24,0.10)'},{from:0.60,to:1.00,color:'rgba(124,10,2,0.12)'}]
+        .forEach(z=>{
+          ctx.fillStyle=z.color;
+          ctx.fillRect(left,y.getPixelForValue(z.to),right-left,y.getPixelForValue(z.from)-y.getPixelForValue(z.to));
         });
+        const idx=(chart.data.labels||[]).indexOf(DAILY_START);
+        if(idx>=0&&x){
+          const xp=x.getPixelForValue(idx);
+          ctx.save();ctx.beginPath();ctx.setLineDash([5,4]);
+          ctx.moveTo(xp,top);ctx.lineTo(xp,bottom);
+          ctx.strokeStyle='rgba(100,116,139,0.55)';ctx.lineWidth=1.5;ctx.stroke();
+          ctx.setLineDash([]);ctx.fillStyle='rgba(100,116,139,0.85)';
+          ctx.font='10px Inter,sans-serif';ctx.textAlign='left';
+          ctx.fillText('coleta diária →',xp+4,top+14);ctx.restore();
+        }
       }
     };
 
     const histDedup = dedupHistoryByDay(state.history);
+    const sp500Raw  = histDedup.map(h=>h.sp500||null);
+    const firstSp   = sp500Raw.find(v=>v!=null);
+    const sp500Norm = sp500Raw.map(v=>v!=null&&firstSp?(v/firstSp)*100:null);
+
     historyChart = new Chart(historyCtx, {
-      type:'line',
-      plugins:[zonePlugin],
+      type:'line', plugins:[zonePlugin],
       data:{
         labels: histDedup.map(h=>h.run_date||h.date),
-        datasets:[{
-          label:'Posterior',
-          data: histDedup.map(h=>h.posterior),
-          borderColor:'#0b1835',
-          backgroundColor:'#0b1835',
-          tension:0.15,
-          pointRadius:2
-        }]
+        datasets:[
+          {label:'Posterior (stress de liquidez)',data:histDedup.map(h=>h.posterior),
+           borderColor:'#0b1835',backgroundColor:'rgba(11,24,53,0.08)',
+           tension:0.15,pointRadius:1.5,yAxisID:'y',order:1},
+          {label:'S&P500 (base 100)',data:sp500Norm,
+           borderColor:'#b54708',backgroundColor:'rgba(181,71,8,0.06)',
+           tension:0.2,pointRadius:0,borderDash:[4,3],yAxisID:'y2',order:2,spanGaps:true}
+        ]
       },
       options:{
-        responsive:true,
-        maintainAspectRatio:false,
+        responsive:true, maintainAspectRatio:false,
+        interaction:{mode:'index',intersect:false},
         scales:{
-          y:{
-            ticks:{ callback:v=>Math.round(v*100)+'%' },
-            min:0,
-            max:1
-          }
+          y:{position:'left',ticks:{callback:v=>Math.round(v*100)+'%',color:'#0b1835'},min:0,max:1,
+             grid:{color:'rgba(219,228,240,0.6)'},
+             title:{display:true,text:'Posterior (stress)',color:'#0b1835',font:{size:11}}},
+          y2:{position:'right',ticks:{callback:v=>v!=null?v.toFixed(0):'',color:'#b54708'},
+              grid:{drawOnChartArea:false},
+              title:{display:true,text:'S&P500 (base 100)',color:'#b54708',font:{size:11}}}
         },
         plugins:{
-          annotation:{}, // placeholder se quiser adicionar depois
-          legend:{ display:true }
-        }
-      }
-    });
-
-    // MELHORIA 3: Toggle entre log e probabilidade
-    const signals = state.latest?.signals || [];
-    const prior = state.latest?.prior || 0.14;
-    const isLog = state.signalViewMode !== 'prob';
-    const values = isLog
-      ? signals.map(s=>s.log_contrib)
-      : signals.map(s=>logToProb(s.log_contrib, prior));
-
-    signalChart = new Chart(signalCtx, {
-      type:'bar',
-      data:{
-        labels: signals.map(s=>s.signal_id),
-        datasets:[{
-          label: isLog ? 'Log contribuição' : 'Δ Probabilidade',
-          data: values,
-          backgroundColor: signals.map(s=>Number(s.log_contrib)>=0?'#f3b5b5':'#b7ebc9'),
-          borderColor: signals.map(s=>Number(s.log_contrib)>=0?'#b42318':'#067647'),
-          borderWidth:1
-        }]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        indexAxis:'y',
-        scales:{
-          x:{
-            ticks:{
-              callback: v => isLog ? v.toFixed(2) : (v*100).toFixed(1)+'pp'
-            }
-          }
+          legend:{display:true,position:'top',labels:{boxWidth:12,font:{size:11}}},
+          tooltip:{callbacks:{label:ctx=>{
+            if(ctx.datasetIndex===0) return 'Posterior: '+(ctx.parsed.y*100).toFixed(1)+'%';
+            return ctx.parsed.y!=null?'S&P500: '+ctx.parsed.y.toFixed(1)+' (base 100)':null;
+          }}}
         }
       }
     });

@@ -162,6 +162,7 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict
     effr     = load_fred_series(SERIES["effr"])
     stlfsi4  = load_fred_series(SERIES["stlfsi4"])
     dpcredit = load_fred_series(SERIES["discount_window"])
+    sp500    = load_fred_series(SERIES["sp500"])
 
     rrp = try_rrp_usd_bn(latest_date(curve))
     if rrp is None:
@@ -188,6 +189,7 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict
         "effr_iorb_bp": effr_iorb_bp([v for _, v in effr], latest_value(iorb)),
         "stlfsi4_stress": stlfsi4_stress(latest_value(stlfsi4)),
         "discount_window_bn": discount_window_bn(latest_value(dpcredit)),
+        "sp500": latest_value(sp500),
     }
 
     source_status = {"custody": "direct", "nfci": "direct"}
@@ -239,10 +241,13 @@ def run_pipeline() -> PipelineOutput:
         "status": statuses.get("bloco_externo", "NEUTRO"),
     }
 
+    # SP500 — carregado para o payload mas não como sinal do modelo
+    sp500_value = raw.get("sp500", None)
+
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = connect(DB_PATH)
-    run_id = insert_run(conn, run_date, model, external_block)
-    history = fetch_history(conn, limit=104)
+    run_id = insert_run(conn, run_date, model, external_block, sp500=sp500_value)
+    history = fetch_history(conn, limit=520)
 
     latest_payload = {
         "run_id": run_id,
@@ -260,6 +265,7 @@ def run_pipeline() -> PipelineOutput:
         "raw_data": raw,
         "source_status": source_status,
         "data_feed_meta": data_feed_meta,
+        "sp500": sp500_value,
     }
     export_latest(LATEST_JSON, latest_payload)
     export_history(HISTORY_JSON, history)

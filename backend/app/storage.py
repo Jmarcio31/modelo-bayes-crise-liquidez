@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS runs (
     prior REAL NOT NULL,
     posterior REAL NOT NULL,
     risk_label TEXT NOT NULL,
-    created_at TEXT NOT NULL
+    created_at TEXT NOT NULL,
+    sp500 REAL
 );
 
 CREATE TABLE IF NOT EXISTS signal_results (
@@ -43,19 +44,29 @@ CREATE TABLE IF NOT EXISTS external_block_details (
 );
 '''
 
+# Migration: adiciona coluna sp500 se não existir (banco pré-existente)
+_MIGRATION = "ALTER TABLE runs ADD COLUMN sp500 REAL"
+
 
 def connect(db_path: Path) -> sqlite3.Connection:
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
+    # Migração: adiciona coluna sp500 em bancos pré-existentes
+    try:
+        conn.execute(_MIGRATION)
+        conn.commit()
+    except Exception:
+        pass  # coluna já existe
     return conn
 
 
-def insert_run(conn: sqlite3.Connection, run_date: str, model_result: dict[str, Any], external_block: dict[str, Any]) -> int:
+def insert_run(conn: sqlite3.Connection, run_date: str, model_result: dict[str, Any], external_block: dict[str, Any], sp500: float | None = None) -> int:
     cur = conn.cursor()
     cur.execute(
-        'INSERT INTO runs (run_date, prior, posterior, risk_label, created_at) VALUES (?, ?, ?, ?, ?)',
-        (run_date, model_result['prior'], model_result['posterior'], model_result['risk_label'], datetime.now(timezone.utc).isoformat()),
+        'INSERT INTO runs (run_date, prior, posterior, risk_label, created_at, sp500) VALUES (?, ?, ?, ?, ?, ?)',
+        (run_date, model_result['prior'], model_result['posterior'], model_result['risk_label'],
+         datetime.now(timezone.utc).isoformat(), sp500),
     )
     run_id = cur.lastrowid
     for s in model_result['signals']:
@@ -86,8 +97,19 @@ def insert_run(conn: sqlite3.Connection, run_date: str, model_result: dict[str, 
     return int(run_id)
 
 
-def fetch_history(conn: sqlite3.Connection, limit: int = 52) -> list[dict[str, Any]]:
+def fetch_history(conn: sqlite3.Connection, limit: int = 520) -> list[dict[str, Any]]:
+    """
+    Retorna o último registro de cada data, ordenado cronologicamente.
+    Inclui sp500 para sobreposição visual no gráfico histórico.
+    """
     cur = conn.cursor()
-    cur.execute('SELECT run_date, posterior, risk_label FROM runs ORDER BY run_date DESC, id DESC LIMIT ?', (limit,))
-    rows = [dict(r) for r in cur.fetchall()]
-    return list(reversed(rows))
+    cur.execute('''
+        SELECT run_date, posterior, risk_label, sp500
+        FROM runs
+        WHERE id IN (
+            SELECT MAX(id) FROM runs GROUP BY run_date
+        )
+        ORDER BY run_date ASC
+        LIMIT ?
+    ''', (limit,))
+    return [dict(r) for r in cur.fetchall()]

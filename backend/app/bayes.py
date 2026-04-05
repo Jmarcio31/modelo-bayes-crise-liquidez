@@ -26,9 +26,7 @@ def _risk_label(posterior: float) -> str:
 # baseado na qualidade declarada da fonte.
 #
 # Filosofia: penalizar levemente, não invalidar. Um proxy bem calibrado
-# ainda carrega 88% do poder informativo de uma série direta. Um dado
-# com alguns dias de defasagem ainda é relevante — especialmente para
-# séries com ciclo semanal (STLFSI4, DPCREDIT, WRESBAL).
+# ainda carrega 88% do poder informativo de uma série direta.
 CONFIDENCE_FACTORS: dict[str, float] = {
     "direct":            1.00,   # série direta de fonte primária
     "feed":              0.97,   # feed automatizado validado
@@ -36,15 +34,12 @@ CONFIDENCE_FACTORS: dict[str, float] = {
     "proxy":             0.88,   # proxy calculado sobre séries públicas
     "fallback":          0.60,   # fallback manual ou default estático
     "manual_or_default": 0.60,
-    "stale":             0.55,   # dado desatualizado além do threshold
-    # Nota: com coleta diária, dado de mais de 3 dias é genuinamente
-    # problemático. Fator 0.55 penaliza sem invalidar completamente.
+    "stale":             0.55,   # dado atrasado além do ciclo natural da série
 }
 
-# Tolerância de defasagem em dias antes de penalizar o peso.
-# 3 dias tolera fins de semana (dado de sexta disponível na segunda)
-# e eventuais atrasos de publicação do FRED.
-STALENESS_THRESHOLD_DAYS = 3
+# Threshold global de fallback (dias) — usado apenas quando o sinal
+# não declara expected_frequency_days no model_config.json.
+_DEFAULT_STALENESS_THRESHOLD = 3
 
 
 def _staleness_days(as_of_date: Optional[str], run_date: str) -> Optional[int]:
@@ -64,21 +59,29 @@ def _effective_weight(
     source_type: str,
     as_of_date: Optional[str],
     run_date: str,
+    expected_frequency_days: int = _DEFAULT_STALENESS_THRESHOLD,
 ) -> tuple[float, str, bool]:
     """
     Retorna (peso_efetivo, confidence_source, is_stale).
 
-    Se o dado estiver atrasado além do threshold, aplica fator 'stale'
-    independentemente do source_type declarado.
+    Staleness é avaliado em relação ao ciclo natural de cada série
+    (expected_frequency_days), não a um threshold global. Um dado semanal
+    com 6 dias de defasagem não é stale — é o ciclo esperado da série.
+    Um dado diário com 4 dias de defasagem é genuinamente stale.
+
+    Tolerância adicional de 3 dias sobre o ciclo natural para absorver
+    fins de semana, feriados e atrasos de publicação do FRED.
     """
     days = _staleness_days(as_of_date, run_date)
-    is_stale = days is not None and days > STALENESS_THRESHOLD_DAYS
+    # Stale = defasagem excede o ciclo natural + 3 dias de tolerância
+    stale_threshold = expected_frequency_days + 3
+    is_stale = days is not None and days > stale_threshold
 
     if is_stale:
         factor = CONFIDENCE_FACTORS["stale"]
         source = "stale"
     else:
-        factor = CONFIDENCE_FACTORS.get(source_type, 0.80)
+        factor = CONFIDENCE_FACTORS.get(source_type, 0.88)
         source = source_type
 
     return weight * factor, source, is_stale
@@ -119,8 +122,11 @@ def compute_model(
         feed_entry  = data_feed_meta.get(raw_key, {})
         as_of_date  = feed_entry.get("as_of_date") if feed_entry else None
 
+        # Frequência esperada declarada no config (fallback: 3 dias)
+        expected_freq = int(signal.get("expected_frequency_days", _DEFAULT_STALENESS_THRESHOLD))
+
         eff_weight, conf_source, is_stale = _effective_weight(
-            weight, source_type, as_of_date, run_date
+            weight, source_type, as_of_date, run_date, expected_freq
         )
 
         # Sinal de cauda com dado stale → força NEUTRO explicitamente
@@ -144,22 +150,23 @@ def compute_model(
         log_odds += log_contrib
 
         rows.append({
-            "signal_id":       signal["id"],
-            "signal_name":     signal["signal_name"],
-            "block":           signal["block"],
-            "raw_value":       float(raw.get(raw_key, 0.0)),
-            "status":          status,
-            "weight":          weight,           # peso nominal (config)
-            "weight_effective": round(eff_weight, 4),  # peso após confidence
-            "confidence_factor": round(eff_weight / weight, 3) if weight else 1.0,
-            "confidence_source": conf_source,
-            "is_stale":        is_stale,
-            "as_of_date":      as_of_date,
-            "tail_signal":     is_tail,
-            "p_e_h":           p_e_h,
-            "p_e_not_h":       p_e_not_h,
-            "lr_used":         lr_used,
-            "log_contrib":     log_contrib,
+            "signal_id":               signal["id"],
+            "signal_name":             signal["signal_name"],
+            "block":                   signal["block"],
+            "raw_value":               float(raw.get(raw_key, 0.0)),
+            "status":                  status,
+            "weight":                  weight,
+            "weight_effective":        round(eff_weight, 4),
+            "confidence_factor":       round(eff_weight / weight, 3) if weight else 1.0,
+            "confidence_source":       conf_source,
+            "is_stale":                is_stale,
+            "as_of_date":              as_of_date,
+            "expected_frequency_days": expected_freq,
+            "tail_signal":             is_tail,
+            "p_e_h":                   p_e_h,
+            "p_e_not_h":               p_e_not_h,
+            "lr_used":                 lr_used,
+            "log_contrib":             log_contrib,
         })
 
     posterior = _from_odds(math.exp(log_odds))
