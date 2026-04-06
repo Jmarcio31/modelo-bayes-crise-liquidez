@@ -37,6 +37,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add frontend/data/latest.json frontend/data/history.json backend/data/raw/data_feed.csv
+          git add frontend/data/latest.json frontend/data/history.json
           git diff --cached --quiet || git commit -m "Atualiza dados do dashboard [$(date -u '+%Y-%m-%d %H:%M UTC')]"
           git push
