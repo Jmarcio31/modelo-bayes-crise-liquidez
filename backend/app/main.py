@@ -169,18 +169,12 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict
         rrp = float(overrides["rrp_usd_bn"])
 
     # Dados brutos
-    _sofr_val = latest_value(sofr)
-    _iorb_val = latest_value(iorb)
-    _sofr_iorb_val = sofr_iorb_bp(_sofr_val, _iorb_val)
-    if _sofr_iorb_val == 0.0:
-        print(f"[WARN] sofr_iorb_bp=0.0 — SOFR={_sofr_val:.4f} IORB={_iorb_val:.4f} "
-              f"(datas: SOFR={latest_date(sofr)}, IORB={latest_date(iorb)})")
     raw = {
         "curva_spread": latest_value(curve),
         "sahm_gap": sahm_gap([v for _, v in unrate]),
         "reservas_pct_min": reservas_pct_min(latest_value(reserves), float(overrides["reserve_floor"])),
         "rrp_usd_bn": rrp,
-        "sofr_iorb_bp": _sofr_iorb_val,
+        "sofr_iorb_bp": sofr_iorb_bp(latest_value(sofr), latest_value(iorb)),
         "fra_ois_bp": float(overrides["fra_ois_bp"]),
         "repo_stress_score": float(overrides["repo_stress_score"]),
         "vol_yields_20d_bp": vol_yields_20d_bp([v for _, v in y10]),
@@ -201,9 +195,13 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict
     source_status = {"custody": "direct", "nfci": "direct"}
 
     # Atualizar com dados do feed
+    # Valores com quality_flag="default_fallback" NÃO substituem os calculados via FRED —
+    # são usados apenas quando não há nenhuma outra fonte disponível (já estão em raw
+    # via MANUAL_DEFAULTS). Isso evita que falhas temporárias da API ativem sinais
+    # artificialmente com valores históricos desatualizados.
     feed = load_data_feed(DATA_FEED_CSV)
     for key, entry in feed.items():
-        if key in raw:
+        if key in raw and entry.quality_flag != "default_fallback":
             raw[key] = entry.value
 
     source_status.update(_source_status_from_feed(feed))
@@ -225,40 +223,7 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict
         raw["usd_stress_score"]
     )
     
-    # Constrói meta base do feed
-    meta = feed_entries_to_meta(feed)
-
-    # Adiciona as_of_date para sinais calculados internamente (sem feed),
-    # que antes ficavam com as_of_date=null, impedindo verificação de staleness.
-
-    # reservas_pct_min: determinada pela última observação do WRESBAL (semanal)
-    meta["reservas_pct_min"] = {
-        "as_of_date": latest_date(reserves),
-        "source": "fred",
-        "method": "wresbal_div_reserve_floor",
-        "quality_flag": "ok",
-    }
-
-    # vol_yields_20d_bp: determinada pela última observação do DGS10 (diária)
-    meta["vol_yields_20d_bp"] = {
-        "as_of_date": latest_date(y10),
-        "source": "fred",
-        "method": "stddev_dgs10_20d",
-        "quality_flag": "ok",
-    }
-
-    # bloco_externo_score: data mais antiga entre seus componentes (abordagem conservadora)
-    date_custody = latest_date(custody)
-    date_tic  = meta.get("tic_3m_usd_bn",    {}).get("as_of_date", date_custody)
-    date_usd  = meta.get("usd_stress_score",  {}).get("as_of_date", date_custody)
-    meta["bloco_externo_score"] = {
-        "as_of_date": min(d for d in [date_custody, date_tic, date_usd] if d),
-        "source": "mixed",
-        "method": "custody_tic_usd_composite",
-        "quality_flag": "ok",
-    }
-
-    return raw, source_status, meta
+    return raw, source_status, feed_entries_to_meta(feed)
 
 
 def run_pipeline() -> PipelineOutput:
@@ -317,49 +282,3 @@ if __name__ == "__main__":
     print(f"[OK] history.json: {HISTORY_JSON}")
     print(f"[OK] prior: {out.latest_payload['prior']:.4f}")
     print(f"[OK] posterior: {out.latest_payload['posterior']:.4f}")
-
-    # ── Diagnóstico de séries críticas ────────────────────────────────────
-    # Detecta valores suspeitos (zero, None, fallback) nas séries de funding stress
-    raw = out.latest_payload.get("raw_data", {})
-    signals = {s["signal_id"]: s for s in out.latest_payload.get("signals", [])}
-
-    print("\n[DIAG] Séries críticas de funding stress:")
-    sofr_iorb = raw.get("sofr_iorb_bp", None)
-    sofr_val  = raw.get("sofr_iorb_bp", 0) / 100 + raw.get("sofr_iorb_bp", 0) * 0  # placeholder
-    print(f"  sofr_iorb_bp  = {sofr_iorb:.4f} bp", end="")
-    if sofr_iorb == 0.0:
-        print("  ⚠ ZERO — verifique SOFR e IORB individualmente no FRED", end="")
-    elif abs(sofr_iorb) < 0.5:
-        print("  ⚠ Valor muito próximo de zero (<0.5bp)", end="")
-    print()
-
-    effr_iorb = raw.get("effr_iorb_bp", None)
-    print(f"  effr_iorb_bp  = {effr_iorb:.4f} bp" if effr_iorb is not None else "  effr_iorb_bp  = None ⚠")
-
-    fra_ois = raw.get("fra_ois_bp", None)
-    src_fra  = out.latest_payload.get("source_status", {}).get("fra_ois", "?")
-    print(f"  fra_ois_bp    = {fra_ois:.2f} bp  [{src_fra}]")
-
-    repo = raw.get("repo_stress_score", None)
-    src_repo = out.latest_payload.get("source_status", {}).get("repo_stress", "?")
-    print(f"  repo_stress   = {repo:.4f}  [{src_repo}]")
-
-    # Diagnóstico SOFR vs IORB via feed_meta
-    feed_meta = out.latest_payload.get("data_feed_meta", {})
-    print("\n[DIAG] Datas das séries (as_of_date):")
-    for key in ["reservas_pct_min", "vol_yields_20d_bp", "bloco_externo_score",
-                "rrp_usd_bn", "fra_ois_bp", "repo_stress_score",
-                "tic_3m_usd_bn", "usd_stress_score", "private_credit_stress_score"]:
-        meta = feed_meta.get(key, {})
-        aod  = meta.get("as_of_date", "null")
-        src  = meta.get("source", "?")
-        print(f"  {key:<35} as_of={aod}  src={src}")
-
-    # Alerta geral: sinais com status suspeito
-    print("\n[DIAG] Status dos sinais:")
-    for sid, s in signals.items():
-        status = s.get("status", "?")
-        val    = s.get("raw_value", 0)
-        src    = s.get("confidence_source", "?")
-        stale  = " ⚠ STALE" if s.get("is_stale") else ""
-        print(f"  {sid:<30} {status:<10} val={val:.4f}  src={src}{stale}")
