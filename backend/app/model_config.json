@@ -11,7 +11,7 @@
         "kind": "gte",
         "threshold": 0.1,
         "add": 0.01,
-        "add_max": 0.025,
+        "add_max": 0.03,
         "smooth_k": 10,
         "label": "curva_desinverte",
         "_calibration_note": "Variável de regime macro. k=10 → zona de transição ±0.23pp. Curva positiva após inversão profunda sinaliza mudança de regime."

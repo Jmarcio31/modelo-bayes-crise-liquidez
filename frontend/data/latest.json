@@ -1,7 +1,7 @@
 {
-  "run_id": 461,
+  "run_id": 465,
   "run_date": "2026-04-05",
-  "prior": 0.15702780702685856,
+  "prior": 0.16200532566105386,
   "prior_base": 0.12,
   "prior_min": 0.08,
   "prior_max": 0.22,
@@ -13,8 +13,8 @@
       "kind": "gte",
       "threshold": 0.1,
       "value": 0.64,
-      "add": 0.024888,
-      "add_max": 0.025,
+      "add": 0.029865,
+      "add_max": 0.03,
       "smooth_k": 10.0,
       "mode": "smooth"
     },
@@ -52,7 +52,7 @@
       "mode": "smooth"
     }
   ],
-  "posterior": 0.35875107022072866,
+  "posterior": 0.3673364807858107,
   "risk_label": "Estresse contido",
   "signals": [
     {
@@ -104,7 +104,7 @@
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": null,
+      "as_of_date": "2026-04-01",
       "expected_frequency_days": 7,
       "tail_signal": false,
       "p_e_h": 0.83,
@@ -199,7 +199,7 @@
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": null,
+      "as_of_date": "2026-04-02",
       "expected_frequency_days": 1,
       "tail_signal": true,
       "p_e_h": 0.7,
@@ -218,7 +218,7 @@
       "confidence_factor": 0.92,
       "confidence_source": "mixed",
       "is_stale": false,
-      "as_of_date": null,
+      "as_of_date": "2026-03-27",
       "expected_frequency_days": 7,
       "tail_signal": false,
       "p_e_h": 0.84,
@@ -403,6 +403,24 @@
       "as_of_date": "2026-04-02",
       "source": "market_proxy",
       "method": "calculated_composite_hy_funding_redemption_overlay",
+      "quality_flag": "ok"
+    },
+    "reservas_pct_min": {
+      "as_of_date": "2026-04-01",
+      "source": "fred",
+      "method": "wresbal_div_reserve_floor",
+      "quality_flag": "ok"
+    },
+    "vol_yields_20d_bp": {
+      "as_of_date": "2026-04-02",
+      "source": "fred",
+      "method": "stddev_dgs10_20d",
+      "quality_flag": "ok"
+    },
+    "bloco_externo_score": {
+      "as_of_date": "2026-03-27",
+      "source": "mixed",
+      "method": "custody_tic_usd_composite",
       "quality_flag": "ok"
     }
   },

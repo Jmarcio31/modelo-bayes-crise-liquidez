@@ -16,5 +16,5 @@ python -m backend.app.main
 
 Subir para o GitHub
 git add .
-git commit -m "Ajuste no modelo de probabilidade posterior"
+git commit -m "Melhorias no modelo de probabilidade posterior e no layout"
 git push

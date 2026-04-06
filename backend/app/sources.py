@@ -17,18 +17,10 @@ REQUEST_TIMEOUT = 60
 REQUEST_ATTEMPTS = 3
 BACKOFF_SECONDS = 2
 
-SERIES = {
-    "curve10y3m": "T10Y3M",
-    "unrate": "UNRATE",
-    "sofr": "SOFR",
-    "iorb": "IORB",
-    "custody": "WSEFINT1",
-    "dxy_broad": "DTWEXBGS",
-    "yield10": "DGS10",
-    "yield2": "DGS2",
-    "reserve_balances": "WRESBAL",
-    "nfci": "NFCI",
-}
+# Nota: o dict SERIES canônico está em config.py e é importado por main.py.
+# Este dict local é mantido apenas para load_nfci(), que precisa de NFCI
+# sem importar config.py (evita dependência circular).
+_NFCI_SERIES_ID = "NFCI"
 
 
 class SourceError(Exception):
@@ -135,7 +127,7 @@ def latest_date(series: List[Tuple[str, float]]) -> str:
 
 
 def load_nfci() -> float:
-    series = load_fred_series(SERIES["nfci"])
+    series = load_fred_series(_NFCI_SERIES_ID)
     return latest_value(series)
 
 
