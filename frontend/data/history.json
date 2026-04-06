@@ -1,8 +1,2306 @@
 [
   {
-    "run_date": "2026-04-06",
-    "posterior": 0.46257333889335694,
+    "run_date": "2019-01-04",
+    "posterior": 0.13921128767233357,
+    "risk_label": "Estresse contido",
+    "sp500": 2531.94
+  },
+  {
+    "run_date": "2019-01-11",
+    "posterior": 0.19804036881677564,
+    "risk_label": "Estresse contido",
+    "sp500": 2596.26
+  },
+  {
+    "run_date": "2019-01-18",
+    "posterior": 0.5222886066309517,
     "risk_label": "Estresse intermediario",
+    "sp500": 2670.71
+  },
+  {
+    "run_date": "2019-01-25",
+    "posterior": 0.15913567535840842,
+    "risk_label": "Estresse contido",
+    "sp500": 2664.76
+  },
+  {
+    "run_date": "2019-02-01",
+    "posterior": 0.008647294933636859,
+    "risk_label": "Estresse contido",
+    "sp500": 2706.53
+  },
+  {
+    "run_date": "2019-02-08",
+    "posterior": 0.008851580874973047,
+    "risk_label": "Estresse contido",
+    "sp500": 2707.88
+  },
+  {
+    "run_date": "2019-02-15",
+    "posterior": 0.014550360403829322,
+    "risk_label": "Estresse contido",
+    "sp500": 2775.6
+  },
+  {
+    "run_date": "2019-02-22",
+    "posterior": 0.038986910577331654,
+    "risk_label": "Estresse contido",
+    "sp500": 2792.67
+  },
+  {
+    "run_date": "2019-03-01",
+    "posterior": 0.0495333450882454,
+    "risk_label": "Estresse contido",
+    "sp500": 2803.69
+  },
+  {
+    "run_date": "2019-03-08",
+    "posterior": 0.07550035761772841,
+    "risk_label": "Estresse contido",
+    "sp500": 2743.07
+  },
+  {
+    "run_date": "2019-03-15",
+    "posterior": 0.03318111447266366,
+    "risk_label": "Estresse contido",
+    "sp500": 2822.48
+  },
+  {
+    "run_date": "2019-03-22",
+    "posterior": 0.06850970018321531,
+    "risk_label": "Estresse contido",
+    "sp500": 2800.71
+  },
+  {
+    "run_date": "2019-03-29",
+    "posterior": 0.03609594220207978,
+    "risk_label": "Estresse contido",
+    "sp500": 2834.4
+  },
+  {
+    "run_date": "2019-04-05",
+    "posterior": 0.02465685780096946,
+    "risk_label": "Estresse contido",
+    "sp500": 2892.74
+  },
+  {
+    "run_date": "2019-04-12",
+    "posterior": 0.04355964259488444,
+    "risk_label": "Estresse contido",
+    "sp500": 2907.41
+  },
+  {
+    "run_date": "2019-04-19",
+    "posterior": 0.04946513238580507,
+    "risk_label": "Estresse contido",
+    "sp500": 2905.03
+  },
+  {
+    "run_date": "2019-04-26",
+    "posterior": 0.018993941558430733,
+    "risk_label": "Estresse contido",
+    "sp500": 2939.88
+  },
+  {
+    "run_date": "2019-05-03",
+    "posterior": 0.004953315603974965,
+    "risk_label": "Estresse contido",
+    "sp500": 2945.64
+  },
+  {
+    "run_date": "2019-05-10",
+    "posterior": 0.016004695209597925,
+    "risk_label": "Estresse contido",
+    "sp500": 2881.4
+  },
+  {
+    "run_date": "2019-05-17",
+    "posterior": 0.032923992937671384,
+    "risk_label": "Estresse contido",
+    "sp500": 2859.53
+  },
+  {
+    "run_date": "2019-05-24",
+    "posterior": 0.25197809854945896,
+    "risk_label": "Estresse contido",
+    "sp500": 2826.06
+  },
+  {
+    "run_date": "2019-05-31",
+    "posterior": 0.022793307293963245,
+    "risk_label": "Estresse contido",
+    "sp500": 2752.06
+  },
+  {
+    "run_date": "2019-06-07",
+    "posterior": 0.039436831065069476,
+    "risk_label": "Estresse contido",
+    "sp500": 2873.34
+  },
+  {
+    "run_date": "2019-06-14",
+    "posterior": 0.023327879307792714,
+    "risk_label": "Estresse contido",
+    "sp500": 2886.98
+  },
+  {
+    "run_date": "2019-06-21",
+    "posterior": 0.023890905949993938,
+    "risk_label": "Estresse contido",
+    "sp500": 2950.46
+  },
+  {
+    "run_date": "2019-06-28",
+    "posterior": 0.0209248965531702,
+    "risk_label": "Estresse contido",
+    "sp500": 2941.76
+  },
+  {
+    "run_date": "2019-07-05",
+    "posterior": 0.025237951651093844,
+    "risk_label": "Estresse contido",
+    "sp500": 2990.41
+  },
+  {
+    "run_date": "2019-07-12",
+    "posterior": 0.01812349839456541,
+    "risk_label": "Estresse contido",
+    "sp500": 3013.77
+  },
+  {
+    "run_date": "2019-07-19",
+    "posterior": 0.018276548154385,
+    "risk_label": "Estresse contido",
+    "sp500": 2976.61
+  },
+  {
+    "run_date": "2019-07-26",
+    "posterior": 0.01795874307175426,
+    "risk_label": "Estresse contido",
+    "sp500": 3025.86
+  },
+  {
+    "run_date": "2019-08-02",
+    "posterior": 0.21485436640577188,
+    "risk_label": "Estresse contido",
+    "sp500": 2932.05
+  },
+  {
+    "run_date": "2019-08-09",
+    "posterior": 0.14033195006657742,
+    "risk_label": "Estresse contido",
+    "sp500": 2918.65
+  },
+  {
+    "run_date": "2019-08-16",
+    "posterior": 0.13958258400371343,
+    "risk_label": "Estresse contido",
+    "sp500": 2888.68
+  },
+  {
+    "run_date": "2019-08-23",
+    "posterior": 0.13673789037562337,
+    "risk_label": "Estresse contido",
+    "sp500": 2847.11
+  },
+  {
+    "run_date": "2019-08-30",
+    "posterior": 0.015748515487355088,
+    "risk_label": "Estresse contido",
+    "sp500": 2926.46
+  },
+  {
+    "run_date": "2019-09-06",
+    "posterior": 0.015833787527009525,
+    "risk_label": "Estresse contido",
+    "sp500": 2978.71
+  },
+  {
+    "run_date": "2019-09-13",
+    "posterior": 0.03466931842887666,
+    "risk_label": "Estresse contido",
+    "sp500": 3007.39
+  },
+  {
+    "run_date": "2019-09-20",
+    "posterior": 0.16949227534138425,
+    "risk_label": "Estresse contido",
+    "sp500": 2992.07
+  },
+  {
+    "run_date": "2019-09-27",
+    "posterior": 0.24717220386210662,
+    "risk_label": "Estresse contido",
+    "sp500": 2961.79
+  },
+  {
+    "run_date": "2019-10-04",
+    "posterior": 0.08720495089687806,
+    "risk_label": "Estresse contido",
+    "sp500": 2952.01
+  },
+  {
+    "run_date": "2019-10-11",
+    "posterior": 0.0350868755610999,
+    "risk_label": "Estresse contido",
+    "sp500": 2970.27
+  },
+  {
+    "run_date": "2019-10-18",
+    "posterior": 0.025829603544868854,
+    "risk_label": "Estresse contido",
+    "sp500": 2986.2
+  },
+  {
+    "run_date": "2019-10-25",
+    "posterior": 0.026349100269035614,
+    "risk_label": "Estresse contido",
+    "sp500": 3022.55
+  },
+  {
+    "run_date": "2019-11-01",
+    "posterior": 0.061680777145073466,
+    "risk_label": "Estresse contido",
+    "sp500": 3066.91
+  },
+  {
+    "run_date": "2019-11-08",
+    "posterior": 0.11961060791734039,
+    "risk_label": "Estresse contido",
+    "sp500": 3093.08
+  },
+  {
+    "run_date": "2019-11-15",
+    "posterior": 0.10154594633820423,
+    "risk_label": "Estresse contido",
+    "sp500": 3120.46
+  },
+  {
+    "run_date": "2019-11-22",
+    "posterior": 0.2967056965407361,
+    "risk_label": "Estresse contido",
+    "sp500": 3110.29
+  },
+  {
+    "run_date": "2019-11-29",
+    "posterior": 0.07239408997568156,
+    "risk_label": "Estresse contido",
+    "sp500": 3140.98
+  },
+  {
+    "run_date": "2019-12-06",
+    "posterior": 0.030102360143046403,
+    "risk_label": "Estresse contido",
+    "sp500": 3145.91
+  },
+  {
+    "run_date": "2019-12-13",
+    "posterior": 0.022293579764331602,
+    "risk_label": "Estresse contido",
+    "sp500": 3168.8
+  },
+  {
+    "run_date": "2019-12-20",
+    "posterior": 0.018383500787451497,
+    "risk_label": "Estresse contido",
+    "sp500": 3221.22
+  },
+  {
+    "run_date": "2019-12-27",
+    "posterior": 0.01396644151731417,
+    "risk_label": "Estresse contido",
+    "sp500": 3240.02
+  },
+  {
+    "run_date": "2020-01-03",
+    "posterior": 0.014512343363739268,
+    "risk_label": "Estresse contido",
+    "sp500": 3234.85
+  },
+  {
+    "run_date": "2020-01-10",
+    "posterior": 0.014450334192809413,
+    "risk_label": "Estresse contido",
+    "sp500": 3265.35
+  },
+  {
+    "run_date": "2020-01-17",
+    "posterior": 0.07737437350030112,
+    "risk_label": "Estresse contido",
+    "sp500": 3329.62
+  },
+  {
+    "run_date": "2020-01-24",
+    "posterior": 0.008442645156733,
+    "risk_label": "Estresse contido",
+    "sp500": 3295.47
+  },
+  {
+    "run_date": "2020-01-31",
+    "posterior": 0.02014068826973242,
+    "risk_label": "Estresse contido",
+    "sp500": 3225.52
+  },
+  {
+    "run_date": "2020-02-07",
+    "posterior": 0.012435967817342781,
+    "risk_label": "Estresse contido",
+    "sp500": 3327.71
+  },
+  {
+    "run_date": "2020-02-14",
+    "posterior": 0.012268841178256995,
+    "risk_label": "Estresse contido",
+    "sp500": 3380.16
+  },
+  {
+    "run_date": "2020-02-21",
+    "posterior": 0.008988596270340645,
+    "risk_label": "Estresse contido",
+    "sp500": 3337.75
+  },
+  {
+    "run_date": "2020-02-28",
+    "posterior": 0.035291834873219644,
+    "risk_label": "Estresse contido",
+    "sp500": 2954.22
+  },
+  {
+    "run_date": "2020-03-06",
+    "posterior": 0.7037485791108349,
+    "risk_label": "Estresse elevado",
+    "sp500": 2972.37
+  },
+  {
+    "run_date": "2020-03-13",
+    "posterior": 0.8988364008374192,
+    "risk_label": "Estresse elevado",
+    "sp500": 2711.02
+  },
+  {
+    "run_date": "2020-03-20",
+    "posterior": 0.7689874616181701,
+    "risk_label": "Estresse elevado",
+    "sp500": 2304.92
+  },
+  {
+    "run_date": "2020-03-27",
+    "posterior": 0.7327782954666544,
+    "risk_label": "Estresse elevado",
+    "sp500": 2541.47
+  },
+  {
+    "run_date": "2020-04-03",
+    "posterior": 0.8302062645022007,
+    "risk_label": "Estresse elevado",
+    "sp500": 2488.65
+  },
+  {
+    "run_date": "2020-04-10",
+    "posterior": 0.7453465620354894,
+    "risk_label": "Estresse elevado",
+    "sp500": 2789.82
+  },
+  {
+    "run_date": "2020-04-17",
+    "posterior": 0.12346326299960059,
+    "risk_label": "Estresse contido",
+    "sp500": 2874.56
+  },
+  {
+    "run_date": "2020-04-24",
+    "posterior": 0.15126987750402687,
+    "risk_label": "Estresse contido",
+    "sp500": 2836.74
+  },
+  {
+    "run_date": "2020-05-01",
+    "posterior": 0.043841141888532394,
+    "risk_label": "Estresse contido",
+    "sp500": 2830.71
+  },
+  {
+    "run_date": "2020-05-08",
+    "posterior": 0.029414134232844447,
+    "risk_label": "Estresse contido",
+    "sp500": 2929.8
+  },
+  {
+    "run_date": "2020-05-15",
+    "posterior": 0.02893219417614759,
+    "risk_label": "Estresse contido",
+    "sp500": 2863.7
+  },
+  {
+    "run_date": "2020-05-22",
+    "posterior": 0.028001955065863414,
+    "risk_label": "Estresse contido",
+    "sp500": 2955.45
+  },
+  {
+    "run_date": "2020-05-29",
+    "posterior": 0.019281415243386488,
+    "risk_label": "Estresse contido",
+    "sp500": 3044.31
+  },
+  {
+    "run_date": "2020-06-05",
+    "posterior": 0.016154013874257085,
+    "risk_label": "Estresse contido",
+    "sp500": 3193.93
+  },
+  {
+    "run_date": "2020-06-12",
+    "posterior": 0.016457117642999293,
+    "risk_label": "Estresse contido",
+    "sp500": 3041.31
+  },
+  {
+    "run_date": "2020-06-19",
+    "posterior": 0.057370636255766196,
+    "risk_label": "Estresse contido",
+    "sp500": 3097.74
+  },
+  {
+    "run_date": "2020-06-26",
+    "posterior": 0.03575650996864998,
+    "risk_label": "Estresse contido",
+    "sp500": 3009.05
+  },
+  {
+    "run_date": "2020-07-03",
+    "posterior": 0.1454557603123671,
+    "risk_label": "Estresse contido",
+    "sp500": 3130.01
+  },
+  {
+    "run_date": "2020-07-10",
+    "posterior": 0.042822922279978935,
+    "risk_label": "Estresse contido",
+    "sp500": 3185.04
+  },
+  {
+    "run_date": "2020-07-17",
+    "posterior": 0.04270730034876939,
+    "risk_label": "Estresse contido",
+    "sp500": 3224.73
+  },
+  {
+    "run_date": "2020-07-24",
+    "posterior": 0.04198234696462656,
+    "risk_label": "Estresse contido",
+    "sp500": 3215.63
+  },
+  {
+    "run_date": "2020-07-31",
+    "posterior": 0.04225908494016859,
+    "risk_label": "Estresse contido",
+    "sp500": 3271.12
+  },
+  {
+    "run_date": "2020-08-07",
+    "posterior": 0.041992707468695045,
+    "risk_label": "Estresse contido",
+    "sp500": 3351.28
+  },
+  {
+    "run_date": "2020-08-14",
+    "posterior": 0.0419953460083882,
+    "risk_label": "Estresse contido",
+    "sp500": 3372.85
+  },
+  {
+    "run_date": "2020-08-21",
+    "posterior": 0.034570560263410675,
+    "risk_label": "Estresse contido",
+    "sp500": 3397.16
+  },
+  {
+    "run_date": "2020-08-28",
+    "posterior": 0.03426680242379668,
+    "risk_label": "Estresse contido",
+    "sp500": 3508.01
+  },
+  {
+    "run_date": "2020-09-04",
+    "posterior": 0.04229863716372904,
+    "risk_label": "Estresse contido",
+    "sp500": 3426.96
+  },
+  {
+    "run_date": "2020-09-11",
+    "posterior": 0.042669047556499896,
+    "risk_label": "Estresse contido",
+    "sp500": 3340.97
+  },
+  {
+    "run_date": "2020-09-18",
+    "posterior": 0.042267846667084365,
+    "risk_label": "Estresse contido",
+    "sp500": 3319.47
+  },
+  {
+    "run_date": "2020-09-25",
+    "posterior": 0.07170685979557553,
+    "risk_label": "Estresse contido",
+    "sp500": 3298.46
+  },
+  {
+    "run_date": "2020-10-02",
+    "posterior": 0.02475339948337623,
+    "risk_label": "Estresse contido",
+    "sp500": 3348.44
+  },
+  {
+    "run_date": "2020-10-09",
+    "posterior": 0.024564204307087344,
+    "risk_label": "Estresse contido",
+    "sp500": 3477.13
+  },
+  {
+    "run_date": "2020-10-16",
+    "posterior": 0.1278208326968981,
+    "risk_label": "Estresse contido",
+    "sp500": 3483.81
+  },
+  {
+    "run_date": "2020-10-23",
+    "posterior": 0.1723101243432573,
+    "risk_label": "Estresse contido",
+    "sp500": 3465.39
+  },
+  {
+    "run_date": "2020-10-30",
+    "posterior": 0.06836646436187412,
+    "risk_label": "Estresse contido",
+    "sp500": 3269.96
+  },
+  {
+    "run_date": "2020-11-06",
+    "posterior": 0.11069880556304329,
+    "risk_label": "Estresse contido",
+    "sp500": 3509.44
+  },
+  {
+    "run_date": "2020-11-13",
+    "posterior": 0.08237905211265983,
+    "risk_label": "Estresse contido",
+    "sp500": 3585.15
+  },
+  {
+    "run_date": "2020-11-20",
+    "posterior": 0.05257648178295705,
+    "risk_label": "Estresse contido",
+    "sp500": 3557.54
+  },
+  {
+    "run_date": "2020-11-27",
+    "posterior": 0.1013728478492598,
+    "risk_label": "Estresse contido",
+    "sp500": 3638.35
+  },
+  {
+    "run_date": "2020-12-04",
+    "posterior": 0.0778107569483772,
+    "risk_label": "Estresse contido",
+    "sp500": 3699.12
+  },
+  {
+    "run_date": "2020-12-11",
+    "posterior": 0.04894112110953101,
+    "risk_label": "Estresse contido",
+    "sp500": 3663.46
+  },
+  {
+    "run_date": "2020-12-18",
+    "posterior": 0.07800685152004982,
+    "risk_label": "Estresse contido",
+    "sp500": 3709.41
+  },
+  {
+    "run_date": "2020-12-25",
+    "posterior": 0.04894349016465867,
+    "risk_label": "Estresse contido",
+    "sp500": 3703.06
+  },
+  {
+    "run_date": "2021-01-01",
+    "posterior": 0.048835473530758414,
+    "risk_label": "Estresse contido",
+    "sp500": 3756.07
+  },
+  {
+    "run_date": "2021-01-08",
+    "posterior": 0.08234546349354192,
+    "risk_label": "Estresse contido",
+    "sp500": 3824.68
+  },
+  {
+    "run_date": "2021-01-15",
+    "posterior": 0.06372647912678919,
+    "risk_label": "Estresse contido",
+    "sp500": 3768.25
+  },
+  {
+    "run_date": "2021-01-22",
+    "posterior": 0.03205959198605865,
+    "risk_label": "Estresse contido",
+    "sp500": 3841.47
+  },
+  {
+    "run_date": "2021-01-29",
+    "posterior": 0.03238938743579387,
+    "risk_label": "Estresse contido",
+    "sp500": 3714.24
+  },
+  {
+    "run_date": "2021-02-05",
+    "posterior": 0.024278444394191988,
+    "risk_label": "Estresse contido",
+    "sp500": 3886.83
+  },
+  {
+    "run_date": "2021-02-12",
+    "posterior": 0.024144101511295268,
+    "risk_label": "Estresse contido",
+    "sp500": 3934.83
+  },
+  {
+    "run_date": "2021-02-19",
+    "posterior": 0.010171033965863063,
+    "risk_label": "Estresse contido",
+    "sp500": 3906.71
+  },
+  {
+    "run_date": "2021-02-26",
+    "posterior": 0.012912098540099245,
+    "risk_label": "Estresse contido",
+    "sp500": 3811.15
+  },
+  {
+    "run_date": "2021-03-05",
+    "posterior": 0.012532188067763586,
+    "risk_label": "Estresse contido",
+    "sp500": 3841.94
+  },
+  {
+    "run_date": "2021-03-12",
+    "posterior": 0.009903987450057352,
+    "risk_label": "Estresse contido",
+    "sp500": 3943.34
+  },
+  {
+    "run_date": "2021-03-19",
+    "posterior": 0.009885589174398782,
+    "risk_label": "Estresse contido",
+    "sp500": 3913.1
+  },
+  {
+    "run_date": "2021-03-26",
+    "posterior": 0.009856315088999581,
+    "risk_label": "Estresse contido",
+    "sp500": 3974.54
+  },
+  {
+    "run_date": "2021-04-02",
+    "posterior": 0.009704341231811783,
+    "risk_label": "Estresse contido",
+    "sp500": 4019.87
+  },
+  {
+    "run_date": "2021-04-09",
+    "posterior": 0.005913981262234843,
+    "risk_label": "Estresse contido",
+    "sp500": 4128.8
+  },
+  {
+    "run_date": "2021-04-16",
+    "posterior": 0.005921869025020477,
+    "risk_label": "Estresse contido",
+    "sp500": 4185.47
+  },
+  {
+    "run_date": "2021-04-23",
+    "posterior": 0.00786229223722233,
+    "risk_label": "Estresse contido",
+    "sp500": 4180.17
+  },
+  {
+    "run_date": "2021-04-30",
+    "posterior": 0.005915382343106973,
+    "risk_label": "Estresse contido",
+    "sp500": 4181.17
+  },
+  {
+    "run_date": "2021-05-07",
+    "posterior": 0.008463895593668776,
+    "risk_label": "Estresse contido",
+    "sp500": 4232.6
+  },
+  {
+    "run_date": "2021-05-14",
+    "posterior": 0.008477859262730328,
+    "risk_label": "Estresse contido",
+    "sp500": 4173.85
+  },
+  {
+    "run_date": "2021-05-21",
+    "posterior": 0.008486423608532051,
+    "risk_label": "Estresse contido",
+    "sp500": 4155.86
+  },
+  {
+    "run_date": "2021-05-28",
+    "posterior": 0.008462263489549931,
+    "risk_label": "Estresse contido",
+    "sp500": 4204.11
+  },
+  {
+    "run_date": "2021-06-04",
+    "posterior": 0.005983002484144133,
+    "risk_label": "Estresse contido",
+    "sp500": 4229.89
+  },
+  {
+    "run_date": "2021-06-11",
+    "posterior": 0.004665755812554601,
+    "risk_label": "Estresse contido",
+    "sp500": 4247.44
+  },
+  {
+    "run_date": "2021-06-18",
+    "posterior": 0.002681560741773261,
+    "risk_label": "Estresse contido",
+    "sp500": 4166.45
+  },
+  {
+    "run_date": "2021-06-25",
+    "posterior": 0.0026792901412403237,
+    "risk_label": "Estresse contido",
+    "sp500": 4280.7
+  },
+  {
+    "run_date": "2021-07-02",
+    "posterior": 0.0068623968532194185,
+    "risk_label": "Estresse contido",
+    "sp500": 4352.34
+  },
+  {
+    "run_date": "2021-07-09",
+    "posterior": 0.009127586155445516,
+    "risk_label": "Estresse contido",
+    "sp500": 4369.55
+  },
+  {
+    "run_date": "2021-07-16",
+    "posterior": 0.009104734193354336,
+    "risk_label": "Estresse contido",
+    "sp500": 4327.16
+  },
+  {
+    "run_date": "2021-07-23",
+    "posterior": 0.009170951032432123,
+    "risk_label": "Estresse contido",
+    "sp500": 4411.79
+  },
+  {
+    "run_date": "2021-07-30",
+    "posterior": 0.009114032361899423,
+    "risk_label": "Estresse contido",
+    "sp500": 4395.26
+  },
+  {
+    "run_date": "2021-08-06",
+    "posterior": 0.012531846999463211,
+    "risk_label": "Estresse contido",
+    "sp500": 4436.52
+  },
+  {
+    "run_date": "2021-08-13",
+    "posterior": 0.00941677144844861,
+    "risk_label": "Estresse contido",
+    "sp500": 4468.0
+  },
+  {
+    "run_date": "2021-08-20",
+    "posterior": 0.009481385537018218,
+    "risk_label": "Estresse contido",
+    "sp500": 4441.67
+  },
+  {
+    "run_date": "2021-08-27",
+    "posterior": 0.009439210231827744,
+    "risk_label": "Estresse contido",
+    "sp500": 4509.37
+  },
+  {
+    "run_date": "2021-09-03",
+    "posterior": 0.009440804967646543,
+    "risk_label": "Estresse contido",
+    "sp500": 4535.43
+  },
+  {
+    "run_date": "2021-09-10",
+    "posterior": 0.009453898898609224,
+    "risk_label": "Estresse contido",
+    "sp500": 4458.58
+  },
+  {
+    "run_date": "2021-09-17",
+    "posterior": 0.009463156470540591,
+    "risk_label": "Estresse contido",
+    "sp500": 4432.99
+  },
+  {
+    "run_date": "2021-09-24",
+    "posterior": 0.00950590531654795,
+    "risk_label": "Estresse contido",
+    "sp500": 4455.48
+  },
+  {
+    "run_date": "2021-10-01",
+    "posterior": 0.009017190542321427,
+    "risk_label": "Estresse contido",
+    "sp500": 4357.04
+  },
+  {
+    "run_date": "2021-10-08",
+    "posterior": 0.009015031755156446,
+    "risk_label": "Estresse contido",
+    "sp500": 4391.34
+  },
+  {
+    "run_date": "2021-10-15",
+    "posterior": 0.008988787900566415,
+    "risk_label": "Estresse contido",
+    "sp500": 4471.37
+  },
+  {
+    "run_date": "2021-10-22",
+    "posterior": 0.008948362158941028,
+    "risk_label": "Estresse contido",
+    "sp500": 4544.9
+  },
+  {
+    "run_date": "2021-10-29",
+    "posterior": 0.006767624672515844,
+    "risk_label": "Estresse contido",
+    "sp500": 4605.38
+  },
+  {
+    "run_date": "2021-11-05",
+    "posterior": 0.009337415597197531,
+    "risk_label": "Estresse contido",
+    "sp500": 4697.53
+  },
+  {
+    "run_date": "2021-11-12",
+    "posterior": 0.012328378203357512,
+    "risk_label": "Estresse contido",
+    "sp500": 4682.85
+  },
+  {
+    "run_date": "2021-11-19",
+    "posterior": 0.00933739110469915,
+    "risk_label": "Estresse contido",
+    "sp500": 4697.96
+  },
+  {
+    "run_date": "2021-11-26",
+    "posterior": 0.009403583005946906,
+    "risk_label": "Estresse contido",
+    "sp500": 4594.62
+  },
+  {
+    "run_date": "2021-12-03",
+    "posterior": 0.009206857172281358,
+    "risk_label": "Estresse contido",
+    "sp500": 4538.43
+  },
+  {
+    "run_date": "2021-12-10",
+    "posterior": 0.009000048615438065,
+    "risk_label": "Estresse contido",
+    "sp500": 4712.02
+  },
+  {
+    "run_date": "2021-12-17",
+    "posterior": 0.009064966560675857,
+    "risk_label": "Estresse contido",
+    "sp500": 4620.64
+  },
+  {
+    "run_date": "2021-12-24",
+    "posterior": 0.0068185599753567685,
+    "risk_label": "Estresse contido",
+    "sp500": 4725.79
+  },
+  {
+    "run_date": "2021-12-31",
+    "posterior": 0.003308005615212513,
+    "risk_label": "Estresse contido",
+    "sp500": 4766.18
+  },
+  {
+    "run_date": "2022-01-07",
+    "posterior": 0.003012059700016292,
+    "risk_label": "Estresse contido",
+    "sp500": 4677.03
+  },
+  {
+    "run_date": "2022-01-14",
+    "posterior": 0.0038079306371976394,
+    "risk_label": "Estresse contido",
+    "sp500": 4662.85
+  },
+  {
+    "run_date": "2022-01-21",
+    "posterior": 0.003850566640465382,
+    "risk_label": "Estresse contido",
+    "sp500": 4397.94
+  },
+  {
+    "run_date": "2022-01-28",
+    "posterior": 0.0030784829249816724,
+    "risk_label": "Estresse contido",
+    "sp500": 4431.85
+  },
+  {
+    "run_date": "2022-02-04",
+    "posterior": 0.003545664682125538,
+    "risk_label": "Estresse contido",
+    "sp500": 4500.53
+  },
+  {
+    "run_date": "2022-02-11",
+    "posterior": 0.004691987926381018,
+    "risk_label": "Estresse contido",
+    "sp500": 4418.64
+  },
+  {
+    "run_date": "2022-02-18",
+    "posterior": 0.0047876462829304625,
+    "risk_label": "Estresse contido",
+    "sp500": 4348.87
+  },
+  {
+    "run_date": "2022-02-25",
+    "posterior": 0.004835528193574066,
+    "risk_label": "Estresse contido",
+    "sp500": 4384.65
+  },
+  {
+    "run_date": "2022-03-04",
+    "posterior": 0.005031068240841903,
+    "risk_label": "Estresse contido",
+    "sp500": 4328.87
+  },
+  {
+    "run_date": "2022-03-11",
+    "posterior": 0.004985708786715892,
+    "risk_label": "Estresse contido",
+    "sp500": 4204.31
+  },
+  {
+    "run_date": "2022-03-18",
+    "posterior": 0.012589419371915945,
+    "risk_label": "Estresse contido",
+    "sp500": 4463.12
+  },
+  {
+    "run_date": "2022-03-25",
+    "posterior": 0.04562123685383256,
+    "risk_label": "Estresse contido",
+    "sp500": 4543.06
+  },
+  {
+    "run_date": "2022-04-01",
+    "posterior": 0.04510384800594108,
+    "risk_label": "Estresse contido",
+    "sp500": 4545.86
+  },
+  {
+    "run_date": "2022-04-08",
+    "posterior": 0.045312018499602626,
+    "risk_label": "Estresse contido",
+    "sp500": 4488.28
+  },
+  {
+    "run_date": "2022-04-15",
+    "posterior": 0.006034074194930061,
+    "risk_label": "Estresse contido",
+    "sp500": 4392.59
+  },
+  {
+    "run_date": "2022-04-22",
+    "posterior": 0.016612625190559206,
+    "risk_label": "Estresse contido",
+    "sp500": 4271.78
+  },
+  {
+    "run_date": "2022-04-29",
+    "posterior": 0.05308339909247807,
+    "risk_label": "Estresse contido",
+    "sp500": 4131.93
+  },
+  {
+    "run_date": "2022-05-06",
+    "posterior": 0.28090803513979956,
+    "risk_label": "Estresse contido",
+    "sp500": 4123.34
+  },
+  {
+    "run_date": "2022-05-13",
+    "posterior": 0.20829971682766477,
+    "risk_label": "Estresse contido",
+    "sp500": 4023.89
+  },
+  {
+    "run_date": "2022-05-20",
+    "posterior": 0.11187247353899621,
+    "risk_label": "Estresse contido",
+    "sp500": 3901.36
+  },
+  {
+    "run_date": "2022-05-27",
+    "posterior": 0.11182321993269546,
+    "risk_label": "Estresse contido",
+    "sp500": 4158.24
+  },
+  {
+    "run_date": "2022-06-03",
+    "posterior": 0.021889630579067437,
+    "risk_label": "Estresse contido",
+    "sp500": 4108.54
+  },
+  {
+    "run_date": "2022-06-10",
+    "posterior": 0.029790761555200964,
+    "risk_label": "Estresse contido",
+    "sp500": 3900.86
+  },
+  {
+    "run_date": "2022-06-17",
+    "posterior": 0.179949891137102,
+    "risk_label": "Estresse contido",
+    "sp500": 3674.84
+  },
+  {
+    "run_date": "2022-06-24",
+    "posterior": 0.12881707483903587,
+    "risk_label": "Estresse contido",
+    "sp500": 3911.74
+  },
+  {
+    "run_date": "2022-07-01",
+    "posterior": 0.3263210475873009,
+    "risk_label": "Estresse contido",
+    "sp500": 3825.33
+  },
+  {
+    "run_date": "2022-07-08",
+    "posterior": 0.3236472234521361,
+    "risk_label": "Estresse contido",
+    "sp500": 3899.38
+  },
+  {
+    "run_date": "2022-07-15",
+    "posterior": 0.07461896255863484,
+    "risk_label": "Estresse contido",
+    "sp500": 3863.16
+  },
+  {
+    "run_date": "2022-07-22",
+    "posterior": 0.057358853111672076,
+    "risk_label": "Estresse contido",
+    "sp500": 3961.63
+  },
+  {
+    "run_date": "2022-07-29",
+    "posterior": 0.34772483903794527,
+    "risk_label": "Estresse contido",
+    "sp500": 4130.29
+  },
+  {
+    "run_date": "2022-08-05",
+    "posterior": 0.3030866476695322,
+    "risk_label": "Estresse contido",
+    "sp500": 4145.19
+  },
+  {
+    "run_date": "2022-08-12",
+    "posterior": 0.2540561820142227,
+    "risk_label": "Estresse contido",
+    "sp500": 4280.15
+  },
+  {
+    "run_date": "2022-08-19",
+    "posterior": 0.2563880239930023,
+    "risk_label": "Estresse contido",
+    "sp500": 4228.48
+  },
+  {
+    "run_date": "2022-08-26",
+    "posterior": 0.06844233172688546,
+    "risk_label": "Estresse contido",
+    "sp500": 4057.66
+  },
+  {
+    "run_date": "2022-09-02",
+    "posterior": 0.07135999133217384,
+    "risk_label": "Estresse contido",
+    "sp500": 3924.26
+  },
+  {
+    "run_date": "2022-09-09",
+    "posterior": 0.0707080461855203,
+    "risk_label": "Estresse contido",
+    "sp500": 4067.36
+  },
+  {
+    "run_date": "2022-09-16",
+    "posterior": 0.07052401405536243,
+    "risk_label": "Estresse contido",
+    "sp500": 3873.33
+  },
+  {
+    "run_date": "2022-09-23",
+    "posterior": 0.2068617700380416,
+    "risk_label": "Estresse contido",
+    "sp500": 3693.23
+  },
+  {
+    "run_date": "2022-09-30",
+    "posterior": 0.27920047943436016,
+    "risk_label": "Estresse contido",
+    "sp500": 3585.62
+  },
+  {
+    "run_date": "2022-10-07",
+    "posterior": 0.5082925799256681,
+    "risk_label": "Estresse intermediario",
+    "sp500": 3639.66
+  },
+  {
+    "run_date": "2022-10-14",
+    "posterior": 0.49800931450439945,
+    "risk_label": "Estresse intermediario",
+    "sp500": 3583.07
+  },
+  {
+    "run_date": "2022-10-21",
+    "posterior": 0.025946036148387225,
+    "risk_label": "Estresse contido",
+    "sp500": 3752.75
+  },
+  {
+    "run_date": "2022-10-28",
+    "posterior": 0.0495356610003035,
+    "risk_label": "Estresse contido",
+    "sp500": 3901.06
+  },
+  {
+    "run_date": "2022-11-04",
+    "posterior": 0.26985157060967624,
+    "risk_label": "Estresse contido",
+    "sp500": 3770.55
+  },
+  {
+    "run_date": "2022-11-11",
+    "posterior": 0.13507707117731785,
+    "risk_label": "Estresse contido",
+    "sp500": 3992.93
+  },
+  {
+    "run_date": "2022-11-18",
+    "posterior": 0.15679016291211456,
+    "risk_label": "Estresse contido",
+    "sp500": 3965.34
+  },
+  {
+    "run_date": "2022-11-25",
+    "posterior": 0.15658411982613718,
+    "risk_label": "Estresse contido",
+    "sp500": 4026.12
+  },
+  {
+    "run_date": "2022-12-02",
+    "posterior": 0.03134691010292066,
+    "risk_label": "Estresse contido",
+    "sp500": 4071.7
+  },
+  {
+    "run_date": "2022-12-09",
+    "posterior": 0.031866547146321055,
+    "risk_label": "Estresse contido",
+    "sp500": 3934.38
+  },
+  {
+    "run_date": "2022-12-16",
+    "posterior": 0.22263715428275624,
+    "risk_label": "Estresse contido",
+    "sp500": 3852.36
+  },
+  {
+    "run_date": "2022-12-23",
+    "posterior": 0.2461847334032651,
+    "risk_label": "Estresse contido",
+    "sp500": 3844.82
+  },
+  {
+    "run_date": "2022-12-30",
+    "posterior": 0.2908383531142281,
+    "risk_label": "Estresse contido",
+    "sp500": 3839.5
+  },
+  {
+    "run_date": "2023-01-06",
+    "posterior": 0.2879044908645301,
+    "risk_label": "Estresse contido",
+    "sp500": 3895.08
+  },
+  {
+    "run_date": "2023-01-13",
+    "posterior": 0.04567723670755036,
+    "risk_label": "Estresse contido",
+    "sp500": 3999.09
+  },
+  {
+    "run_date": "2023-01-20",
+    "posterior": 0.021394882548979453,
+    "risk_label": "Estresse contido",
+    "sp500": 3972.61
+  },
+  {
+    "run_date": "2023-01-27",
+    "posterior": 0.0453901412509522,
+    "risk_label": "Estresse contido",
+    "sp500": 4070.56
+  },
+  {
+    "run_date": "2023-02-03",
+    "posterior": 0.020009401375635873,
+    "risk_label": "Estresse contido",
+    "sp500": 4136.48
+  },
+  {
+    "run_date": "2023-02-10",
+    "posterior": 0.0951948204455819,
+    "risk_label": "Estresse contido",
+    "sp500": 4090.46
+  },
+  {
+    "run_date": "2023-02-17",
+    "posterior": 0.11809666290392232,
+    "risk_label": "Estresse contido",
+    "sp500": 4079.09
+  },
+  {
+    "run_date": "2023-02-24",
+    "posterior": 0.21842412330407684,
+    "risk_label": "Estresse contido",
+    "sp500": 3970.04
+  },
+  {
+    "run_date": "2023-03-03",
+    "posterior": 0.0644522233574964,
+    "risk_label": "Estresse contido",
+    "sp500": 4045.64
+  },
+  {
+    "run_date": "2023-03-10",
+    "posterior": 0.052926281016568065,
+    "risk_label": "Estresse contido",
+    "sp500": 3861.59
+  },
+  {
+    "run_date": "2023-03-17",
+    "posterior": 0.04885949737015896,
+    "risk_label": "Estresse contido",
+    "sp500": 3916.64
+  },
+  {
+    "run_date": "2023-03-24",
+    "posterior": 0.009994232813820149,
+    "risk_label": "Estresse contido",
+    "sp500": 3970.99
+  },
+  {
+    "run_date": "2023-03-31",
+    "posterior": 0.020719716809412782,
+    "risk_label": "Estresse contido",
+    "sp500": 4109.31
+  },
+  {
+    "run_date": "2023-04-07",
+    "posterior": 0.12995407308023074,
+    "risk_label": "Estresse contido",
+    "sp500": 4105.02
+  },
+  {
+    "run_date": "2023-04-14",
+    "posterior": 0.04345881647136832,
+    "risk_label": "Estresse contido",
+    "sp500": 4137.64
+  },
+  {
+    "run_date": "2023-04-21",
+    "posterior": 0.024397255493944798,
+    "risk_label": "Estresse contido",
+    "sp500": 4133.52
+  },
+  {
+    "run_date": "2023-04-28",
+    "posterior": 0.024795675944923327,
+    "risk_label": "Estresse contido",
+    "sp500": 4169.48
+  },
+  {
+    "run_date": "2023-05-05",
+    "posterior": 0.0512034824621749,
+    "risk_label": "Estresse contido",
+    "sp500": 4136.25
+  },
+  {
+    "run_date": "2023-05-12",
+    "posterior": 0.08478313919119562,
+    "risk_label": "Estresse contido",
+    "sp500": 4124.08
+  },
+  {
+    "run_date": "2023-05-19",
+    "posterior": 0.08500154053957824,
+    "risk_label": "Estresse contido",
+    "sp500": 4191.98
+  },
+  {
+    "run_date": "2023-05-26",
+    "posterior": 0.10565952048142163,
+    "risk_label": "Estresse contido",
+    "sp500": 4205.45
+  },
+  {
+    "run_date": "2023-06-02",
+    "posterior": 0.02001605545083508,
+    "risk_label": "Estresse contido",
+    "sp500": 4282.37
+  },
+  {
+    "run_date": "2023-06-09",
+    "posterior": 0.024425430275574294,
+    "risk_label": "Estresse contido",
+    "sp500": 4298.86
+  },
+  {
+    "run_date": "2023-06-16",
+    "posterior": 0.01813066874080521,
+    "risk_label": "Estresse contido",
+    "sp500": 4409.59
+  },
+  {
+    "run_date": "2023-06-23",
+    "posterior": 0.012075898695424704,
+    "risk_label": "Estresse contido",
+    "sp500": 4348.33
+  },
+  {
+    "run_date": "2023-06-30",
+    "posterior": 0.004286154023235938,
+    "risk_label": "Estresse contido",
+    "sp500": 4450.38
+  },
+  {
+    "run_date": "2023-07-07",
+    "posterior": 0.008918380265563863,
+    "risk_label": "Estresse contido",
+    "sp500": 4398.95
+  },
+  {
+    "run_date": "2023-07-14",
+    "posterior": 0.006225106293919466,
+    "risk_label": "Estresse contido",
+    "sp500": 4505.42
+  },
+  {
+    "run_date": "2023-07-21",
+    "posterior": 0.006208665462574734,
+    "risk_label": "Estresse contido",
+    "sp500": 4536.34
+  },
+  {
+    "run_date": "2023-07-28",
+    "posterior": 0.004704948748403724,
+    "risk_label": "Estresse contido",
+    "sp500": 4582.23
+  },
+  {
+    "run_date": "2023-08-04",
+    "posterior": 0.04224725807263272,
+    "risk_label": "Estresse contido",
+    "sp500": 4478.03
+  },
+  {
+    "run_date": "2023-08-11",
+    "posterior": 0.052863612641140596,
+    "risk_label": "Estresse contido",
+    "sp500": 4464.05
+  },
+  {
+    "run_date": "2023-08-18",
+    "posterior": 0.05291008871084562,
+    "risk_label": "Estresse contido",
+    "sp500": 4369.71
+  },
+  {
+    "run_date": "2023-08-25",
+    "posterior": 0.007577527822482843,
+    "risk_label": "Estresse contido",
+    "sp500": 4405.71
+  },
+  {
+    "run_date": "2023-09-01",
+    "posterior": 0.005656777373571763,
+    "risk_label": "Estresse contido",
+    "sp500": 4515.77
+  },
+  {
+    "run_date": "2023-09-08",
+    "posterior": 0.007672328535726098,
+    "risk_label": "Estresse contido",
+    "sp500": 4457.49
+  },
+  {
+    "run_date": "2023-09-15",
+    "posterior": 0.005653821382328921,
+    "risk_label": "Estresse contido",
+    "sp500": 4450.32
+  },
+  {
+    "run_date": "2023-09-22",
+    "posterior": 0.005654824528674434,
+    "risk_label": "Estresse contido",
+    "sp500": 4320.06
+  },
+  {
+    "run_date": "2023-09-29",
+    "posterior": 0.009771154752212357,
+    "risk_label": "Estresse contido",
+    "sp500": 4288.05
+  },
+  {
+    "run_date": "2023-10-06",
+    "posterior": 0.013948148208003483,
+    "risk_label": "Estresse contido",
+    "sp500": 4308.5
+  },
+  {
+    "run_date": "2023-10-13",
+    "posterior": 0.01388474310267006,
+    "risk_label": "Estresse contido",
+    "sp500": 4327.78
+  },
+  {
+    "run_date": "2023-10-20",
+    "posterior": 0.014029782518364951,
+    "risk_label": "Estresse contido",
+    "sp500": 4224.16
+  },
+  {
+    "run_date": "2023-10-27",
+    "posterior": 0.01112374679470695,
+    "risk_label": "Estresse contido",
+    "sp500": 4117.37
+  },
+  {
+    "run_date": "2023-11-03",
+    "posterior": 0.01021981951759362,
+    "risk_label": "Estresse contido",
+    "sp500": 4358.34
+  },
+  {
+    "run_date": "2023-11-10",
+    "posterior": 0.010170349879695445,
+    "risk_label": "Estresse contido",
+    "sp500": 4415.24
+  },
+  {
+    "run_date": "2023-11-17",
+    "posterior": 0.003202889314687134,
+    "risk_label": "Estresse contido",
+    "sp500": 4514.02
+  },
+  {
+    "run_date": "2023-11-24",
+    "posterior": 0.0031887916307114326,
+    "risk_label": "Estresse contido",
+    "sp500": 4559.34
+  },
+  {
+    "run_date": "2023-12-01",
+    "posterior": 0.002424520176807542,
+    "risk_label": "Estresse contido",
+    "sp500": 4594.63
+  },
+  {
+    "run_date": "2023-12-08",
+    "posterior": 0.0018698324981102517,
+    "risk_label": "Estresse contido",
+    "sp500": 4604.37
+  },
+  {
+    "run_date": "2023-12-15",
+    "posterior": 0.0018609268116528588,
+    "risk_label": "Estresse contido",
+    "sp500": 4719.19
+  },
+  {
+    "run_date": "2023-12-22",
+    "posterior": 0.0018740719388707597,
+    "risk_label": "Estresse contido",
+    "sp500": 4754.63
+  },
+  {
+    "run_date": "2023-12-29",
+    "posterior": 0.0018752844849364953,
+    "risk_label": "Estresse contido",
+    "sp500": 4769.83
+  },
+  {
+    "run_date": "2024-01-05",
+    "posterior": 0.005786508751993719,
+    "risk_label": "Estresse contido",
+    "sp500": 4697.24
+  },
+  {
+    "run_date": "2024-01-12",
+    "posterior": 0.0014249406260070558,
+    "risk_label": "Estresse contido",
+    "sp500": 4783.83
+  },
+  {
+    "run_date": "2024-01-19",
+    "posterior": 0.0029155112825983557,
+    "risk_label": "Estresse contido",
+    "sp500": 4839.81
+  },
+  {
+    "run_date": "2024-01-26",
+    "posterior": 0.003957837797861246,
+    "risk_label": "Estresse contido",
+    "sp500": 4890.97
+  },
+  {
+    "run_date": "2024-02-02",
+    "posterior": 0.0014635480912877758,
+    "risk_label": "Estresse contido",
+    "sp500": 4958.61
+  },
+  {
+    "run_date": "2024-02-09",
+    "posterior": 0.001471400880070672,
+    "risk_label": "Estresse contido",
+    "sp500": 5026.61
+  },
+  {
+    "run_date": "2024-02-16",
+    "posterior": 0.0014686867422807291,
+    "risk_label": "Estresse contido",
+    "sp500": 5005.57
+  },
+  {
+    "run_date": "2024-02-23",
+    "posterior": 0.0018529414207976108,
+    "risk_label": "Estresse contido",
+    "sp500": 5088.8
+  },
+  {
+    "run_date": "2024-03-01",
+    "posterior": 0.0018980598162716036,
+    "risk_label": "Estresse contido",
+    "sp500": 5137.08
+  },
+  {
+    "run_date": "2024-03-08",
+    "posterior": 0.0018978967226434234,
+    "risk_label": "Estresse contido",
+    "sp500": 5123.69
+  },
+  {
+    "run_date": "2024-03-15",
+    "posterior": 0.0018910967456297284,
+    "risk_label": "Estresse contido",
+    "sp500": 5117.09
+  },
+  {
+    "run_date": "2024-03-22",
+    "posterior": 0.00189031095263046,
+    "risk_label": "Estresse contido",
+    "sp500": 5234.18
+  },
+  {
+    "run_date": "2024-03-29",
+    "posterior": 0.0005240386197959099,
+    "risk_label": "Estresse contido",
+    "sp500": 5254.35
+  },
+  {
+    "run_date": "2024-04-05",
+    "posterior": 0.0018753921952305971,
+    "risk_label": "Estresse contido",
+    "sp500": 5204.34
+  },
+  {
+    "run_date": "2024-04-12",
+    "posterior": 0.003854002568802055,
+    "risk_label": "Estresse contido",
+    "sp500": 5123.41
+  },
+  {
+    "run_date": "2024-04-19",
+    "posterior": 0.0032716476776549794,
+    "risk_label": "Estresse contido",
+    "sp500": 4967.23
+  },
+  {
+    "run_date": "2024-04-26",
+    "posterior": 0.010258464691434648,
+    "risk_label": "Estresse contido",
+    "sp500": 5099.96
+  },
+  {
+    "run_date": "2024-05-03",
+    "posterior": 0.0059961442640312545,
+    "risk_label": "Estresse contido",
+    "sp500": 5127.79
+  },
+  {
+    "run_date": "2024-05-10",
+    "posterior": 0.005981427926893374,
+    "risk_label": "Estresse contido",
+    "sp500": 5222.68
+  },
+  {
+    "run_date": "2024-05-17",
+    "posterior": 0.0018726017429141187,
+    "risk_label": "Estresse contido",
+    "sp500": 5303.27
+  },
+  {
+    "run_date": "2024-05-24",
+    "posterior": 0.0038377178620473966,
+    "risk_label": "Estresse contido",
+    "sp500": 5304.72
+  },
+  {
+    "run_date": "2024-05-31",
+    "posterior": 0.002900332588467196,
+    "risk_label": "Estresse contido",
+    "sp500": 5277.51
+  },
+  {
+    "run_date": "2024-06-07",
+    "posterior": 0.003922593785862743,
+    "risk_label": "Estresse contido",
+    "sp500": 5346.99
+  },
+  {
+    "run_date": "2024-06-14",
+    "posterior": 0.0053248036100843965,
+    "risk_label": "Estresse contido",
+    "sp500": 5431.6
+  },
+  {
+    "run_date": "2024-06-21",
+    "posterior": 0.00672742087364181,
+    "risk_label": "Estresse contido",
+    "sp500": 5464.62
+  },
+  {
+    "run_date": "2024-06-28",
+    "posterior": 0.004759870637405861,
+    "risk_label": "Estresse contido",
+    "sp500": 5460.48
+  },
+  {
+    "run_date": "2024-07-05",
+    "posterior": 0.005923090685673349,
+    "risk_label": "Estresse contido",
+    "sp500": 5567.19
+  },
+  {
+    "run_date": "2024-07-12",
+    "posterior": 0.012102400205771868,
+    "risk_label": "Estresse contido",
+    "sp500": 5615.35
+  },
+  {
+    "run_date": "2024-07-19",
+    "posterior": 0.012169041673915153,
+    "risk_label": "Estresse contido",
+    "sp500": 5505.0
+  },
+  {
+    "run_date": "2024-07-26",
+    "posterior": 0.012189014362499506,
+    "risk_label": "Estresse contido",
+    "sp500": 5459.1
+  },
+  {
+    "run_date": "2024-08-02",
+    "posterior": 0.012735072828303575,
+    "risk_label": "Estresse contido",
+    "sp500": 5346.56
+  },
+  {
+    "run_date": "2024-08-09",
+    "posterior": 0.00794310443844194,
+    "risk_label": "Estresse contido",
+    "sp500": 5344.16
+  },
+  {
+    "run_date": "2024-08-16",
+    "posterior": 0.007736076045479439,
+    "risk_label": "Estresse contido",
+    "sp500": 5554.25
+  },
+  {
+    "run_date": "2024-08-23",
+    "posterior": 0.006148960567709704,
+    "risk_label": "Estresse contido",
+    "sp500": 5634.61
+  },
+  {
+    "run_date": "2024-08-30",
+    "posterior": 0.001654382394424934,
+    "risk_label": "Estresse contido",
+    "sp500": 5648.4
+  },
+  {
+    "run_date": "2024-09-06",
+    "posterior": 0.001672138128755835,
+    "risk_label": "Estresse contido",
+    "sp500": 5408.42
+  },
+  {
+    "run_date": "2024-09-13",
+    "posterior": 0.0022277764932822153,
+    "risk_label": "Estresse contido",
+    "sp500": 5626.02
+  },
+  {
+    "run_date": "2024-09-20",
+    "posterior": 0.007517498617749617,
+    "risk_label": "Estresse contido",
+    "sp500": 5702.55
+  },
+  {
+    "run_date": "2024-09-27",
+    "posterior": 0.012757949731920333,
+    "risk_label": "Estresse contido",
+    "sp500": 5738.17
+  },
+  {
+    "run_date": "2024-10-04",
+    "posterior": 0.026891139869957014,
+    "risk_label": "Estresse contido",
+    "sp500": 5751.07
+  },
+  {
+    "run_date": "2024-10-11",
+    "posterior": 0.057480780747399284,
+    "risk_label": "Estresse contido",
+    "sp500": 5815.03
+  },
+  {
+    "run_date": "2024-10-18",
+    "posterior": 0.010471968541028054,
+    "risk_label": "Estresse contido",
+    "sp500": 5864.67
+  },
+  {
+    "run_date": "2024-10-25",
+    "posterior": 0.010547425858323125,
+    "risk_label": "Estresse contido",
+    "sp500": 5808.12
+  },
+  {
+    "run_date": "2024-11-01",
+    "posterior": 0.012565479261918307,
+    "risk_label": "Estresse contido",
+    "sp500": 5728.8
+  },
+  {
+    "run_date": "2024-11-08",
+    "posterior": 0.0049326999389063195,
+    "risk_label": "Estresse contido",
+    "sp500": 5995.54
+  },
+  {
+    "run_date": "2024-11-15",
+    "posterior": 0.06752788306623884,
+    "risk_label": "Estresse contido",
+    "sp500": 5870.62
+  },
+  {
+    "run_date": "2024-11-22",
+    "posterior": 0.06760745793278192,
+    "risk_label": "Estresse contido",
+    "sp500": 5969.34
+  },
+  {
+    "run_date": "2024-11-29",
+    "posterior": 0.046019626076936625,
+    "risk_label": "Estresse contido",
+    "sp500": 6032.38
+  },
+  {
+    "run_date": "2024-12-06",
+    "posterior": 0.006147312491751476,
+    "risk_label": "Estresse contido",
+    "sp500": 6090.27
+  },
+  {
+    "run_date": "2024-12-13",
+    "posterior": 0.009842102555632778,
+    "risk_label": "Estresse contido",
+    "sp500": 6051.09
+  },
+  {
+    "run_date": "2024-12-20",
+    "posterior": 0.22980945377480136,
+    "risk_label": "Estresse contido",
+    "sp500": 5930.85
+  },
+  {
+    "run_date": "2024-12-27",
+    "posterior": 0.32911704759316096,
+    "risk_label": "Estresse contido",
+    "sp500": 5970.84
+  },
+  {
+    "run_date": "2025-01-03",
+    "posterior": 0.16780333145344167,
+    "risk_label": "Estresse contido",
+    "sp500": 5942.47
+  },
+  {
+    "run_date": "2025-01-10",
+    "posterior": 0.1398584542021032,
+    "risk_label": "Estresse contido",
+    "sp500": 5827.04
+  },
+  {
+    "run_date": "2025-01-17",
+    "posterior": 0.01983601961265907,
+    "risk_label": "Estresse contido",
+    "sp500": 5996.66
+  },
+  {
+    "run_date": "2025-01-24",
+    "posterior": 0.019813576183580737,
+    "risk_label": "Estresse contido",
+    "sp500": 6101.24
+  },
+  {
+    "run_date": "2025-01-31",
+    "posterior": 0.01986941491170737,
+    "risk_label": "Estresse contido",
+    "sp500": 6040.53
+  },
+  {
+    "run_date": "2025-02-07",
+    "posterior": 0.006922595026340671,
+    "risk_label": "Estresse contido",
+    "sp500": 6025.99
+  },
+  {
+    "run_date": "2025-02-14",
+    "posterior": 0.001852684495779859,
+    "risk_label": "Estresse contido",
+    "sp500": 6114.63
+  },
+  {
+    "run_date": "2025-02-21",
+    "posterior": 0.0018282885626863716,
+    "risk_label": "Estresse contido",
+    "sp500": 6013.13
+  },
+  {
+    "run_date": "2025-02-28",
+    "posterior": 0.021176857494922645,
+    "risk_label": "Estresse contido",
+    "sp500": 5954.5
+  },
+  {
+    "run_date": "2025-03-07",
+    "posterior": 0.01701007022623906,
+    "risk_label": "Estresse contido",
+    "sp500": 5770.2
+  },
+  {
+    "run_date": "2025-03-14",
+    "posterior": 0.004285037347968007,
+    "risk_label": "Estresse contido",
+    "sp500": 5638.94
+  },
+  {
+    "run_date": "2025-03-21",
+    "posterior": 0.00310361873834538,
+    "risk_label": "Estresse contido",
+    "sp500": 5667.56
+  },
+  {
+    "run_date": "2025-03-28",
+    "posterior": 0.0031246888785820665,
+    "risk_label": "Estresse contido",
+    "sp500": 5580.94
+  },
+  {
+    "run_date": "2025-04-04",
+    "posterior": 0.0052719605482539865,
+    "risk_label": "Estresse contido",
+    "sp500": 5074.08
+  },
+  {
+    "run_date": "2025-04-11",
+    "posterior": 0.006697666849899248,
+    "risk_label": "Estresse contido",
+    "sp500": 5363.36
+  },
+  {
+    "run_date": "2025-04-18",
+    "posterior": 0.0059640926865277355,
+    "risk_label": "Estresse contido",
+    "sp500": 5282.7
+  },
+  {
+    "run_date": "2025-04-25",
+    "posterior": 0.018606126417575416,
+    "risk_label": "Estresse contido",
+    "sp500": 5525.21
+  },
+  {
+    "run_date": "2025-05-02",
+    "posterior": 0.013638083208415006,
+    "risk_label": "Estresse contido",
+    "sp500": 5686.67
+  },
+  {
+    "run_date": "2025-05-09",
+    "posterior": 0.013727934173018,
+    "risk_label": "Estresse contido",
+    "sp500": 5659.91
+  },
+  {
+    "run_date": "2025-05-16",
+    "posterior": 0.013716003859357541,
+    "risk_label": "Estresse contido",
+    "sp500": 5958.38
+  },
+  {
+    "run_date": "2025-05-23",
+    "posterior": 0.04188547552549713,
+    "risk_label": "Estresse contido",
+    "sp500": 5802.82
+  },
+  {
+    "run_date": "2025-05-30",
+    "posterior": 0.013806003134913182,
+    "risk_label": "Estresse contido",
+    "sp500": 5911.69
+  },
+  {
+    "run_date": "2025-06-06",
+    "posterior": 0.01035115957938152,
+    "risk_label": "Estresse contido",
+    "sp500": 6000.36
+  },
+  {
+    "run_date": "2025-06-13",
+    "posterior": 0.00536276069967667,
+    "risk_label": "Estresse contido",
+    "sp500": 5976.97
+  },
+  {
+    "run_date": "2025-06-20",
+    "posterior": 0.0031297616521406752,
+    "risk_label": "Estresse contido",
+    "sp500": 5967.84
+  },
+  {
+    "run_date": "2025-06-27",
+    "posterior": 0.001147881848463123,
+    "risk_label": "Estresse contido",
+    "sp500": 6173.07
+  },
+  {
+    "run_date": "2025-07-04",
+    "posterior": 0.0022775110185442636,
+    "risk_label": "Estresse contido",
+    "sp500": 6279.35
+  },
+  {
+    "run_date": "2025-07-11",
+    "posterior": 0.013501101216234828,
+    "risk_label": "Estresse contido",
+    "sp500": 6259.75
+  },
+  {
+    "run_date": "2025-07-18",
+    "posterior": 0.004291999246635115,
+    "risk_label": "Estresse contido",
+    "sp500": 6296.79
+  },
+  {
+    "run_date": "2025-07-25",
+    "posterior": 0.004170484749813825,
+    "risk_label": "Estresse contido",
+    "sp500": 6388.64
+  },
+  {
+    "run_date": "2025-08-01",
+    "posterior": 0.00977330317380531,
+    "risk_label": "Estresse contido",
+    "sp500": 6238.01
+  },
+  {
+    "run_date": "2025-08-08",
+    "posterior": 0.013226617554082007,
+    "risk_label": "Estresse contido",
+    "sp500": 6389.45
+  },
+  {
+    "run_date": "2025-08-15",
+    "posterior": 0.002369022941336448,
+    "risk_label": "Estresse contido",
+    "sp500": 6449.8
+  },
+  {
+    "run_date": "2025-08-22",
+    "posterior": 0.0017572702191637232,
+    "risk_label": "Estresse contido",
+    "sp500": 6466.91
+  },
+  {
+    "run_date": "2025-08-29",
+    "posterior": 0.0017735876019553832,
+    "risk_label": "Estresse contido",
+    "sp500": 6460.26
+  },
+  {
+    "run_date": "2025-09-05",
+    "posterior": 0.005139871776040073,
+    "risk_label": "Estresse contido",
+    "sp500": 6481.5
+  },
+  {
+    "run_date": "2025-09-12",
+    "posterior": 0.006637229462848428,
+    "risk_label": "Estresse contido",
+    "sp500": 6584.29
+  },
+  {
+    "run_date": "2025-09-19",
+    "posterior": 0.05029847287671689,
+    "risk_label": "Estresse contido",
+    "sp500": 6664.36
+  },
+  {
+    "run_date": "2025-09-26",
+    "posterior": 0.0916159109748351,
+    "risk_label": "Estresse contido",
+    "sp500": 6643.7
+  },
+  {
+    "run_date": "2025-10-03",
+    "posterior": 0.05166773523519001,
+    "risk_label": "Estresse contido",
+    "sp500": 6715.79
+  },
+  {
+    "run_date": "2025-10-10",
+    "posterior": 0.06117868133817824,
+    "risk_label": "Estresse contido",
+    "sp500": 6552.51
+  },
+  {
+    "run_date": "2025-10-17",
+    "posterior": 0.03076312642713872,
+    "risk_label": "Estresse contido",
+    "sp500": 6664.01
+  },
+  {
+    "run_date": "2025-10-24",
+    "posterior": 0.0220819568032673,
+    "risk_label": "Estresse contido",
+    "sp500": 6791.69
+  },
+  {
+    "run_date": "2025-10-31",
+    "posterior": 0.04150212429836911,
+    "risk_label": "Estresse contido",
+    "sp500": 6840.2
+  },
+  {
+    "run_date": "2025-11-07",
+    "posterior": 0.08901217483298764,
+    "risk_label": "Estresse contido",
+    "sp500": 6728.8
+  },
+  {
+    "run_date": "2025-11-14",
+    "posterior": 0.11400248454011658,
+    "risk_label": "Estresse contido",
+    "sp500": 6734.11
+  },
+  {
+    "run_date": "2025-11-21",
+    "posterior": 0.08878554864622923,
+    "risk_label": "Estresse contido",
+    "sp500": 6602.99
+  },
+  {
+    "run_date": "2025-11-28",
+    "posterior": 0.017656080203525742,
+    "risk_label": "Estresse contido",
+    "sp500": 6849.09
+  },
+  {
+    "run_date": "2025-12-05",
+    "posterior": 0.017494577483611908,
+    "risk_label": "Estresse contido",
+    "sp500": 6870.4
+  },
+  {
+    "run_date": "2025-12-12",
+    "posterior": 0.09653761012448425,
+    "risk_label": "Estresse contido",
+    "sp500": 6827.41
+  },
+  {
+    "run_date": "2025-12-19",
+    "posterior": 0.153119617244311,
+    "risk_label": "Estresse contido",
+    "sp500": 6834.5
+  },
+  {
+    "run_date": "2025-12-26",
+    "posterior": 0.1306179223232561,
+    "risk_label": "Estresse contido",
+    "sp500": 6929.94
+  },
+  {
+    "run_date": "2026-01-02",
+    "posterior": 0.12974700004484496,
+    "risk_label": "Estresse contido",
+    "sp500": 6858.47
+  },
+  {
+    "run_date": "2026-01-09",
+    "posterior": 0.047037975600851385,
+    "risk_label": "Estresse contido",
+    "sp500": 6966.28
+  },
+  {
+    "run_date": "2026-01-16",
+    "posterior": 0.09217592886146667,
+    "risk_label": "Estresse contido",
+    "sp500": 6940.01
+  },
+  {
+    "run_date": "2026-01-23",
+    "posterior": 0.09197024554035488,
+    "risk_label": "Estresse contido",
+    "sp500": 6915.61
+  },
+  {
+    "run_date": "2026-01-30",
+    "posterior": 0.04703707966485985,
+    "risk_label": "Estresse contido",
+    "sp500": 6939.03
+  },
+  {
+    "run_date": "2026-02-06",
+    "posterior": 0.066993685474087,
+    "risk_label": "Estresse contido",
+    "sp500": 6932.3
+  },
+  {
+    "run_date": "2026-02-13",
+    "posterior": 0.04392815374411425,
+    "risk_label": "Estresse contido",
+    "sp500": 6836.17
+  },
+  {
+    "run_date": "2026-02-20",
+    "posterior": 0.016220954753857063,
+    "risk_label": "Estresse contido",
+    "sp500": 6909.51
+  },
+  {
+    "run_date": "2026-02-27",
+    "posterior": 0.08611504741873884,
+    "risk_label": "Estresse contido",
+    "sp500": 6878.88
+  },
+  {
+    "run_date": "2026-03-06",
+    "posterior": 0.07434558131040171,
+    "risk_label": "Estresse contido",
+    "sp500": 6740.02
+  },
+  {
+    "run_date": "2026-03-13",
+    "posterior": 0.07499971434639642,
+    "risk_label": "Estresse contido",
+    "sp500": 6632.19
+  },
+  {
+    "run_date": "2026-03-20",
+    "posterior": 0.04699390484690817,
+    "risk_label": "Estresse contido",
+    "sp500": 6506.48
+  },
+  {
+    "run_date": "2026-03-27",
+    "posterior": 0.06345109765052426,
+    "risk_label": "Estresse contido",
+    "sp500": 6368.85
+  },
+  {
+    "run_date": "2026-03-31",
+    "posterior": 0.422552085657656,
+    "risk_label": "Estresse intermediario",
+    "sp500": 6528.52
+  },
+  {
+    "run_date": "2026-04-01",
+    "posterior": 0.1336731406970651,
+    "risk_label": "Estresse contido",
+    "sp500": 6575.32
+  },
+  {
+    "run_date": "2026-04-02",
+    "posterior": 0.3140300229298246,
+    "risk_label": "Estresse contido",
+    "sp500": 6582.69
+  },
+  {
+    "run_date": "2026-04-03",
+    "posterior": 0.361399337573148,
+    "risk_label": "Estresse contido",
+    "sp500": 6582.69
+  },
+  {
+    "run_date": "2026-04-04",
+    "posterior": 0.35875107022072866,
+    "risk_label": "Estresse contido",
+    "sp500": 6582.69
+  },
+  {
+    "run_date": "2026-04-05",
+    "posterior": 0.3673364807858107,
+    "risk_label": "Estresse contido",
     "sp500": 6582.69
   },
   {
