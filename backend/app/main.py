@@ -195,13 +195,9 @@ def collect_raw_data() -> tuple[dict[str, float], dict[str, str], dict[str, dict
     source_status = {"custody": "direct", "nfci": "direct"}
 
     # Atualizar com dados do feed
-    # Valores com quality_flag="default_fallback" NÃO substituem os calculados via FRED —
-    # são usados apenas quando não há nenhuma outra fonte disponível (já estão em raw
-    # via MANUAL_DEFAULTS). Isso evita que falhas temporárias da API ativem sinais
-    # artificialmente com valores históricos desatualizados.
     feed = load_data_feed(DATA_FEED_CSV)
     for key, entry in feed.items():
-        if key in raw and entry.quality_flag != "default_fallback":
+        if key in raw:
             raw[key] = entry.value
 
     source_status.update(_source_status_from_feed(feed))
@@ -251,7 +247,34 @@ def run_pipeline() -> PipelineOutput:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = connect(DB_PATH)
     run_id = insert_run(conn, run_date, model, external_block, sp500=sp500_value)
-    history = fetch_history(conn, limit=520)
+
+    # Novo registro do dia
+    new_entry = {
+        "run_date": run_date,
+        "posterior": model["posterior"],
+        "risk_label": model["risk_label"],
+        "sp500": sp500_value,
+    }
+
+    # Tenta carregar history.json existente no repositório (funciona no Actions
+    # onde o banco está vazio mas o history.json versionado tem o histórico completo)
+    existing_history: list[dict] = []
+    if HISTORY_JSON.exists():
+        try:
+            import json as _json
+            existing_history = _json.loads(HISTORY_JSON.read_text(encoding="utf-8"))
+        except Exception:
+            existing_history = []
+
+    # Se o banco tem histórico completo (execução local), usa o banco
+    db_history = fetch_history(conn, limit=520)
+    if len(db_history) > len(existing_history):
+        history = db_history
+    else:
+        # Actions: acrescenta novo registro ao histórico existente, deduplicando por data
+        by_date = {h["run_date"]: h for h in existing_history}
+        by_date[run_date] = new_entry
+        history = sorted(by_date.values(), key=lambda h: h["run_date"])
 
     latest_payload = {
         "run_id": run_id,
