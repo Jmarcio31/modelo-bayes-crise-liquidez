@@ -52,7 +52,7 @@
       "mode": "smooth"
     }
   ],
-  "posterior": 0.2014723809606465,
+  "posterior": 0.328988757155078,
   "risk_label": "Estresse contido",
   "signals": [
     {
@@ -135,7 +135,7 @@
       "signal_id": "sofr_iorb",
       "signal_name": "Spread SOFR - IORB",
       "block": "Funding stress",
-      "raw_value": -6.000000000000005,
+      "raw_value": -8.000000000000007,
       "status": "CONTRARIO",
       "weight": 0.65,
       "weight_effective": 0.65,
@@ -154,26 +154,26 @@
       "signal_id": "fra_ois",
       "signal_name": "FRA-OIS proxy pública",
       "block": "Funding stress",
-      "raw_value": 10.8,
-      "status": "NEUTRO",
+      "raw_value": 29.0,
+      "status": "ATIVO",
       "weight": 0.7,
       "weight_effective": 0.616,
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": "2026-04-08",
+      "as_of_date": "2026-04-10",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.72,
       "p_e_not_h": 0.38,
-      "lr_used": 1.0,
-      "log_contrib": 0.0
+      "lr_used": 1.894736842105263,
+      "log_contrib": 0.39367325492243643
     },
     {
       "signal_id": "repo",
       "signal_name": "Repo stress / spikes",
       "block": "Funding stress",
-      "raw_value": 0.246,
+      "raw_value": 0.388,
       "status": "NEUTRO",
       "weight": 0.95,
       "weight_effective": 0.836,
@@ -230,20 +230,20 @@
       "signal_id": "private_credit",
       "signal_name": "Private credit stress",
       "block": "Crédito privado / NBFI",
-      "raw_value": 0.2329,
-      "status": "NEUTRO",
+      "raw_value": 0.2577,
+      "status": "ATIVO",
       "weight": 0.5,
       "weight_effective": 0.44,
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": "2026-04-08",
+      "as_of_date": "2026-04-09",
       "expected_frequency_days": 7,
       "tail_signal": false,
       "p_e_h": 0.74,
       "p_e_not_h": 0.4,
-      "lr_used": 1.0,
-      "log_contrib": 0.0
+      "lr_used": 1.8499999999999999,
+      "log_contrib": 0.2706816811997027
     },
     {
       "signal_id": "nfci",
@@ -334,15 +334,15 @@
     "sahm_gap": 0.2333333333333334,
     "reservas_pct_min": 1.038749,
     "rrp_usd_bn": 3.2956,
-    "sofr_iorb_bp": -6.000000000000005,
-    "fra_ois_bp": 10.8,
-    "repo_stress_score": 0.246,
+    "sofr_iorb_bp": -8.000000000000007,
+    "fra_ois_bp": 29.0,
+    "repo_stress_score": 0.388,
     "vol_yields_20d_bp": 6.066300355241236,
     "custody_12w_pct": -3.9527705586036466,
     "tic_3m_usd_bn": -81.9539,
     "usd_stress_score": 0.2277,
     "nfci": -0.433,
-    "private_credit_stress_score": 0.2329,
+    "private_credit_stress_score": 0.2577,
     "effr_iorb_bp": -1.000000000000023,
     "stlfsi4_stress": 0.4638830138212847,
     "discount_window_bn": 0.00375,
@@ -354,7 +354,7 @@
     "nfci": "direct",
     "tic": "proxy",
     "repo_stress": "proxy",
-    "fra_ois": "proxy",
+    "fra_ois": "fallback",
     "rrp": "direct",
     "usd_stress": "proxy",
     "private_credit": "proxy",
@@ -371,18 +371,18 @@
       "quality_flag": "ok"
     },
     "repo_stress_score": {
-      "value": 0.246,
+      "value": 0.388,
       "as_of_date": "2026-04-10",
       "source": "nyfed_markets",
       "method": "calculated_composite",
       "quality_flag": "ok"
     },
     "fra_ois_bp": {
-      "value": 10.8,
-      "as_of_date": "2026-04-08",
+      "value": 29.0,
+      "as_of_date": "2026-04-10",
       "source": "fred",
-      "method": "calculated_proxy_cp_minus_sofr",
-      "quality_flag": "ok"
+      "method": "default_fallback:fra_ois_error:HTTPError",
+      "quality_flag": "default_fallback"
     },
     "rrp_usd_bn": {
       "value": 3.2956,
@@ -399,8 +399,8 @@
       "quality_flag": "ok"
     },
     "private_credit_stress_score": {
-      "value": 0.2329,
-      "as_of_date": "2026-04-08",
+      "value": 0.2577,
+      "as_of_date": "2026-04-09",
       "source": "market_proxy",
       "method": "calculated_composite_hy_funding_redemption_overlay",
       "quality_flag": "ok"
