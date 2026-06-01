@@ -1,6 +1,6 @@
 {
   "run_id": 1,
-  "run_date": "2026-05-29",
+  "run_date": "2026-06-01",
   "prior": 0.1538157056380823,
   "prior_base": 0.12,
   "prior_min": 0.08,
@@ -52,7 +52,7 @@
       "mode": "smooth"
     }
   ],
-  "posterior": 0.20240462470126766,
+  "posterior": 0.3302670021001317,
   "risk_label": "Estresse contido",
   "signals": [
     {
@@ -116,14 +116,14 @@
       "signal_id": "rrp",
       "signal_name": "Reverse Repo Facility comprimido",
       "block": "Liquidez doméstica",
-      "raw_value": 1.8098,
+      "raw_value": 3.5564,
       "status": "ATIVO",
       "weight": 0.4,
       "weight_effective": 0.388,
       "confidence_factor": 0.97,
       "confidence_source": "feed",
       "is_stale": false,
-      "as_of_date": "2026-05-29",
+      "as_of_date": "2026-06-01",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.68,
@@ -135,7 +135,7 @@
       "signal_id": "sofr_iorb",
       "signal_name": "Spread SOFR - IORB",
       "block": "Funding stress",
-      "raw_value": -2.9999999999999805,
+      "raw_value": -2.0000000000000018,
       "status": "CONTRARIO",
       "weight": 0.65,
       "weight_effective": 0.65,
@@ -154,20 +154,20 @@
       "signal_id": "fra_ois",
       "signal_name": "FRA-OIS proxy pública",
       "block": "Funding stress",
-      "raw_value": 12.2,
-      "status": "NEUTRO",
+      "raw_value": 29.0,
+      "status": "ATIVO",
       "weight": 0.7,
       "weight_effective": 0.616,
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": "2026-05-28",
+      "as_of_date": "2026-06-01",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.72,
       "p_e_not_h": 0.38,
-      "lr_used": 1.0,
-      "log_contrib": 0.0
+      "lr_used": 1.894736842105263,
+      "log_contrib": 0.39367325492243643
     },
     {
       "signal_id": "repo",
@@ -180,7 +180,7 @@
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": "2026-05-29",
+      "as_of_date": "2026-06-01",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.88,
@@ -192,7 +192,7 @@
       "signal_id": "vol_yields",
       "signal_name": "Volatilidade de yields (proxy pública do MOVE)",
       "block": "Mercado de juros",
-      "raw_value": 8.467585252006621,
+      "raw_value": 8.386149295117516,
       "status": "NEUTRO",
       "weight": 0.4,
       "weight_effective": 0.352,
@@ -211,7 +211,7 @@
       "signal_id": "bloco_externo",
       "signal_name": "Bloco externo: Custody + TIC + stress em dólar",
       "block": "Externo",
-      "raw_value": 0.2363776216517458,
+      "raw_value": 0.3533476216517458,
       "status": "NEUTRO",
       "weight": 0.7,
       "weight_effective": 0.644,
@@ -230,20 +230,20 @@
       "signal_id": "private_credit",
       "signal_name": "Private credit stress",
       "block": "Crédito privado / NBFI",
-      "raw_value": 0.2403,
-      "status": "NEUTRO",
+      "raw_value": 0.5,
+      "status": "ATIVO",
       "weight": 0.5,
       "weight_effective": 0.44,
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": "2026-05-28",
+      "as_of_date": "2026-06-01",
       "expected_frequency_days": 7,
       "tail_signal": false,
       "p_e_h": 0.74,
       "p_e_not_h": 0.4,
-      "lr_used": 1.0,
-      "log_contrib": 0.0
+      "lr_used": 1.8499999999999999,
+      "log_contrib": 0.2706816811997027
     },
     {
       "signal_id": "nfci",
@@ -325,39 +325,39 @@
   "external_block": {
     "custody_12w_pct": -0.21116443303491605,
     "tic_3m_usd_bn": -79.8947,
-    "usd_stress_score": 0.2201,
-    "composite_score": 0.2363776216517458,
+    "usd_stress_score": 0.61,
+    "composite_score": 0.3533476216517458,
     "status": "NEUTRO"
   },
   "raw_data": {
     "curva_spread": 0.76,
     "sahm_gap": 0.2333333333333334,
     "reservas_pct_min": 1.0221866666666666,
-    "rrp_usd_bn": 1.8098,
-    "sofr_iorb_bp": -2.9999999999999805,
-    "fra_ois_bp": 12.2,
+    "rrp_usd_bn": 3.5564,
+    "sofr_iorb_bp": -2.0000000000000018,
+    "fra_ois_bp": 29.0,
     "repo_stress_score": 0.296,
-    "vol_yields_20d_bp": 8.467585252006621,
+    "vol_yields_20d_bp": 8.386149295117516,
     "custody_12w_pct": -0.21116443303491605,
     "tic_3m_usd_bn": -79.8947,
-    "usd_stress_score": 0.2201,
+    "usd_stress_score": 0.61,
     "nfci": -0.51,
-    "private_credit_stress_score": 0.2403,
+    "private_credit_stress_score": 0.5,
     "effr_iorb_bp": -2.9999999999999805,
     "stlfsi4_stress": 0.38777846315786624,
     "discount_window_bn": 0.00375,
-    "sp500": 7520.36,
-    "bloco_externo_score": 0.2363776216517458
+    "sp500": 7580.06,
+    "bloco_externo_score": 0.3533476216517458
   },
   "source_status": {
     "custody": "direct",
     "nfci": "direct",
     "tic": "proxy",
     "repo_stress": "proxy",
-    "fra_ois": "proxy",
+    "fra_ois": "fallback",
     "rrp": "direct",
-    "usd_stress": "proxy",
-    "private_credit": "proxy",
+    "usd_stress": "fallback",
+    "private_credit": "fallback",
     "effr_iorb": "direct",
     "stlfsi4_stress": "direct",
     "discount_window": "direct"
@@ -372,39 +372,39 @@
     },
     "repo_stress_score": {
       "value": 0.296,
-      "as_of_date": "2026-05-29",
+      "as_of_date": "2026-06-01",
       "source": "nyfed_markets",
       "method": "calculated_composite",
       "quality_flag": "ok"
     },
     "fra_ois_bp": {
-      "value": 12.2,
-      "as_of_date": "2026-05-28",
+      "value": 29.0,
+      "as_of_date": "2026-06-01",
       "source": "fred",
-      "method": "calculated_proxy_cp_minus_sofr",
-      "quality_flag": "ok"
+      "method": "default_fallback:fra_ois_error:HTTPError",
+      "quality_flag": "default_fallback"
     },
     "rrp_usd_bn": {
-      "value": 1.8098,
-      "as_of_date": "2026-05-29",
+      "value": 3.5564,
+      "as_of_date": "2026-06-01",
       "source": "nyfed_markets",
       "method": "api_direct_5d_avg",
       "quality_flag": "ok"
     },
     "usd_stress_score": {
-      "value": 0.2201,
-      "as_of_date": "2026-05-22",
+      "value": 0.61,
+      "as_of_date": "2026-06-01",
       "source": "fred",
-      "method": "calculated_composite",
-      "quality_flag": "ok"
+      "method": "default_fallback:usd_stress_error:HTTPError",
+      "quality_flag": "default_fallback"
     },
     "private_credit_stress_score": {
-      "value": 0.2403,
-      "as_of_date": "2026-05-28",
+      "value": 0.5,
+      "as_of_date": "2026-06-01",
       "source": "market_proxy",
-      "method": "calculated_composite_hy_funding_redemption_overlay",
-      "quality_flag": "ok"
+      "method": "default_fallback:private_credit_error:HTTPError",
+      "quality_flag": "default_fallback"
     }
   },
-  "sp500": 7520.36
+  "sp500": 7580.06
 }
