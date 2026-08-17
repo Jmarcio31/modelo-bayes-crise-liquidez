@@ -1,7 +1,7 @@
 {
   "run_id": 1,
-  "run_date": "2026-08-14",
-  "prior": 0.14920208729626233,
+  "run_date": "2026-08-17",
+  "prior": 0.14921739957417712,
   "prior_base": 0.12,
   "prior_min": 0.08,
   "prior_max": 0.22,
@@ -12,8 +12,8 @@
       "raw_key": "curva_spread",
       "kind": "gte",
       "threshold": 0.1,
-      "value": 0.76,
-      "add": 0.024966,
+      "value": 0.82,
+      "add": 0.024981,
       "add_max": 0.025,
       "smooth_k": 10.0,
       "mode": "smooth"
@@ -52,14 +52,14 @@
       "mode": "smooth"
     }
   ],
-  "posterior": 0.047682982596222105,
+  "posterior": 0.04768846017666822,
   "risk_label": "Estresse contido",
   "signals": [
     {
       "signal_id": "curva",
       "signal_name": "Desinversão da curva após inversão profunda",
       "block": "Macro",
-      "raw_value": 0.76,
+      "raw_value": 0.82,
       "status": "ATIVO",
       "weight": 0.55,
       "weight_effective": 0.55,
@@ -116,14 +116,14 @@
       "signal_id": "rrp",
       "signal_name": "Reverse Repo Facility comprimido",
       "block": "Liquidez doméstica",
-      "raw_value": 970000.0,
+      "raw_value": 730000.0,
       "status": "CONTRARIO",
       "weight": 0.4,
       "weight_effective": 0.388,
       "confidence_factor": 0.97,
       "confidence_source": "feed",
       "is_stale": false,
-      "as_of_date": "2026-08-14",
+      "as_of_date": "2026-08-17",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.68,
@@ -161,7 +161,7 @@
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": "2026-08-13",
+      "as_of_date": "2026-08-14",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.72,
@@ -180,7 +180,7 @@
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": "2026-08-14",
+      "as_of_date": "2026-08-17",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.88,
@@ -192,7 +192,7 @@
       "signal_id": "vol_yields",
       "signal_name": "Volatilidade de yields (proxy pública do MOVE)",
       "block": "Mercado de juros",
-      "raw_value": 4.96890329952194,
+      "raw_value": 4.58911756223351,
       "status": "CONTRARIO",
       "weight": 0.4,
       "weight_effective": 0.352,
@@ -211,7 +211,7 @@
       "signal_id": "bloco_externo",
       "signal_name": "Bloco externo: Custody + TIC + stress em dólar",
       "block": "Externo",
-      "raw_value": 0.18018999999999996,
+      "raw_value": 0.18037000000000003,
       "status": "CONTRARIO",
       "weight": 0.7,
       "weight_effective": 0.644,
@@ -230,7 +230,7 @@
       "signal_id": "private_credit",
       "signal_name": "Private credit stress",
       "block": "Crédito privado / NBFI",
-      "raw_value": 0.2118,
+      "raw_value": 0.2105,
       "status": "NEUTRO",
       "weight": 0.5,
       "weight_effective": 0.44,
@@ -324,30 +324,30 @@
   ],
   "external_block": {
     "custody_12w_pct": 23.378809230339968,
-    "tic_3m_usd_bn": -75.2,
-    "usd_stress_score": 0.0993,
-    "composite_score": 0.18018999999999996,
+    "tic_3m_usd_bn": -76.4,
+    "usd_stress_score": 0.0919,
+    "composite_score": 0.18037000000000003,
     "status": "CONTRARIO"
   },
   "raw_data": {
-    "curva_spread": 0.76,
+    "curva_spread": 0.82,
     "sahm_gap": 0.10000000000000053,
     "reservas_pct_min": 0.981353,
-    "rrp_usd_bn": 970000.0,
+    "rrp_usd_bn": 730000.0,
     "sofr_iorb_bp": -2.9999999999999805,
     "fra_ois_bp": 16.4,
     "repo_stress_score": 0.254,
-    "vol_yields_20d_bp": 4.96890329952194,
+    "vol_yields_20d_bp": 4.58911756223351,
     "custody_12w_pct": 23.378809230339968,
-    "tic_3m_usd_bn": -75.2,
-    "usd_stress_score": 0.0993,
+    "tic_3m_usd_bn": -76.4,
+    "usd_stress_score": 0.0919,
     "nfci": -0.549,
-    "private_credit_stress_score": 0.2118,
+    "private_credit_stress_score": 0.2105,
     "effr_iorb_bp": -2.0000000000000018,
     "stlfsi4_stress": 0.3863834385010447,
     "discount_window_bn": 0.00375,
-    "sp500": 7798.99,
-    "bloco_externo_score": 0.18018999999999996
+    "sp500": 7785.76,
+    "bloco_externo_score": 0.18037000000000003
   },
   "source_status": {
     "custody": "direct",
@@ -364,7 +364,7 @@
   },
   "data_feed_meta": {
     "tic_3m_usd_bn": {
-      "value": -75.2,
+      "value": -76.4,
       "as_of_date": "2026-08-07",
       "source": "public_proxy",
       "method": "calculated_proxy_dxy_plus_curve",
@@ -372,39 +372,39 @@
     },
     "repo_stress_score": {
       "value": 0.254,
-      "as_of_date": "2026-08-14",
+      "as_of_date": "2026-08-17",
       "source": "nyfed_markets",
       "method": "calculated_composite",
       "quality_flag": "ok"
     },
     "fra_ois_bp": {
       "value": 16.4,
-      "as_of_date": "2026-08-13",
+      "as_of_date": "2026-08-14",
       "source": "fred",
       "method": "calculated_proxy_cp_minus_sofr",
       "quality_flag": "ok"
     },
     "rrp_usd_bn": {
-      "value": 970000.0,
-      "as_of_date": "2026-08-14",
+      "value": 730000.0,
+      "as_of_date": "2026-08-17",
       "source": "nyfed_markets",
       "method": "api_direct_5d_avg",
       "quality_flag": "ok"
     },
     "usd_stress_score": {
-      "value": 0.0993,
+      "value": 0.0919,
       "as_of_date": "2026-08-07",
       "source": "fred",
       "method": "calculated_composite",
       "quality_flag": "ok"
     },
     "private_credit_stress_score": {
-      "value": 0.2118,
+      "value": 0.2105,
       "as_of_date": "2026-08-13",
       "source": "market_proxy",
       "method": "calculated_composite_hy_funding_redemption_overlay",
       "quality_flag": "ok"
     }
   },
-  "sp500": 7798.99
+  "sp500": 7785.76
 }
