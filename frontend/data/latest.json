@@ -1,6 +1,6 @@
 {
   "run_id": 1,
-  "run_date": "2026-10-09",
+  "run_date": "2026-10-12",
   "prior": 0.149791059437305,
   "prior_base": 0.12,
   "prior_min": 0.08,
@@ -123,7 +123,7 @@
       "confidence_factor": 0.97,
       "confidence_source": "feed",
       "is_stale": false,
-      "as_of_date": "2026-10-09",
+      "as_of_date": "2026-10-12",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.68,
@@ -180,7 +180,7 @@
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": "2026-10-09",
+      "as_of_date": "2026-10-12",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.88,
@@ -192,7 +192,7 @@
       "signal_id": "vol_yields",
       "signal_name": "Volatilidade de yields (proxy pública do MOVE)",
       "block": "Mercado de juros",
-      "raw_value": 14.008836497011448,
+      "raw_value": 13.605513588247964,
       "status": "ATIVO",
       "weight": 0.4,
       "weight_effective": 0.352,
@@ -211,7 +211,7 @@
       "signal_id": "bloco_externo",
       "signal_name": "Bloco externo: Custody + TIC + stress em dólar",
       "block": "Externo",
-      "raw_value": 0.3895676,
+      "raw_value": 0.3883976,
       "status": "NEUTRO",
       "weight": 0.7,
       "weight_effective": 0.644,
@@ -230,7 +230,7 @@
       "signal_id": "private_credit",
       "signal_name": "Private credit stress",
       "block": "Crédito privado / NBFI",
-      "raw_value": 0.2989,
+      "raw_value": 0.2982,
       "status": "ATIVO",
       "weight": 0.5,
       "weight_effective": 0.44,
@@ -325,8 +325,8 @@
   "external_block": {
     "custody_12w_pct": 16.402016349782734,
     "tic_3m_usd_bn": -107.3788,
-    "usd_stress_score": 0.5827,
-    "composite_score": 0.3895676,
+    "usd_stress_score": 0.5788,
+    "composite_score": 0.3883976,
     "status": "NEUTRO"
   },
   "raw_data": {
@@ -337,17 +337,17 @@
     "sofr_iorb_bp": -2.9999999999999805,
     "fra_ois_bp": 6.6,
     "repo_stress_score": 0.268,
-    "vol_yields_20d_bp": 14.008836497011448,
+    "vol_yields_20d_bp": 13.605513588247964,
     "custody_12w_pct": 16.402016349782734,
     "tic_3m_usd_bn": -107.3788,
-    "usd_stress_score": 0.5827,
+    "usd_stress_score": 0.5788,
     "nfci": -0.494,
-    "private_credit_stress_score": 0.2989,
+    "private_credit_stress_score": 0.2982,
     "effr_iorb_bp": -2.0000000000000018,
     "stlfsi4_stress": 0.43024294822577286,
     "discount_window_bn": 0.004,
-    "sp500": 7765.36,
-    "bloco_externo_score": 0.3895676
+    "sp500": 7811.54,
+    "bloco_externo_score": 0.3883976
   },
   "source_status": {
     "custody": "direct",
@@ -372,7 +372,7 @@
     },
     "repo_stress_score": {
       "value": 0.268,
-      "as_of_date": "2026-10-09",
+      "as_of_date": "2026-10-12",
       "source": "nyfed_markets",
       "method": "calculated_composite",
       "quality_flag": "ok"
@@ -386,25 +386,25 @@
     },
     "rrp_usd_bn": {
       "value": 878200.0,
-      "as_of_date": "2026-10-09",
+      "as_of_date": "2026-10-12",
       "source": "nyfed_markets",
       "method": "api_direct_5d_avg",
       "quality_flag": "ok"
     },
     "usd_stress_score": {
-      "value": 0.5827,
+      "value": 0.5788,
       "as_of_date": "2026-10-02",
       "source": "fred",
       "method": "calculated_composite",
       "quality_flag": "ok"
     },
     "private_credit_stress_score": {
-      "value": 0.2989,
+      "value": 0.2982,
       "as_of_date": "2026-10-08",
       "source": "market_proxy",
       "method": "calculated_composite_hy_funding_redemption_overlay",
       "quality_flag": "ok"
     }
   },
-  "sp500": 7765.36
+  "sp500": 7811.54
 }
