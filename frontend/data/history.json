@@ -3124,5 +3124,11 @@
     "posterior": 0.15239695987172436,
     "risk_label": "Estresse contido",
     "sp500": 7718.94
+  },
+  {
+    "run_date": "2026-10-16",
+    "posterior": 0.2278273351087821,
+    "risk_label": "Estresse contido",
+    "sp500": 7744.06
   }
 ]
