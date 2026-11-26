@@ -1,6 +1,6 @@
 {
   "run_id": 1,
-  "run_date": "2026-11-25",
+  "run_date": "2026-11-26",
   "prior": 0.15215401238961898,
   "prior_base": 0.12,
   "prior_min": 0.08,
@@ -123,7 +123,7 @@
       "confidence_factor": 0.97,
       "confidence_source": "feed",
       "is_stale": false,
-      "as_of_date": "2026-11-25",
+      "as_of_date": "2026-11-26",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.68,
@@ -180,7 +180,7 @@
       "confidence_factor": 0.88,
       "confidence_source": "proxy",
       "is_stale": false,
-      "as_of_date": "2026-11-25",
+      "as_of_date": "2026-11-26",
       "expected_frequency_days": 1,
       "tail_signal": false,
       "p_e_h": 0.88,
@@ -372,7 +372,7 @@
     },
     "repo_stress_score": {
       "value": 0.31,
-      "as_of_date": "2026-11-25",
+      "as_of_date": "2026-11-26",
       "source": "nyfed_markets",
       "method": "calculated_composite",
       "quality_flag": "ok"
@@ -386,7 +386,7 @@
     },
     "rrp_usd_bn": {
       "value": 351400.0,
-      "as_of_date": "2026-11-25",
+      "as_of_date": "2026-11-26",
       "source": "nyfed_markets",
       "method": "api_direct_5d_avg",
       "quality_flag": "ok"
