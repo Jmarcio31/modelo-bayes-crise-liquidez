@@ -3292,5 +3292,11 @@
     "posterior": 0.41536776897407574,
     "risk_label": "Estresse intermediario",
     "sp500": 7201.09
+  },
+  {
+    "run_date": "2026-11-27",
+    "posterior": 0.41536776897407574,
+    "risk_label": "Estresse intermediario",
+    "sp500": 7182.78
   }
 ]
